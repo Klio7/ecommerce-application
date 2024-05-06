@@ -52,13 +52,13 @@ npm install
 ### Running the Project
 To run the project in development mode, execute the following command:
 ```bash
-npm dev
+npm run dev
 ```
 
 ### Building the Project
 If you need to build the project for deployment, execute the following command:
 ```bash
-npm build
+npm run build
 ```
 
 ---
