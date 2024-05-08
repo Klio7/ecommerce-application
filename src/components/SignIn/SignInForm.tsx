@@ -43,14 +43,21 @@ function SignInForm() {
         <FormLabel>Password</FormLabel>
         <Input
           {...register("password", {
-            minLength: {
-              value: 8,
-              message: "Please enter at least 8 characters",
-            },
-            pattern: {
-              value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/,
-              message:
-                "Please enter at least one digit, one lowercase letter, one uppercase letter and one special character(!@#$%^&*), whitespaces are not allowed",
+            // minLength: {
+            //   value: 8,
+            //   message: "Please enter at least 8 characters",
+            // },
+            validate: {
+              checkSymbol: (value) =>
+                /(?=.*[!@#$%^&*])/.test(value) ||
+                "Please add at least one special character(!@#$%^&*)",
+              checkLetters: (value) =>
+                /(?=.*[a-z])(?=.*[A-Z])/.test(value) ||
+                "Please add at least one capital letter and one lowercase letter",
+              checkDigit: (value) =>
+                /(?=.*[0-9])/.test(value) || "Please add at least one digit",
+              checkSpace: (value) =>
+                !/\s/.test(value) || "Please, don't use spaces",
             },
 
             required: "Please enter your password",
