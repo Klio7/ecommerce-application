@@ -23,7 +23,7 @@ function SignInForm() {
   });
   const onSubmit: SubmitHandler<SignInFormInputs> = (data) => console.log(data);
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <FormControl isRequired isInvalid={!!errors.email?.message}>
         <FormLabel> Email address</FormLabel>
         <Input
@@ -50,8 +50,9 @@ function SignInForm() {
             pattern: {
               value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/,
               message:
-                "Please enter at least one digit, one lowercase letter, one uppercase letter and one special character(!@#$%^&*)",
+                "Please enter at least one digit, one lowercase letter, one uppercase letter and one special character(!@#$%^&*), whitespaces are not allowed",
             },
+
             required: "Please enter your password",
           })}
           type="password"
