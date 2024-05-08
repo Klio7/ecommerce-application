@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   Input,
@@ -6,6 +6,8 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 
 interface SignInFormInputs {
@@ -22,6 +24,8 @@ function SignInForm() {
     mode: "onChange",
   });
   const onSubmit: SubmitHandler<SignInFormInputs> = (data) => console.log(data);
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <FormControl isRequired isInvalid={!!errors.email?.message}>
@@ -30,7 +34,7 @@ function SignInForm() {
           {...register("email", {
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Please enter a valid email",
+              message: "Please enter a valid email (e.g. user@gmail.com)",
             },
             required: "Please enter your email",
           })}
@@ -41,30 +45,34 @@ function SignInForm() {
       </FormControl>
       <FormControl isRequired isInvalid={!!errors.password?.message}>
         <FormLabel>Password</FormLabel>
-        <Input
-          {...register("password", {
-            // minLength: {
-            //   value: 8,
-            //   message: "Please enter at least 8 characters",
-            // },
-            validate: {
-              checkSymbol: (value) =>
-                /(?=.*[!@#$%^&*])/.test(value) ||
-                "Please add at least one special character(!@#$%^&*)",
-              checkLetters: (value) =>
-                /(?=.*[a-z])(?=.*[A-Z])/.test(value) ||
-                "Please add at least one capital letter and one lowercase letter",
-              checkDigit: (value) =>
-                /(?=.*[0-9])/.test(value) || "Please add at least one digit",
-              checkSpace: (value) =>
-                !/\s/.test(value) || "Please, don't use spaces",
-            },
-
-            required: "Please enter your password",
-          })}
-          type="password"
-          placeholder="password"
-        />
+        <InputGroup>
+          <Input
+            {...register("password", {
+              validate: {
+                checkSpace: (value) =>
+                  !/\s/.test(value) || "Please, don't use spaces",
+                checkLetters: (value) =>
+                  /(?=.*[a-z])(?=.*[A-Z])/.test(value) ||
+                  "Please add at least one capital letter and one lowercase letter",
+                checkDigit: (value) =>
+                  /(?=.*[0-9])/.test(value) || "Please add at least one digit",
+                checkSymbol: (value) =>
+                  /(?=.*[!@#$%^&*])/.test(value) ||
+                  "Please add at least one special character(!@#$%^&*)",
+                checkLength: (value) =>
+                  value.length >= 8 || "Please, enter 8 characters or more",
+              },
+              required: "Please enter your password",
+            })}
+            type={show ? "text" : "password"}
+            placeholder="password"
+          />
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" onClick={handleClick}>
+              {show ? "Hide" : "Show"}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
         <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
       </FormControl>
       <Button type="submit">SIGN IN</Button>
