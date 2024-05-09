@@ -29,7 +29,7 @@ function SignInForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <FormControl isRequired isInvalid={!!errors.email?.message}>
-        <FormLabel> Email address</FormLabel>
+        <FormLabel mt={5}> Email address</FormLabel>
         <Input
           {...register("email", {
             pattern: {
@@ -44,7 +44,7 @@ function SignInForm() {
         <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
       </FormControl>
       <FormControl isRequired isInvalid={!!errors.password?.message}>
-        <FormLabel>Password</FormLabel>
+        <FormLabel mt={5}>Password</FormLabel>
         <InputGroup>
           <Input
             {...register("password", {
@@ -75,7 +75,16 @@ function SignInForm() {
         </InputGroup>
         <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
       </FormControl>
-      <Button type="submit">SIGN IN</Button>
+      <Button
+        mt={5}
+        bg="white"
+        border="2px"
+        border-color="black"
+        width="100%"
+        type="submit"
+      >
+        SIGN IN
+      </Button>
     </form>
   );
 }
