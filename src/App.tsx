@@ -1,11 +1,10 @@
 import React from "react";
-import { getProject } from "./services/CreateClient";
+import SignInForm from "./components/SignIn/SignInForm";
 
 import "./App.scss";
 
 function App() {
-  getProject().then(console.log).catch(console.error);
-  return <header>Hello!</header>;
+  return <SignInForm />;
 }
 
 export default App;

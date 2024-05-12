@@ -9,7 +9,6 @@ export default defineConfig({
   resolve: {
     alias: {
       stream: "rollup-plugin-node-polyfills/polyfills/stream",
-      // other modules to be polyfilled will go here. e.g buffer etc
     },
   },
   optimizeDeps: {
@@ -28,7 +27,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      plugins: [rollupNodePolyFill()],
+      // plugins: [rollupNodePolyFill()],
     },
   },
 });

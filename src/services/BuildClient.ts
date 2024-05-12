@@ -1,8 +1,7 @@
-// import fetch from "node-fetch";
 import {
   ClientBuilder,
-  type AuthMiddlewareOptions, // Required for auth
-  type HttpMiddlewareOptions, // Required for sending HTTP requests
+  type AuthMiddlewareOptions,
+  type HttpMiddlewareOptions,
 } from "@commercetools/sdk-client-v2";
 
 const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
