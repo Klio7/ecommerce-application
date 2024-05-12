@@ -26,6 +26,7 @@ function SignInForm() {
     mode: "onChange",
   });
   const toast = useToast();
+
   const onSubmit: SubmitHandler<SignInFormInputs> = (data) =>
     loginCustomer(data.email, data.password)
       .then(({ body }) => {
@@ -35,9 +36,10 @@ function SignInForm() {
         if (error) {
           if (error.statusCode === 400) {
             toast({
+              position: "top",
               title: "Sorry.",
               description: "Your email or password is invalid",
-              status: "success",
+              status: "error",
               duration: 9000,
               isClosable: true,
             });

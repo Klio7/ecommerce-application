@@ -1,6 +1,6 @@
 import apiRoot from "./CreateClient";
 
-const loginCustomer = (email: string, password: string) =>
+const loginCustomer = async (email: string, password: string) =>
   apiRoot
     .me()
     .login()
@@ -11,5 +11,4 @@ const loginCustomer = (email: string, password: string) =>
       },
     })
     .execute();
-
 export default loginCustomer;
