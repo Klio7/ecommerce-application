@@ -11,10 +11,10 @@ function App() {
     <>
       <Header />
       <Routes>
-        <Route path="/" element={ <MainPage />} />
-        <Route path="/signin" element={ <SignInForm />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/signin" element={<SignInForm />} />
         <Route path="/signup" />
-        <Route path="*" element={ <NotFoundPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <footer />
     </>
