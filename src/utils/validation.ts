@@ -64,5 +64,39 @@ export const birthDateValidation: RegisterOptions = {
                 return "You should be at least 13 years old";
             },
     },
-    required: "Please enter your first name",
+    required: "Please enter your date of birth",
+}
+
+export const streetValidation: RegisterOptions = {
+    validate: {
+        checkLength: (value) =>
+            value.length >= 1 || "Too short",
+    },
+    required: "Please enter street",
+}
+
+export const cityValidation: RegisterOptions = {
+    validate: {
+        checkDigit: (value) =>
+            !/(?=.*[0-9])/.test(value) || "City shouldn't contain digits",
+        checkSymbol: (value) =>
+            !/(?=.*[!@#$%^&*])/.test(value) ||
+            "City shouldn't contain special characters (!@#$%^&*)",
+        checkLength: (value) =>
+            value.length >= 1 || "Too short",
+    },
+    required: "Please enter city",
+}
+
+export const countryValidation: RegisterOptions = {
+    required: "Please select country",
+}
+
+export const zipValidation: RegisterOptions = {
+    validate: {
+        // regex for UK postal code https://stackoverflow.com/a/51885364
+        checkUKPostCode: (value) =>
+            /^([A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$/.test(value) || "Invalid UK postal code",
+    },
+    required: "Please enter postal code",
 }

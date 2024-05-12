@@ -8,15 +8,30 @@ import {
   FormLabel,
   InputGroup,
   InputRightElement,
+  Select,
 } from "@chakra-ui/react";
-import { birthDateValidation, emailValidation, firstNameValidation, lastNameValidation, passwordValidation } from "../../utils/validation";
+import {
+  birthDateValidation,
+  cityValidation,
+  countryValidation,
+  emailValidation,
+  firstNameValidation,
+  lastNameValidation,
+  passwordValidation,
+  streetValidation,
+  zipValidation,
+} from "../../utils/validation";
 
 interface SignUpFormInputs {
   email: string;
   password: string;
   firstName: string;
   lastName: string;
-  birthDate: Date;
+  birthDate: string;
+  street: string;
+  city: string;
+  zip: string;
+  country: string;
 }
 
 function SignUpForm() {
@@ -77,12 +92,48 @@ function SignUpForm() {
       </FormControl>
       <FormControl isRequired isInvalid={!!errors.birthDate?.message}>
         <FormLabel mt={5}>Date of birth</FormLabel>
-        <Input 
-            {...register("birthDate", birthDateValidation)} 
-            placeholder='Select Date' 
-            type='date'
+        <Input
+          {...register("birthDate", birthDateValidation)}
+          placeholder="Select Date"
+          type="date"
         />
         <FormErrorMessage>{errors.birthDate?.message}</FormErrorMessage>
+      </FormControl>
+      <FormControl isRequired isInvalid={!!errors.street?.message}>
+        <FormLabel mt={5}>Street</FormLabel>
+        <Input
+          {...register("street", streetValidation)}
+          type="street"
+          placeholder="Street"
+        />
+        <FormErrorMessage>{errors.street?.message}</FormErrorMessage>
+      </FormControl>
+      <FormControl isRequired isInvalid={!!errors.city?.message}>
+        <FormLabel mt={5}>City</FormLabel>
+        <Input
+          {...register("city", cityValidation)}
+          type="city"
+          placeholder="City"
+        />
+        <FormErrorMessage>{errors.city?.message}</FormErrorMessage>
+      </FormControl>
+      <FormControl isRequired isInvalid={!!errors.zip?.message}>
+        <FormLabel mt={5}>Postal code</FormLabel>
+        <Input
+          {...register("zip", zipValidation)}
+          type="zip"
+          placeholder="Postal code"
+        />
+        <FormErrorMessage>{errors.zip?.message}</FormErrorMessage>
+      </FormControl>
+      <FormControl isRequired isInvalid={!!errors.country?.message}>
+        <FormLabel mt={5}>Country</FormLabel>
+        <Select 
+          {...register("country", countryValidation)}
+          placeholder='Select country'>
+          <option>United Kingdom</option>
+        </Select>
+        <FormErrorMessage>{errors.country?.message}</FormErrorMessage>
       </FormControl>
       <Button
         mt={5}

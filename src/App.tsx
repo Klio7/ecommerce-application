@@ -12,10 +12,10 @@ function App() {
     <>
       <Header />
       <Routes>
-        <Route path="/" element={ <MainPage />} />
-        <Route path="/signin" element={ <SignInForm />} />
-        <Route path="/signup" element={ <SignUpForm />} />
-        <Route path="*" element={ <NotFoundPage />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/signin" element={<SignInForm />} />
+        <Route path="/signup" element={<SignUpForm />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <footer />
     </>
