@@ -1,8 +1,21 @@
 import React from "react";
-import { Container } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import "./NotFoundPage.scss"
 
 function NotFoundPage() {
-  return <Container>404 Not Found</Container>;
+  return (
+    <Box as="main" position="relative">
+    <Image src="./src/assets/pic4.png" />
+    <Flex className="not-found-msg" >
+    <Text className="big-text">
+        404
+      </Text>
+      <Text className="big-text">
+        Page Not Found
+      </Text>
+    </Flex>
+  </Box>
+  );
 }
 
 export default NotFoundPage;
