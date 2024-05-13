@@ -13,8 +13,8 @@ function Footer() {
       justifyContent="center"
       alignItems="center"
       gap="2em"
-      pos='absolute'
-      top='100%'
+      pos="absolute"
+      top="100%"
     >
       <Link to="https://rs.school/">Rolling Scopes</Link>
       <Text>
