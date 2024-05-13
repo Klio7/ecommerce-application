@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import "./NotFoundPage.scss";
 
 function NotFoundPage() {
-const history = useNavigate();
+  const history = useNavigate();
 
   return (
     <Box as="main" position="relative">
@@ -12,7 +12,9 @@ const history = useNavigate();
       <Flex className="not-found-msg">
         <Text className="big-text">404</Text>
         <Text className="big-text">Page Not Found</Text>
-        <Button onClick={() => history(-1)} colorScheme="gray" marginTop="1em">Go back</Button>
+        <Button onClick={() => history(-1)} colorScheme="gray" marginTop="1em">
+          Go back
+        </Button>
       </Flex>
     </Box>
   );
