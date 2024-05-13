@@ -1,25 +1,25 @@
 import React from "react";
-import { Box, Container, Flex, Image } from "@chakra-ui/react";
+import { Box, Container, Flex, Image, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import "./MainPage.scss"
 
 function MainPage() {
   return (
     <>
       <Box position="relative">
         <Image src="./src/assets/pic1.png" />
-        <Flex
-          paddingLeft="0.5em"
-          top="0px"
-          position="absolute"
-          w="100px"
-          h="100%"
-          bg="#826F66"
-          flexDirection="column"
-        >
+        <Flex as="aside" className="sidebar">
           <Link to="/">Main Page</Link>
           <Link to="/signin">Sign In</Link>
           <Link to="/signup">Sign Up</Link>
-        </Flex>{" "}
+        </Flex>
+        <Flex className="dinnerset-info">
+        <Text className="normal-text">Handcrafted in Viet Nam since 1650</Text>
+<Text className="big-text">
+  BAT TRANG<br />
+  DINNER SET
+</Text>
+        </Flex>
       </Box>
       <Container />
     </>

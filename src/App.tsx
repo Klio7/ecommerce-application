@@ -5,6 +5,7 @@ import MainPage from "./pages/MainPage/MainPage";
 import SignInForm from "./components/SignIn/SignInForm";
 import Header from "./components/Header/Header";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
         <Route path="/signup" />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      <footer />
+      <Footer />
     </>
   );
 }
