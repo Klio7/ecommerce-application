@@ -9,7 +9,9 @@ import {
   InputGroup,
   InputRightElement,
   useToast,
+  IconButton,
 } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import loginCustomer from "../../services/Authenication";
 
 interface SignInFormInputs {
@@ -90,9 +92,9 @@ function SignInForm() {
             placeholder="password"
           />
           <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? "Hide" : "Show"}
-            </Button>
+            <IconButton aria-label="Search database" onClick={handleClick}>
+              {show ? <ViewIcon /> : <ViewOffIcon />}
+            </IconButton>
           </InputRightElement>
         </InputGroup>
         <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
