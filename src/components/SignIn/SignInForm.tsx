@@ -66,8 +66,13 @@ function SignInForm() {
             type={show ? "text" : "password"}
             placeholder="password"
           />
-          <InputRightElement width="4.5rem">
-            <IconButton aria-label="Search database" onClick={handleClick}>
+          <InputRightElement width="4rem">
+            <IconButton
+              h="95%"
+              aria-label="Search database"
+              bg="white"
+              onClick={handleClick}
+            >
               {show ? <ViewIcon /> : <ViewOffIcon />}
             </IconButton>
           </InputRightElement>
