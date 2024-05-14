@@ -13,11 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import loginCustomer from "../../services/Authenication";
-
-interface SignInFormInputs {
-  email: string;
-  password: string;
-}
+import { SignInFormInputs } from "../../types/types";
+import { passwordValidation, emailValidation } from "../../utils/validation";
 
 function SignInForm() {
   const {
@@ -55,13 +52,7 @@ function SignInForm() {
       <FormControl isRequired isInvalid={!!errors.email?.message}>
         <FormLabel mt={5}> Email address</FormLabel>
         <Input
-          {...register("email", {
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Please enter a valid email (e.g. user@gmail.com)",
-            },
-            required: "Please enter your email",
-          })}
+          {...register("email", emailValidation)}
           type="email"
           placeholder="email"
         />
@@ -71,23 +62,7 @@ function SignInForm() {
         <FormLabel mt={5}>Password</FormLabel>
         <InputGroup>
           <Input
-            {...register("password", {
-              validate: {
-                checkSpace: (value) =>
-                  !/\s/.test(value) || "Please, don't use spaces",
-                checkLetters: (value) =>
-                  /(?=.*[a-z])(?=.*[A-Z])/.test(value) ||
-                  "Please add at least one capital letter and one lowercase letter",
-                checkDigit: (value) =>
-                  /(?=.*[0-9])/.test(value) || "Please add at least one digit",
-                checkSymbol: (value) =>
-                  /(?=.*[!@#$%^&*])/.test(value) ||
-                  "Please add at least one special character(!@#$%^&*)",
-                checkLength: (value) =>
-                  value.length >= 8 || "Please, enter 8 characters or more",
-              },
-              required: "Please enter your password",
-            })}
+            {...register("password", passwordValidation)}
             type={show ? "text" : "password"}
             placeholder="password"
           />
