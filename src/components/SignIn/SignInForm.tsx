@@ -8,7 +8,9 @@ import {
   FormLabel,
   InputGroup,
   InputRightElement,
+  useToast,
 } from "@chakra-ui/react";
+import loginCustomer from "../../services/Authenication";
 
 interface SignInFormInputs {
   email: string;
@@ -23,7 +25,27 @@ function SignInForm() {
   } = useForm<SignInFormInputs>({
     mode: "onChange",
   });
-  const onSubmit: SubmitHandler<SignInFormInputs> = (data) => console.log(data);
+  const toast = useToast();
+
+  const onSubmit: SubmitHandler<SignInFormInputs> = (data) =>
+    loginCustomer(data.email, data.password)
+      .then(({ body }) => {
+        console.log(body);
+      })
+      .catch((error) => {
+        if (error) {
+          if (error.statusCode === 400) {
+            toast({
+              position: "top",
+              title: "Sorry.",
+              description: "Your email or password is invalid",
+              status: "error",
+              duration: 9000,
+              isClosable: true,
+            });
+          }
+        }
+      });
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   return (
