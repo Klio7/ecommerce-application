@@ -1,0 +1,29 @@
+.not-found-msg {
+    flex-direction:column;
+    justify-content:center; 
+    align-items:center; 
+    background-color: #826F66; 
+    width:30%; 
+    height:80%; 
+    position:absolute; 
+    top:10%; 
+    left:15%; 
+    color:#FFFDFB;
+}
+
+.big-text {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+@media screen and (width <= 826px) {
+    .big-text {
+        font-size: 1.25em;
+    }
+}
+
+@media screen and (width <= 535px) {
+    .big-text {
+        font-size: 0.75em;
+    }
+}
