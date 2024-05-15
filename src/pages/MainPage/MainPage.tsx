@@ -9,9 +9,7 @@ function MainPage() {
   return (
     <Box as="main" position="relative">
       <Image src="./src/assets/pic1.png" />
-      {isAuthenticated ? (
-        <Text>Nothing</Text>
-      ) : (
+      {isAuthenticated ? null : (
         <Flex as="aside" className="sidebar">
           <Link to="/">Main Page</Link>
           <Link to="/signin">Sign In</Link>

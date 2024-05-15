@@ -1,9 +1,15 @@
 import React from "react";
 import { Container, Text, Center, Link as ChakraLink } from "@chakra-ui/react";
-import { Link as ReactRouterLink } from "react-router-dom";
+import { Link as ReactRouterLink, Navigate } from "react-router-dom";
 import SignInForm from "../../components/SignIn/SignInForm";
+import useAuth from "../../hooks/useAuth";
 
 function SignInPage() {
+  const { isAuthenticated } = useAuth();
+  if (isAuthenticated) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <Center bg="grey.300" bgGradient="radial(blackAlpha.200, whiteAlpha.50)">
       <Container
