@@ -9,7 +9,6 @@ function SignInPage() {
   if (isAuthenticated) {
     return <Navigate to="/" />;
   }
-
   return (
     <Center bg="grey.300" bgGradient="radial(blackAlpha.200, whiteAlpha.50)">
       <Container

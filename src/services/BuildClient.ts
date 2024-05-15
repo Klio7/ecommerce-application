@@ -31,7 +31,3 @@ const ctpClient = new ClientBuilder()
   .build();
 
 export default ctpClient;
-
-export const authClient = new ClientBuilder().withClientCredentialsFlow(
-  authMiddlewareOptions,
-);

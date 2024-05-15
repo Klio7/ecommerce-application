@@ -30,14 +30,13 @@ function SignInForm() {
 
   const onSubmit: SubmitHandler<SignInFormInputs> = (data) =>
     loginCustomer(data.email, data.password)
-      .then(({ body }) => {
-        console.log(body);
+      .then(() => {
         setAuth(true);
         toast({
           position: "top",
           title: "Welcome!",
           description: "You are succesfully signed in.",
-          status: "success",
+          status: "info",
           duration: 3000,
           isClosable: true,
         });
@@ -48,9 +47,10 @@ function SignInForm() {
             toast({
               position: "top",
               title: "Sorry.",
-              description: "Your email or password is invalid",
+              description:
+                "Your email or password is invalid. Try again or sign up.",
               status: "error",
-              duration: 9000,
+              duration: 6000,
               isClosable: true,
             });
           }
