@@ -30,6 +30,13 @@ function SignInForm() {
     loginCustomer(data.email, data.password)
       .then(({ body }) => {
         console.log(body);
+        toast({
+          position: "top",
+          title: "Welcome!",
+          description: "You are succesfully signed in.",
+          status: "success",
+          isClosable: true,
+        });
       })
       .catch((error) => {
         if (error) {
