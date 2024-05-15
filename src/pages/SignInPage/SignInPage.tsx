@@ -5,7 +5,7 @@ import SignInForm from "../../components/SignIn/SignInForm";
 
 function SignInPage() {
   return (
-    <Center bg="grey.300" bgGradient="radial(gray.400, gray.50)">
+    <Center bg="grey.300" bgGradient="radial(blackAlpha.200, whiteAlpha.50)">
       <Container
         border="1px"
         borderColor="gray.400"
