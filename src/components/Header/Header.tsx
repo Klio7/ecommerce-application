@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Button, Box } from "@chakra-ui/react";
+import { Flex, Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
@@ -31,7 +31,7 @@ function Header() {
         {isAuthenticated ? (
           <Button>Logout</Button>
         ) : (
-          <Flex  gap="1em">
+          <Flex gap="1em">
             <Link to="/signin">Sign In</Link>
             <Link to="/signup">Sign Up</Link>
           </Flex>
