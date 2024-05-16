@@ -5,3 +5,9 @@ const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
   projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
 });
 export default apiRoot;
+
+export const authApiRoot = createApiBuilderFromCtpClient(
+  ctpClient,
+).withProjectKey({
+  projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+});

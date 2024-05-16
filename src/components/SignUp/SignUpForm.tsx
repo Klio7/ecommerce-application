@@ -128,9 +128,10 @@ function SignUpForm() {
       </FormControl>
       <FormControl isRequired isInvalid={!!errors.country?.message}>
         <FormLabel mt={5}>Country</FormLabel>
-        <Select 
+        <Select
           {...register("country", countryValidation)}
-          placeholder='Select country'>
+          placeholder="Select country"
+        >
           <option>United Kingdom</option>
         </Select>
         <FormErrorMessage>{errors.country?.message}</FormErrorMessage>

@@ -1,8 +1,10 @@
 import React from "react";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Button, Box } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 function Header() {
+  const { isAuthenticated } = useAuth();
   return (
     <Flex
       as="header"
@@ -26,8 +28,14 @@ function Header() {
         <Link to="/basket">
           <img src="./src/assets/Shopping cart.svg" alt="" />
         </Link>
-        <Link to="/signin">Sign In</Link>
-        <Link to="/signup">Sign Up</Link>
+        {isAuthenticated ? (
+          <Button>Logout</Button>
+        ) : (
+          <Flex  gap="1em">
+            <Link to="/signin">Sign In</Link>
+            <Link to="/signup">Sign Up</Link>
+          </Flex>
+        )}
       </Flex>
     </Flex>
   );
