@@ -31,10 +31,10 @@ function Header() {
         {isAuthenticated ? (
           <Button>Logout</Button>
         ) : (
-          <Box>
+          <Flex  gap="1em">
             <Link to="/signin">Sign In</Link>
             <Link to="/signup">Sign Up</Link>
-          </Box>
+          </Flex>
         )}
       </Flex>
     </Flex>
