@@ -29,6 +29,7 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.34.1",
     "framer-motion": "^11.1.7",
+    "isomorphic-fetch": "^3.0.0",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
