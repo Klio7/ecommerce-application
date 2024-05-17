@@ -43,17 +43,15 @@ function SignInForm() {
       })
       .catch((error) => {
         if (error) {
-          if (error.statusCode === 400) {
-            toast({
-              position: "top",
-              title: "Sorry.",
-              description:
-                "Your email or password is invalid. Try again or sign up.",
-              status: "error",
-              duration: 6000,
-              isClosable: true,
-            });
-          }
+          toast({
+            position: "top",
+            title: "Sorry.",
+            description:
+              "Your email or password is invalid. Try again or sign up.",
+            status: "error",
+            duration: 6000,
+            isClosable: true,
+          });
         }
       });
   const [show, setShow] = useState(false);
