@@ -5,6 +5,21 @@ import {
 } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 
+type Request = [RequestInfo | URL];
+
+async function fetcher(...args: Request) {
+  const param = args;
+  const r = await fetch(...param);
+  const t = r.clone();
+  const tt = await t.json();
+  if (tt.access_token) {
+    localStorage.setItem("sleepless_access_token", tt.access_token);
+    localStorage.setItem("isAuthenticated", "true");
+  }
+
+  return r;
+}
+
 const PasswordFlowApiClient = (email: string, password: string) => {
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
   const options: PasswordAuthMiddlewareOptions = {
@@ -28,7 +43,7 @@ const PasswordFlowApiClient = (email: string, password: string) => {
 
     // tokenCache?:;
     // oauthUri?: string;
-    fetch,
+    fetch: fetcher,
   };
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
     host: import.meta.env.VITE_CTP_API_URL,
