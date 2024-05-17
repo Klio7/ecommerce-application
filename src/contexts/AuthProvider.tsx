@@ -1,4 +1,10 @@
-import React, { createContext, useState, ReactNode, useMemo } from "react";
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useMemo,
+  useEffect,
+} from "react";
 import { getTokenFromLocalStorage } from "../store/LocalStorage";
 
 type AuthContextType = {
@@ -18,6 +24,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { token } = getTokenFromLocalStorage();
     return !!token && (!!storedIsAuthenticated as boolean);
   });
+
+  useEffect(() => {
+    localStorage.setItem("isAuthenticated", `${isAuthenticated}`);
+    if (!isAuthenticated) {
+      delete localStorage.sleepless_access_token;
+    }
+  }, [isAuthenticated]);
+
   const contextValue = useMemo(
     () => ({ isAuthenticated, setAuth }),
     [isAuthenticated],

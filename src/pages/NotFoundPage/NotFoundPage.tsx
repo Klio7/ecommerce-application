@@ -15,6 +15,9 @@ function NotFoundPage() {
         <Button onClick={() => history(-1)} colorScheme="gray" marginTop="1em">
           Go back
         </Button>
+        <Button onClick={() => history("/")} colorScheme="gray" marginTop="1em">
+          Main
+        </Button>
       </Flex>
     </Box>
   );
