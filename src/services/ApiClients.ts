@@ -4,20 +4,18 @@ import {
   type HttpMiddlewareOptions,
 } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
-
-type Request = [RequestInfo | URL];
+import { Request } from "../types/types";
+import { setTokenToLocalStorage } from "../store/LocalStorage";
 
 async function fetcher(...args: Request) {
   const param = args;
-  const r = await fetch(...param);
-  const t = r.clone();
-  const tt = await t.json();
-  if (tt.access_token) {
-    localStorage.setItem("sleepless_access_token", tt.access_token);
-    localStorage.setItem("isAuthenticated", "true");
+  const response = await fetch(...param);
+  const responseClone = response.clone();
+  const responseFormatted = await responseClone.json();
+  if (responseFormatted.access_token) {
+    setTokenToLocalStorage(responseFormatted.access_token, true);
   }
-
-  return r;
+  return response;
 }
 
 const PasswordFlowApiClient = (email: string, password: string) => {
@@ -41,8 +39,6 @@ const PasswordFlowApiClient = (email: string, password: string) => {
       `manage_my_payments:${projectKey}`,
     ] */,
 
-    // tokenCache?:;
-    // oauthUri?: string;
     fetch: fetcher,
   };
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
@@ -56,13 +52,13 @@ const PasswordFlowApiClient = (email: string, password: string) => {
     .withLoggerMiddleware()
     .build();
 
-  const PasswordFlowApiRoot = createApiBuilderFromCtpClient(
+  const passwordFlowApiRoot = createApiBuilderFromCtpClient(
     passwordFlowClient,
   ).withProjectKey({
     projectKey,
   });
 
-  return PasswordFlowApiRoot;
+  return passwordFlowApiRoot;
 };
 
 export default PasswordFlowApiClient;
