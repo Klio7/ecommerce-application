@@ -49,7 +49,7 @@ const PasswordFlowApiClient = (email: string, password: string) => {
   const passwordFlowClient = new ClientBuilder()
     .withPasswordFlow(options)
     .withHttpMiddleware(httpMiddlewareOptions)
-    .withLoggerMiddleware()
+    // .withLoggerMiddleware() only for development usage
     .build();
 
   const passwordFlowApiRoot = createApiBuilderFromCtpClient(
