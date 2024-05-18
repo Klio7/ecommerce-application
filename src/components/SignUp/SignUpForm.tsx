@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   Input,
   Button,
@@ -9,7 +10,10 @@ import {
   InputGroup,
   InputRightElement,
   Select,
+  useToast,
+  IconButton,
 } from "@chakra-ui/react";
+import { CustomerSignUp } from "@commercetools/platform-sdk";
 import {
   birthDateValidation,
   cityValidation,
@@ -21,6 +25,9 @@ import {
   streetValidation,
   zipValidation,
 } from "../../utils/validation";
+import apiRoot from "../../services/CreateClient";
+import useAuth from "../../hooks/useAuth";
+import loginCustomer from "../../services/Authenication";
 
 interface SignUpFormInputs {
   email: string;
@@ -34,6 +41,15 @@ interface SignUpFormInputs {
   country: string;
 }
 
+interface ApiError {
+  statusCode: number;
+  message: string;
+  body?: {
+    message?: string;
+    statusCode?: number;
+  };
+}
+
 function SignUpForm() {
   const {
     register,
@@ -42,7 +58,85 @@ function SignUpForm() {
   } = useForm<SignUpFormInputs>({
     mode: "onChange",
   });
-  const onSubmit: SubmitHandler<SignUpFormInputs> = (data) => console.log(data);
+
+  const { setAuth } = useAuth();
+  const toast = useToast();
+  const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
+    try {
+      const newCustomerDetails: CustomerSignUp = {
+        email: data.email,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        dateOfBirth: data.birthDate,
+        addresses: [
+          {
+            country: data.country,
+            streetName: data.street,
+            postalCode: data.zip,
+            city: data.city,
+          },
+        ],
+      };
+
+      // create customer
+      await apiRoot.customers().post({ body: newCustomerDetails }).execute();
+
+      // login for the customer
+      await loginCustomer(data.email, data.password);
+
+      setAuth(true);
+
+      toast({
+        position: "top",
+        title: "Welcome!",
+        description: "You are succesfully signed up.",
+        status: "info",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      const apiError = error as ApiError;
+      if (apiError.body && apiError.body.statusCode === 400) {
+        if (
+          apiError.body.message?.includes(
+            "There is already an existing customer with the provided email",
+          )
+        ) {
+          toast({
+            position: "top",
+            title: "Error",
+            description:
+              "An account with this email address already exists. Please log in or use another email.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        } else {
+          toast({
+            position: "top",
+            title: "Error",
+            description:
+              "Invalid input. Please check your details and try again.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      } else {
+        toast({
+          position: "top",
+          title: "Error",
+          description:
+            "Something went wrong during the registration process. Please try again later.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    }
+  };
+
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   return (
@@ -64,10 +158,15 @@ function SignUpForm() {
             type={show ? "text" : "password"}
             placeholder="Create a password"
           />
-          <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? "Hide" : "Show"}
-            </Button>
+          <InputRightElement width="4rem">
+            <IconButton
+              h="95%"
+              aria-label="Search database"
+              bg="white"
+              onClick={handleClick}
+            >
+              {show ? <ViewIcon /> : <ViewOffIcon />}
+            </IconButton>
           </InputRightElement>
         </InputGroup>
         <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
@@ -132,7 +231,7 @@ function SignUpForm() {
           {...register("country", countryValidation)}
           placeholder="Select country"
         >
-          <option>United Kingdom</option>
+          <option value="GB">United Kingdom</option>
         </Select>
         <FormErrorMessage>{errors.country?.message}</FormErrorMessage>
       </FormControl>
