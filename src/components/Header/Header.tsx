@@ -18,7 +18,7 @@ import useAuth from "../../hooks/useAuth";
 import "./Header.scss";
 
 function Header() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, setAuth } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Flex
@@ -79,7 +79,7 @@ function Header() {
           />
         </Link>
         {isAuthenticated ? (
-          <Button>Sign Out</Button>
+          <Button onClick={() => setAuth(false)}>Sign Out</Button>
         ) : (
           <Flex gap="1em">
             <Link to="/signin">Sign In</Link>
