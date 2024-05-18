@@ -13,10 +13,7 @@ import {
   useToast,
   IconButton,
 } from "@chakra-ui/react";
-import {
-  CustomerSignUp
-} from "@commercetools/platform-sdk";
-import { Navigate } from "react-router-dom";
+import { CustomerSignUp } from "@commercetools/platform-sdk";
 import {
   birthDateValidation,
   cityValidation,
@@ -62,8 +59,7 @@ function SignUpForm() {
     mode: "onChange",
   });
 
-  const { setAuth, isAuthenticated } = useAuth();
-
+  const { setAuth } = useAuth();
   const toast = useToast();
   const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
     try {
@@ -75,7 +71,7 @@ function SignUpForm() {
         dateOfBirth: data.birthDate,
         addresses: [
           {
-            country: 'GB',
+            country: data.country,
             streetName: data.street,
             postalCode: data.zip,
             city: data.city,
@@ -84,13 +80,10 @@ function SignUpForm() {
       };
 
       // create customer
-      await apiRoot
-        .customers()
-        .post({ body: newCustomerDetails })
-        .execute();
+      await apiRoot.customers().post({ body: newCustomerDetails }).execute();
 
       // login for the customer
-      await loginCustomer(data.email,data.password);
+      await loginCustomer(data.email, data.password);
 
       setAuth(true);
 
@@ -105,11 +98,16 @@ function SignUpForm() {
     } catch (error) {
       const apiError = error as ApiError;
       if (apiError.body && apiError.body.statusCode === 400) {
-        if (apiError.body.message?.includes("There is already an existing customer with the provided email")) {
+        if (
+          apiError.body.message?.includes(
+            "There is already an existing customer with the provided email",
+          )
+        ) {
           toast({
             position: "top",
             title: "Error",
-            description: "An account with this email address already exists. Please log in or use another email.",
+            description:
+              "An account with this email address already exists. Please log in or use another email.",
             status: "error",
             duration: 3000,
             isClosable: true,
@@ -118,31 +116,29 @@ function SignUpForm() {
           toast({
             position: "top",
             title: "Error",
-            description: "Invalid input. Please check your details and try again.",
+            description:
+              "Invalid input. Please check your details and try again.",
             status: "error",
             duration: 3000,
             isClosable: true,
           });
         }
       } else {
-          toast({
-            position: "top",
-            title: "Error",
-            description: "Something went wrong during the registration process. Please try again later.",
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-          });
+        toast({
+          position: "top",
+          title: "Error",
+          description:
+            "Something went wrong during the registration process. Please try again later.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       }
     }
   };
 
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
-
-  if (isAuthenticated) {
-    return <Navigate to="/" />
-  }
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <FormControl isRequired isInvalid={!!errors.email?.message}>
@@ -163,7 +159,7 @@ function SignUpForm() {
             placeholder="Create a password"
           />
           <InputRightElement width="4rem">
-          <IconButton
+            <IconButton
               h="95%"
               aria-label="Search database"
               bg="white"
@@ -235,7 +231,7 @@ function SignUpForm() {
           {...register("country", countryValidation)}
           placeholder="Select country"
         >
-          <option>United Kingdom</option>
+          <option value="GB">United Kingdom</option>
         </Select>
         <FormErrorMessage>{errors.country?.message}</FormErrorMessage>
       </FormControl>
