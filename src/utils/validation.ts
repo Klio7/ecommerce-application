@@ -27,11 +27,9 @@ export const passwordValidation: RegisterOptions = {
 
 export const firstNameValidation: RegisterOptions = {
   validate: {
-    checkDigit: (value) =>
-      !/(?=.*[0-9])/.test(value) || "Name shouldn't contain digits",
-    checkSymbol: (value) =>
-      !/(?=.*[!@#$%^&*])/.test(value) ||
-      "Please don't use special characters (!@#$%^&*)",
+    checkValidCharacters: (value) =>
+      /^[A-Za-z]+$/.test(value) ||
+      "First name should contain only latin letters",
     checkLength: (value) => value.length >= 1 || "Too short",
   },
   required: "Please enter your first name",
@@ -39,11 +37,9 @@ export const firstNameValidation: RegisterOptions = {
 
 export const lastNameValidation: RegisterOptions = {
   validate: {
-    checkDigit: (value) =>
-      !/(?=.*[0-9])/.test(value) || "Name shouldn't contain digits",
-    checkSymbol: (value) =>
-      !/(?=.*[!@#$%^&*])/.test(value) ||
-      "Please don't use special characters (!@#$%^&*)",
+    checkValidCharacters: (value) =>
+      /^[A-Za-z]+$/.test(value) ||
+      "Last name should contain only latin letters",
     checkLength: (value) => value.length >= 1 || "Too short",
   },
   required: "Please enter your last name",
@@ -52,8 +48,17 @@ export const lastNameValidation: RegisterOptions = {
 export const birthDateValidation: RegisterOptions = {
   validate: {
     checkDate: (value) => {
+      const currentDate = new Date();
+      const inputDate = new Date(value);
+      const minDate = new Date("1900-01-01");
       const thirteenYearsAgo = Date.now() - 13 * 365.25 * 24 * 60 * 60 * 1000;
-      if (new Date(value).getTime() <= thirteenYearsAgo) {
+      if (inputDate.getTime() < minDate.getTime()) {
+        return "Date cannot be earlier than 1900";
+      }
+      if (inputDate.getTime() > currentDate.getTime()) {
+        return "Date cannot be in the future";
+      }
+      if (inputDate.getTime() <= thirteenYearsAgo) {
         return true;
       }
       return "You should be at least 13 years old";
@@ -64,6 +69,9 @@ export const birthDateValidation: RegisterOptions = {
 
 export const streetValidation: RegisterOptions = {
   validate: {
+    checkValidCharacters: (value) =>
+      /^([0-9a-zA-Z]+)(,\s*[0-9a-zA-Z]+)*$/.test(value) ||
+      "Street should contain only latin letters and numbers",
     checkLength: (value) => value.length >= 1 || "Too short",
   },
   required: "Please enter street",
@@ -71,11 +79,9 @@ export const streetValidation: RegisterOptions = {
 
 export const cityValidation: RegisterOptions = {
   validate: {
-    checkDigit: (value) =>
-      !/(?=.*[0-9])/.test(value) || "City shouldn't contain digits",
-    checkSymbol: (value) =>
-      !/(?=.*[!@#$%^&*])/.test(value) ||
-      "City shouldn't contain special characters (!@#$%^&*)",
+    checkValidCharacters: (value) =>
+      /^[a-zA-Z]+$/.test(value) ||
+      "City should contain only latin letters",
     checkLength: (value) => value.length >= 1 || "Too short",
   },
   required: "Please enter city",
