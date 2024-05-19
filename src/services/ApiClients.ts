@@ -2,10 +2,18 @@ import {
   ClientBuilder,
   type PasswordAuthMiddlewareOptions,
   type HttpMiddlewareOptions,
+  type AuthMiddlewareOptions,
 } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 import { Request } from "../types/types";
 import { setTokenToLocalStorage } from "../store/LocalStorage";
+
+const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
+const scopes = [import.meta.env.VITE_CTP_SCOPES];
+const httpMiddlewareOptions: HttpMiddlewareOptions = {
+  host: import.meta.env.VITE_CTP_API_URL,
+  fetch,
+};
 
 async function fetcher(...args: Request) {
   const param = args;
@@ -19,7 +27,6 @@ async function fetcher(...args: Request) {
 }
 
 const PasswordFlowApiClient = (email: string, password: string) => {
-  const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
   const options: PasswordAuthMiddlewareOptions = {
     host: import.meta.env.VITE_CTP_AUTH_URL,
     projectKey,
@@ -31,25 +38,14 @@ const PasswordFlowApiClient = (email: string, password: string) => {
         password,
       },
     },
-    scopes: [import.meta.env.VITE_CTP_SCOPES] /* [
-      `view_published_products:${projectKey}`,
-      `manage_my_profile:${projectKey}`,
-      `manage_my_orders:${projectKey}`,
-      `manage_my_shopping_lists:${projectKey}`,
-      `manage_my_payments:${projectKey}`,
-    ] */,
-
+    scopes,
     fetch: fetcher,
-  };
-  const httpMiddlewareOptions: HttpMiddlewareOptions = {
-    host: import.meta.env.VITE_CTP_API_URL,
-    fetch,
   };
 
   const passwordFlowClient = new ClientBuilder()
     .withPasswordFlow(options)
     .withHttpMiddleware(httpMiddlewareOptions)
-    // .withLoggerMiddleware() only for development usage
+    .withLoggerMiddleware()
     .build();
 
   const passwordFlowApiRoot = createApiBuilderFromCtpClient(
@@ -61,4 +57,31 @@ const PasswordFlowApiClient = (email: string, password: string) => {
   return passwordFlowApiRoot;
 };
 
-export default PasswordFlowApiClient;
+const ClientCredentialsFlowApiClient = () => {
+  const authMiddlewareOptions: AuthMiddlewareOptions = {
+    host: import.meta.env.VITE_CTP_AUTH_URL,
+    projectKey,
+    credentials: {
+      clientId: import.meta.env.VITE_CTP_CLIENT_ID,
+      clientSecret: import.meta.env.VITE_CTP_CLIENT_SECRET,
+    },
+    scopes,
+    fetch,
+  };
+
+  const clientCredentialsFlowClient = new ClientBuilder()
+    .withClientCredentialsFlow(authMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+
+  const clientCredentialsFlowApiRoot = createApiBuilderFromCtpClient(
+    clientCredentialsFlowClient,
+  ).withProjectKey({
+    projectKey,
+  });
+
+  return clientCredentialsFlowApiRoot;
+};
+
+export { PasswordFlowApiClient, ClientCredentialsFlowApiClient };

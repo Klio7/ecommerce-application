@@ -3,9 +3,9 @@ import {
   CustomerSignin,
   ClientResponse,
 } from "@commercetools/platform-sdk";
-import PasswordFlowApiClient from "./ApiClients";
+import { PasswordFlowApiClient } from "./ApiClients";
 
-async function loginCustomer(
+async function signInCustomer(
   email: string,
   password: string,
 ): Promise<ClientResponse<CustomerSignInResult>> {
@@ -31,4 +31,4 @@ async function loginCustomer(
   }
 }
 
-export default loginCustomer;
+export default signInCustomer;
