@@ -13,7 +13,7 @@ import {
   useToast,
   IconButton,
 } from "@chakra-ui/react";
-import { CustomerSignUp } from "@commercetools/platform-sdk";
+import { CustomerDraft } from "@commercetools/platform-sdk";
 import {
   birthDateValidation,
   cityValidation,
@@ -25,9 +25,9 @@ import {
   streetValidation,
   zipValidation,
 } from "../../utils/validation";
-import apiRoot from "../../services/CreateClient";
+import { ClientCredentialsFlowApiClient } from "../../services/ApiClients";
 import useAuth from "../../hooks/useAuth";
-import loginCustomer from "../../services/Authenication";
+import signInCustomer from "../../services/Authenication";
 
 interface SignUpFormInputs {
   email: string;
@@ -63,7 +63,7 @@ function SignUpForm() {
   const toast = useToast();
   const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
     try {
-      const newCustomerDetails: CustomerSignUp = {
+      const newCustomerDetails: CustomerDraft = {
         email: data.email,
         password: data.password,
         firstName: data.firstName,
@@ -80,10 +80,13 @@ function SignUpForm() {
       };
 
       // create customer
-      await apiRoot.customers().post({ body: newCustomerDetails }).execute();
+      await ClientCredentialsFlowApiClient()
+        .customers()
+        .post({ body: newCustomerDetails })
+        .execute();
 
       // login for the customer
-      await loginCustomer(data.email, data.password);
+      await signInCustomer(data.email, data.password);
 
       setAuth(true);
 
