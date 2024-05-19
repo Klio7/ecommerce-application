@@ -71,7 +71,7 @@ function SignUpForm() {
 
   const { setAuth } = useAuth();
   const toast = useToast();
-  const useSameAddress = watch("useSameAddress")
+  const useSameAddress = watch("useSameAddress");
   const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
     try {
       const shippingAdrress = {
@@ -278,13 +278,13 @@ function SignUpForm() {
         </Select>
         <FormErrorMessage>{errors.shippingCountry?.message}</FormErrorMessage>
       </FormControl>
-       {/* Checkbox for default address */}
+      {/* Checkbox for default address */}
       <FormControl mt={5}>
         <Checkbox {...register("setDefaultShipping")}>
-          Use as default address
+          Use as default shipping address
         </Checkbox>
       </FormControl>
-        {/* Checkbox for same address */}
+      {/* Checkbox for same address */}
       <FormControl mt={5}>
         <Checkbox {...register("useSameAddress")}>
           Use the same address for billing
@@ -293,54 +293,57 @@ function SignUpForm() {
       {/* Billing Address Section */}
       {!useSameAddress && (
         <>
-      <Box mt={10} mb={5}>
-        <FormLabel fontSize="lg">Billing  Address</FormLabel>
-      </Box>
-      <FormControl isRequired isInvalid={!!errors.billingStreet?.message}>
-        <FormLabel mt={5}>Street</FormLabel>
-        <Input
-          {...register("billingStreet", streetValidation)}
-          type="street"
-          placeholder="Street"
-        />
-        <FormErrorMessage>{errors.billingStreet?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isRequired isInvalid={!!errors.billingCity?.message}>
-        <FormLabel mt={5}>City</FormLabel>
-        <Input
-          {...register("billingCity", cityValidation)}
-          type="city"
-          placeholder="City"
-        />
-        <FormErrorMessage>{errors.billingCity?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isRequired isInvalid={!!errors.billingZip?.message}>
-        <FormLabel mt={5}>Postal code</FormLabel>
-        <Input
-          {...register("billingZip", zipValidation)}
-          type="zip"
-          placeholder="Postal code"
-        />
-        <FormErrorMessage>{errors.billingZip?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isRequired isInvalid={!!errors.billingCountry?.message}>
-        <FormLabel mt={5}>Country</FormLabel>
-        <Select
-          {...register("billingCountry", countryValidation)}
-          placeholder="Select country"
-        >
-          <option value="GB">United Kingdom</option>
-        </Select>
-        <FormErrorMessage>{errors.billingCountry?.message}</FormErrorMessage>
-      </FormControl>
-      </>
+          <Box mt={10} mb={5}>
+            <FormLabel fontSize="lg">Billing Address</FormLabel>
+          </Box>
+          <FormControl isRequired isInvalid={!!errors.billingStreet?.message}>
+            <FormLabel mt={5}>Street</FormLabel>
+            <Input
+              {...register("billingStreet", streetValidation)}
+              type="street"
+              placeholder="Street"
+            />
+            <FormErrorMessage>{errors.billingStreet?.message}</FormErrorMessage>
+          </FormControl>
+          <FormControl isRequired isInvalid={!!errors.billingCity?.message}>
+            <FormLabel mt={5}>City</FormLabel>
+            <Input
+              {...register("billingCity", cityValidation)}
+              type="city"
+              placeholder="City"
+            />
+            <FormErrorMessage>{errors.billingCity?.message}</FormErrorMessage>
+          </FormControl>
+          <FormControl isRequired isInvalid={!!errors.billingZip?.message}>
+            <FormLabel mt={5}>Postal code</FormLabel>
+            <Input
+              {...register("billingZip", zipValidation)}
+              type="zip"
+              placeholder="Postal code"
+            />
+            <FormErrorMessage>{errors.billingZip?.message}</FormErrorMessage>
+          </FormControl>
+          <FormControl isRequired isInvalid={!!errors.billingCountry?.message}>
+            <FormLabel mt={5}>Country</FormLabel>
+            <Select
+              {...register("billingCountry", countryValidation)}
+              placeholder="Select country"
+            >
+              <option value="GB">United Kingdom</option>
+            </Select>
+            <FormErrorMessage>
+              {errors.billingCountry?.message}
+            </FormErrorMessage>
+          </FormControl>
+          {/* Checkbox for default address */}
+          <FormControl mt={5}>
+            <Checkbox {...register("setDefaultBilling")}>
+              Use as default shipping address
+            </Checkbox>
+          </FormControl>
+        </>
       )}
 
-      <FormControl mt={5}>
-        <Checkbox {...register("setDefaultBilling")}>
-          Set as default billing address
-        </Checkbox>
-      </FormControl>
 
       <Button
         mt={5}
