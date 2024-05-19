@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import useAuth from "../../hooks/useAuth";
-import loginCustomer from "../../services/Authenication";
+import signInCustomer from "../../services/Authenication";
 import { SignInFormInputs } from "../../types/types";
 import { passwordValidation, emailValidation } from "../../utils/validation";
 
@@ -29,7 +29,7 @@ function SignInForm() {
   const { setAuth } = useAuth();
 
   const onSubmit: SubmitHandler<SignInFormInputs> = (data) =>
-    loginCustomer(data.email, data.password)
+    signInCustomer(data.email, data.password)
       .then(() => {
         setAuth(true);
         toast({

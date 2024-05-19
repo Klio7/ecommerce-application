@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import MainPage from "../pages/MainPage/MainPage";
 import SignInPage from "../pages/SignInPage/SignInPage";
-import SignUpForm from "../components/SignUp/SignUpForm";
+import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 
 function Router() {
@@ -10,7 +10,7 @@ function Router() {
     <Routes>
       <Route path="/" element={<MainPage />} />
       <Route path="/signin" element={<SignInPage />} />
-      <Route path="/signup" element={<SignUpForm />} />
+      <Route path="/signup" element={<SignUpPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
