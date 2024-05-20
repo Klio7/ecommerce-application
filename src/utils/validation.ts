@@ -95,7 +95,7 @@ export const zipValidation: RegisterOptions = {
     // regex for UK postal code https://stackoverflow.com/a/51885364
     checkUKPostCode: (value) =>
       /^([A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$/.test(value) ||
-      "Invalid UK postal code",
+      "Invalid UK postal code, example of a valid postal code “W1G 8UJ”",
   },
   required: "Please enter postal code",
 };
