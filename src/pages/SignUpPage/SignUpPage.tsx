@@ -21,7 +21,7 @@ function SignUpPage() {
       >
         <Center>
           <Text>
-            Are you already registered? {" "}
+            Are you already registered?{" "}
             <ChakraLink color="red" as={ReactRouterLink} to="/signin">
               Sign In
             </ChakraLink>
