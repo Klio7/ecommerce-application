@@ -344,7 +344,6 @@ function SignUpForm() {
         </>
       )}
 
-
       <Button
         mt={5}
         bg="white"

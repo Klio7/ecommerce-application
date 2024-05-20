@@ -11,8 +11,14 @@ describe("SignUpForm", () => {
   const firstNameInput = screen.getByPlaceholderText("First name");
   const lastNameInput = screen.getByPlaceholderText("Last name");
   const streetInputs = screen.getAllByPlaceholderText("Street");
+  const shippingStreetInput = streetInputs[0];
+  const billingStreetInput = streetInputs[1];
   const cityInputs = screen.getAllByPlaceholderText("City");
+  const shippingCityInput = cityInputs[0];
+  const billingCityInput = cityInputs[1];
   const postalCodeInputs = screen.getAllByPlaceholderText("Postal code");
+  const shippingPostalCodeInput = postalCodeInputs[0];
+  const billingPostalCodeInput = postalCodeInputs[1];
 
   it("should say if email is invalid", async () => {
     fireEvent.change(emailInput, { target: { value: "invalidemail" } });
@@ -128,8 +134,8 @@ describe("SignUpForm", () => {
     });
   });
 
-  it("should say if street contains not only Latin letters or numbers", async () => {
-    fireEvent.change(streetInputs[0], { target: { value: "^" } });
+  it("should say if shipping street contains not only Latin letters or numbers", async () => {
+    fireEvent.change(shippingStreetInput, { target: { value: "^" } });
     await waitFor(async () => {
       expect(
         screen.getByText(
@@ -139,15 +145,15 @@ describe("SignUpForm", () => {
     });
   });
 
-  it("should say if no street is entered", async () => {
-    fireEvent.change(streetInputs[0], { target: { value: "" } });
+  it("should say if no shipping street is entered", async () => {
+    fireEvent.change(shippingStreetInput, { target: { value: "" } });
     await waitFor(async () => {
       expect(await screen.getByText("Please enter street")).toBeInTheDocument();
     });
   });
 
-  it("should say if city contains not only Latin letters", async () => {
-    fireEvent.change(cityInputs[0], { target: { value: "0" } });
+  it("should say if shipping city contains not only Latin letters", async () => {
+    fireEvent.change(shippingCityInput, { target: { value: "0" } });
     await waitFor(async () => {
       expect(
         await screen.getByText("City should contain only Latin letters"),
@@ -155,15 +161,15 @@ describe("SignUpForm", () => {
     });
   });
 
-  it("should say if no city is entered", async () => {
-    fireEvent.change(cityInputs[0], { target: { value: "" } });
+  it("should say if no shipping city is entered", async () => {
+    fireEvent.change(shippingCityInput, { target: { value: "" } });
     await waitFor(async () => {
       expect(await screen.getByText("Please enter city")).toBeInTheDocument();
     });
   });
 
-  it("should say if postalcode doesn't suit UK postal codes", async () => {
-    fireEvent.change(postalCodeInputs[0], { target: { value: "PPP" } });
+  it("should say if shipping postalcode doesn't suit UK postal codes", async () => {
+    fireEvent.change(shippingPostalCodeInput, { target: { value: "PPP" } });
     await waitFor(async () => {
       expect(
         await screen.getByText("Invalid UK postal code"),
@@ -171,16 +177,16 @@ describe("SignUpForm", () => {
     });
   });
 
-  it("should say if no postal code is entered", async () => {
-    fireEvent.change(postalCodeInputs[0], { target: { value: "" } });
+  it("should say if no shipping postal code is entered", async () => {
+    fireEvent.change(shippingPostalCodeInput, { target: { value: "" } });
     await waitFor(async () => {
       expect(
         await screen.getByText("Please enter postal code"),
       ).toBeInTheDocument();
     });
   });
-  it("should say if street contains not only Latin letters or numbers", async () => {
-    fireEvent.change(streetInputs[1], { target: { value: "^" } });
+  it("should say if billing street contains not only Latin letters or numbers", async () => {
+    fireEvent.change(billingStreetInput, { target: { value: "^" } });
     await waitFor(async () => {
       expect(
         screen.getByText(
@@ -190,15 +196,17 @@ describe("SignUpForm", () => {
     });
   });
 
-  it("should say if no street is entered", async () => {
-    fireEvent.change(streetInputs[1], { target: { value: "" } });
+  it("should say if no billing street is entered", async () => {
+    fireEvent.change(billingStreetInput, { target: { value: "" } });
     await waitFor(async () => {
-      expect(await screen.getByText("Please enter street")).toBeInTheDocument();
+      expect(
+        await screen.getAllByText("Please enter street")[1],
+      ).toBeInTheDocument();
     });
   });
 
-  it("should say if city contains not only Latin letters", async () => {
-    fireEvent.change(cityInputs[1], { target: { value: "0" } });
+  it("should say if billing city contains not only Latin letters", async () => {
+    fireEvent.change(billingCityInput, { target: { value: "0" } });
     await waitFor(async () => {
       expect(
         await screen.getByText("City should contain only Latin letters"),
@@ -206,15 +214,17 @@ describe("SignUpForm", () => {
     });
   });
 
-  it("should say if no city is entered", async () => {
-    fireEvent.change(cityInputs[1], { target: { value: "" } });
+  it("should say if no billing city is entered", async () => {
+    fireEvent.change(billingCityInput, { target: { value: "" } });
     await waitFor(async () => {
-      expect(await screen.getByText("Please enter city")).toBeInTheDocument();
+      expect(
+        await screen.getAllByText("Please enter city")[1],
+      ).toBeInTheDocument();
     });
   });
 
-  it("should say if postalcode doesn't suit UK postal codes", async () => {
-    fireEvent.change(postalCodeInputs[1], { target: { value: "PPP" } });
+  it("should say if billing postalcode doesn't suit UK postal codes", async () => {
+    fireEvent.change(billingPostalCodeInput, { target: { value: "ooo" } });
     await waitFor(async () => {
       expect(
         await screen.getByText("Invalid UK postal code"),
@@ -222,11 +232,11 @@ describe("SignUpForm", () => {
     });
   });
 
-  it("should say if no postal code is entered", async () => {
-    fireEvent.change(postalCodeInputs[1], { target: { value: "" } });
+  it("should say if no billing postal code is entered", async () => {
+    fireEvent.change(billingPostalCodeInput, { target: { value: "" } });
     await waitFor(async () => {
       expect(
-        await screen.getByText("Please enter postal code"),
+        await screen.getAllByText("Please enter postal code")[1],
       ).toBeInTheDocument();
     });
   });
