@@ -31,7 +31,7 @@ function Header() {
         <Button
           className="icon"
           colorScheme="none"
-          leftIcon={<img src="./src/assets/Burger.svg" alt="burger" />}
+          leftIcon={<img src="images/icons/Burger.svg" alt="burger" />}
           onClick={onOpen}
         />
       </Show>
@@ -56,7 +56,7 @@ function Header() {
       </Drawer>
       <Flex align="center" gap="1em">
         <Link to="/">
-          <img className="icon" src="./src/assets/blyudo.png" alt="Blyudo" />
+          <img className="icon" src="images/icons/blyudo.png" alt="Blyudo" />
         </Link>
         <Link to="/">Blyudo</Link>
       </Flex>
@@ -69,12 +69,12 @@ function Header() {
       </Hide>
       <Flex gap="1em" alignItems="center">
         <Link to="/profile">
-          <img className="icon" src="./src/assets/Avatar.svg" alt="profile" />
+          <img className="icon" src="images/icons/Avatar.svg" alt="profile" />
         </Link>
         <Link to="/basket">
           <img
             className="icon"
-            src="./src/assets/Shopping cart.svg"
+            src="images/icons/Shopping cart.svg"
             alt="basket"
           />
         </Link>
