@@ -29,7 +29,7 @@ export const firstNameValidation: RegisterOptions = {
   validate: {
     checkValidCharacters: (value) =>
       /^[A-Za-z]+$/.test(value) ||
-      "First name should contain only latin letters",
+      "First name should contain only Latin letters",
     checkLength: (value) => value.length >= 1 || "Too short",
   },
   required: "Please enter your first name",
@@ -39,7 +39,7 @@ export const lastNameValidation: RegisterOptions = {
   validate: {
     checkValidCharacters: (value) =>
       /^[A-Za-z]+$/.test(value) ||
-      "Last name should contain only latin letters",
+      "Last name should contain only Latin letters",
     checkLength: (value) => value.length >= 1 || "Too short",
   },
   required: "Please enter your last name",
@@ -71,7 +71,7 @@ export const streetValidation: RegisterOptions = {
   validate: {
     checkValidCharacters: (value) =>
       /^([0-9a-zA-Z]+)(,\s*[0-9a-zA-Z]+)*$/.test(value) ||
-      "Street should contain only latin letters and numbers",
+      "Street should contain only Latin letters and numbers",
     checkLength: (value) => value.length >= 1 || "Too short",
   },
   required: "Please enter street",
@@ -80,8 +80,7 @@ export const streetValidation: RegisterOptions = {
 export const cityValidation: RegisterOptions = {
   validate: {
     checkValidCharacters: (value) =>
-      /^[a-zA-Z]+$/.test(value) ||
-      "City should contain only latin letters",
+      /^[a-zA-Z]+$/.test(value) || "City should contain only Latin letters",
     checkLength: (value) => value.length >= 1 || "Too short",
   },
   required: "Please enter city",
