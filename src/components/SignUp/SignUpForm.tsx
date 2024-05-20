@@ -338,7 +338,7 @@ function SignUpForm() {
           {/* Checkbox for default address */}
           <FormControl mt={5}>
             <Checkbox {...register("setDefaultBilling")}>
-              Use as default shipping address
+              Use as default billing address
             </Checkbox>
           </FormControl>
         </>
