@@ -16,6 +16,11 @@
     font-weight: bold;
 }
 
+.not-found-page-pic {
+    min-height: calc(100vh - 82px - 86px);
+    object-fit: cover;
+}
+
 @media screen and (width <= 826px) {
     .big-text {
         font-size: 1.25em;
