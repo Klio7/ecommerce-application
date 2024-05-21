@@ -10,7 +10,12 @@ module.exports = {
     "airbnb/hooks",
     "prettier",
   ],
-  ignorePatterns: ["dist", ".eslintrc.cjs", "vite.config.ts"],
+  ignorePatterns: [
+    "dist",
+    ".eslintrc.cjs",
+    "vite.config.ts",
+    "vitest.config.ts",
+  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "./tsconfig.json",
@@ -21,5 +26,6 @@ module.exports = {
       "warn",
       { allowConstantExport: true },
     ],
+    "react/jsx-props-no-spreading": "off",
   },
 };
