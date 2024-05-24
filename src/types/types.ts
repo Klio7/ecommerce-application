@@ -11,3 +11,13 @@ export interface ParsedProductData {
   images: string[];
   price: string;
 }
+export interface ImageViewProps {
+  images: string[];
+  mainImageURL: string;
+  handleMainImageChange: (src: string) => void;
+}
+
+export interface AdditionalImageViewProps {
+  imageSrc: string;
+  replaceMainImage: (src: string) => void;
+}

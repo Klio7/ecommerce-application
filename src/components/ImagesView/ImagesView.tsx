@@ -1,31 +1,36 @@
 import React from "react";
-import { Flex, HStack, Text, Image } from "@chakra-ui/react";
+import { HStack } from "@chakra-ui/react";
 import ProductMainView from "../ProductMainView/ProductMainView";
+import ProductAdditionalView from "../ProductAdditionalView/ProductAdditionalView";
+import { ImageViewProps } from "../../types/types";
 
-function ImagesView(images: string | string[]) {
-  const modifiedImages = [...images];
-  if (modifiedImages.length === 1) {
-    return ProductMainView(modifiedImages[0]);
-  }
-  if (typeof images !== "string" && modifiedImages.length > 1) {
-    const additionalImages = modifiedImages.slice(0);
-    return (
-      <>
-        {" "}
-        {ProductMainView(modifiedImages[0])}
+function ImagesView({
+  images,
+  mainImageURL,
+  handleMainImageChange,
+}: ImageViewProps) {
+  return (
+    <>
+      {ProductMainView(mainImageURL)}
+      {images.length > 1 && (
         <HStack>
-          {additionalImages.map((image) => (
-            <Image src={image} alt="" boxSize="100px" />
+          {images.map((src) => (
+            <ProductAdditionalView
+              imageSrc={src}
+              replaceMainImage={handleMainImageChange}
+              key={src}
+            />
           ))}
         </HStack>
-      </>
-    );
-  }
-  return (
+      )}
+    </>
+  );
+
+  /* return (
     <Flex>
       <Text>Sorry, photos are not available</Text>
     </Flex>
-  );
+  ); */
 }
 
 export default ImagesView;
