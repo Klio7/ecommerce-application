@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { HStack, Container, VStack, Text } from "@chakra-ui/react";
 import { ParsedProductData } from "../../types/types";
-import ProductMainView from "../ProductMainView/ProductMainView";
 import getProductDetails from "../../services/getProductDetails";
+import ImagesView from "../ImagesView/ImagesView";
 
 function DetailedProduct() {
   const [productData, setProductData] = useState<ParsedProductData>();
@@ -19,19 +19,13 @@ function DetailedProduct() {
     getProductData();
   }, []);
 
-  function renderProductView(data: ParsedProductData): React.JSX.Element {
-    if (productData?.images.length === 1) {
-      return ProductMainView(data.images[0]);
-    }
-    return ProductMainView(data.images[0]);
-  }
   if (productData === undefined) {
     return null;
   }
 
   return (
     <HStack>
-      <VStack>{renderProductView(productData)}</VStack>
+      <VStack>{ImagesView(productData?.images)}</VStack>
       <VStack>
         <Container>
           <Text>{productData.title}</Text>
