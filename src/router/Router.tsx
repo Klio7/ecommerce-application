@@ -4,7 +4,7 @@ import MainPage from "../pages/MainPage/MainPage";
 import SignInPage from "../pages/SignInPage/SignInPage";
 import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
-import DetailedProduct from "../components/DetailedProduct/DetailedProducts";
+import DetailedProduct from "../components/DetailedProduct/DetailedProduct";
 
 function Router() {
   return (
