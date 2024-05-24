@@ -4,7 +4,7 @@ import DetailedProduct from "../../components/DetailedProduct/DetailedProduct";
 
 function DetailedProductPage() {
   return (
-    <Flex>
+    <Flex justify="space-around" bgGradient="radial(#ded6cb, #bcb5ab)">
       <DetailedProduct />
     </Flex>
   );

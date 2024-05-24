@@ -10,7 +10,7 @@ function ProductAdditionalView({
     <Flex key={imageSrc}>
       <Image
         src={imageSrc}
-        boxSize="200px"
+        boxSize="140px"
         alt=""
         onClick={() => replaceMainImage(imageSrc)}
       />

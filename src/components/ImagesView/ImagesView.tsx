@@ -13,7 +13,7 @@ function ImagesView({
     <>
       {ProductMainView(mainImageURL)}
       {images.length > 1 && (
-        <HStack>
+        <HStack width="xl">
           {images.map((src) => (
             <ProductAdditionalView
               imageSrc={src}
