@@ -4,7 +4,7 @@ import MainPage from "../pages/MainPage/MainPage";
 import SignInPage from "../pages/SignInPage/SignInPage";
 import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
-import DetailedProduct from "../components/DetailedProduct/DetailedProduct";
+import DetailedProductPage from "../pages/DetailedProductPage/DetailedProductPage";
 
 function Router() {
   return (
@@ -13,7 +13,7 @@ function Router() {
       <Route path="/signin" element={<SignInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="*" element={<NotFoundPage />} />
-      <Route path="/about" element={<DetailedProduct />} />
+      <Route path="/about" element={<DetailedProductPage />} />
     </Routes>
   );
 }
