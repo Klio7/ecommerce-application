@@ -21,3 +21,9 @@ export interface AdditionalImageViewProps {
   imageSrc: string;
   replaceMainImage: (src: string) => void;
 }
+
+export interface SliderProps {
+  imagesArray: string[];
+  mainImageSrc: string;
+  replaceMainImage: (src: string) => void;
+}

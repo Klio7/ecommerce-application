@@ -10,10 +10,16 @@ function ImagesView({
   mainImageURL,
   handleMainImageChange,
 }: ImageViewProps) {
+  if (images.length === 1) {
+    return <> {ProductMainView(mainImageURL)}</>;
+  }
   return (
     <>
-      {ProductMainView(mainImageURL)}
-      {ImageSlider(mainImageURL)}
+      <ImageSlider
+        imagesArray={images}
+        mainImageSrc={mainImageURL}
+        replaceMainImage={handleMainImageChange}
+      />
       {images.length > 1 && (
         <HStack width="xl">
           {images.map((src) => (
