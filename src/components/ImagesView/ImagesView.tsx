@@ -3,6 +3,7 @@ import { HStack } from "@chakra-ui/react";
 import ProductMainView from "../ProductMainView/ProductMainView";
 import ProductAdditionalView from "../ProductAdditionalView/ProductAdditionalView";
 import { ImageViewProps } from "../../types/types";
+import ImageSlider from "../ImageSlider/ImageSlider";
 
 function ImagesView({
   images,
@@ -12,6 +13,7 @@ function ImagesView({
   return (
     <>
       {ProductMainView(mainImageURL)}
+      {ImageSlider(mainImageURL)}
       {images.length > 1 && (
         <HStack width="xl">
           {images.map((src) => (
