@@ -20,6 +20,7 @@ import "./Header.scss";
 function Header() {
   const { isAuthenticated, setAuth } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Flex
       as="header"
