@@ -10,6 +10,7 @@ export interface ParsedProductData {
   description: string;
   images: string[];
   price: string;
+  discountedPrice: string | undefined;
 }
 export interface ImageViewProps {
   images: string[];

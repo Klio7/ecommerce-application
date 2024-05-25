@@ -6,6 +6,7 @@ import {
   Text,
   StackDivider,
   Heading,
+  Highlight,
 } from "@chakra-ui/react";
 import { ParsedProductData } from "../../types/types";
 import getProductDetails from "../../services/getProductDetails";
@@ -17,8 +18,8 @@ function DetailedProduct() {
   async function getProductData() {
     const data = await getProductDetails("stocked_set");
     if (data) {
-      const { title, description, images, price } = data;
-      setProductData({ title, description, images, price });
+      const { title, description, images, price, discountedPrice } = data;
+      setProductData({ title, description, images, price, discountedPrice });
       setMainImage(images[0]);
     }
     return null;
@@ -50,17 +51,41 @@ function DetailedProduct() {
         divider={<StackDivider borderColor="#3A3845" />}
       >
         <Container marginBottom={10}>
-          <Heading textAlign="center" fontFamily="myHeading">
+          <Heading textAlign="center" fontFamily="detailedPageHeading">
             {productData.title}
           </Heading>
         </Container>
         <Container>
-          <Text fontSize="3xl" textAlign="center" fontFamily="myHeading">
-            {productData.price}
-          </Text>
+          {!productData.discountedPrice && (
+            <Text
+              fontSize="3xl"
+              textAlign="center"
+              fontFamily="detailedPageHeading"
+            >
+              {productData.price}
+            </Text>
+          )}
+          {productData.discountedPrice && (
+            <Text
+              fontSize="3xl"
+              textAlign="center"
+              fontFamily="detailedPageHeading"
+            >
+              <Highlight
+                query={`${productData.price}`}
+                styles={{
+                  fontSize: "xl",
+                  textDecorationLine: "line-through",
+                  color: "gray.500",
+                }}
+              >
+                {`${productData.discountedPrice}/${productData.price}`}
+              </Highlight>
+            </Text>
+          )}
         </Container>
         <Container>
-          <Text fontSize="2xl" textAlign="center" fontFamily="myBody">
+          <Text fontSize="2xl" textAlign="center" fontFamily="detailedPageBody">
             {productData.description}
           </Text>
         </Container>
