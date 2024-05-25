@@ -23,6 +23,7 @@ function DetailedProduct() {
     }
     return null;
   }
+
   useEffect(() => {
     getProductData();
   }, []);

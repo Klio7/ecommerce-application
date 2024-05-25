@@ -21,7 +21,7 @@ function ImagesView({
         replaceMainImage={handleMainImageChange}
       />
       {images.length > 1 && (
-        <HStack width="xl">
+        <HStack width="xl" justify="center">
           {images.map((src) => (
             <ProductAdditionalView
               imageSrc={src}

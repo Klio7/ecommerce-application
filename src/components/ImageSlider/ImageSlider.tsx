@@ -38,12 +38,20 @@ function ImageSlider({
       <IconButton
         aria-label="Search database"
         icon={<ChevronLeftIcon />}
+        colorScheme="white"
+        fontSize="60px"
+        height="100%"
+        _hover={{ backgroundColor: "#ffffff20" }}
         onClick={() => goPreviousSlide()}
       />
-      {ProductMainView(mainImageSrc)}
+      <Flex boxSize="xl">{ProductMainView(mainImageSrc)}</Flex>
       <IconButton
         aria-label="Search database"
         icon={<ChevronRightIcon />}
+        colorScheme="white"
+        fontSize="60px"
+        height="100%"
+        _hover={{ backgroundColor: "#ffffff20" }}
         onClick={() => goNextSlide()}
       />
     </Flex>
