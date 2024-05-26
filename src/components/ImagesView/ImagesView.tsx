@@ -5,27 +5,23 @@ import ProductAdditionalView from "../ProductAdditionalView/ProductAdditionalVie
 import { ImageViewProps } from "../../types/types";
 import ImageSlider from "../ImageSlider/ImageSlider";
 
-function ImagesView({
-  images,
-  mainImageURL,
-  handleMainImageChange,
-}: ImageViewProps) {
+function ImagesView({ images, mainImage, setMainImage }: ImageViewProps) {
   if (images.length === 1) {
-    return <> {ProductMainView(mainImageURL)}</>;
+    return <> {ProductMainView(mainImage)}</>;
   }
   return (
     <>
       <ImageSlider
-        imagesArray={images}
-        mainImageSrc={mainImageURL}
-        replaceMainImage={handleMainImageChange}
+        images={images}
+        mainImage={mainImage}
+        setMainImage={setMainImage}
       />
       {images.length > 1 && (
         <HStack width="xl" justify="center">
           {images.map((src) => (
             <ProductAdditionalView
               imageSrc={src}
-              replaceMainImage={handleMainImageChange}
+              replaceMainImage={setMainImage}
               key={src}
             />
           ))}
@@ -33,12 +29,6 @@ function ImagesView({
       )}
     </>
   );
-
-  /* return (
-    <Flex>
-      <Text>Sorry, photos are not available</Text>
-    </Flex>
-  ); */
 }
 
 export default ImagesView;

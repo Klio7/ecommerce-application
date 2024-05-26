@@ -38,8 +38,8 @@ function DetailedProduct() {
       <VStack>
         <ImagesView
           images={productData?.images}
-          mainImageURL={mainImage}
-          handleMainImageChange={setMainImage}
+          mainImage={mainImage}
+          setMainImage={setMainImage}
         />
       </VStack>
       <VStack

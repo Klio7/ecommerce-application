@@ -14,17 +14,11 @@ export interface ParsedProductData {
 }
 export interface ImageViewProps {
   images: string[];
-  mainImageURL: string;
-  handleMainImageChange: (src: string) => void;
+  mainImage: string;
+  setMainImage: (src: string) => void;
 }
 
 export interface AdditionalImageViewProps {
   imageSrc: string;
-  replaceMainImage: (src: string) => void;
-}
-
-export interface SliderProps {
-  imagesArray: string[];
-  mainImageSrc: string;
-  replaceMainImage: (src: string) => void;
+  setMainImage: (src: string) => void;
 }
