@@ -5,6 +5,7 @@ function parseProductDetails(data: ProductData): ParsedProductData | null {
   const title = data.name["en-US"];
   let description;
   let images;
+  let discountedPrice;
   let price;
 
   if (
@@ -19,9 +20,14 @@ function parseProductDetails(data: ProductData): ParsedProductData | null {
     );
     const rawPrice = data.masterVariant.prices[0].value.centAmount;
     price = `${(rawPrice / 100).toFixed(2)}$`;
+    const rawDiscountedPrice =
+      data.masterVariant.prices[0].discounted?.value.centAmount;
+    if (rawDiscountedPrice) {
+      discountedPrice = `${(rawDiscountedPrice / 100).toFixed(2)}$`;
+    }
   }
   if (description && images && price) {
-    return { title, description, images, price };
+    return { title, description, images, price, discountedPrice };
   }
 
   return null;

@@ -11,3 +11,15 @@ async function getProductDetails(key: string) {
   return parseProductDetails(productData);
 }
 export default getProductDetails;
+
+export async function getFiltered() {
+  ClientCredentialsFlowApiClient()
+    .productProjections()
+    .search()
+    .get({
+      queryArgs: {
+        filter: [`variants.attributes.Color:"Midnight"`],
+      },
+    })
+    .execute();
+}
