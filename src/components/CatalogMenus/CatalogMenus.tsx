@@ -16,9 +16,11 @@ import { Category } from "@commercetools/platform-sdk";
 import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
 
 export default function CatalogMenus({
-  HandleSortByColor,
+  HandleFilterByCustomAttribute, HandleFilterByPrice, HandleFilterByCategory
 }: {
-  HandleSortByColor: (color: string) => void;
+  HandleFilterByCustomAttribute: (attribute: string, color: string) => void;
+  HandleFilterByPrice: (value: number[]) => void;
+  HandleFilterByCategory: (id: string) => void;
 }) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [colors, setColors] = useState<Set<string>>(new Set());
@@ -56,8 +58,12 @@ export default function CatalogMenus({
       });
   }, []);
 
-  function HandleColorClick(color: string) {
-    HandleSortByColor(color);
+  function HandleCustomAttributeClick(attribute: string, color: string) {
+    HandleFilterByCustomAttribute(attribute, color);
+  }
+
+  function HandlePriceRangeChange(value: number[]) {
+    HandleFilterByPrice(value);
   }
 
   return (
@@ -68,7 +74,7 @@ export default function CatalogMenus({
         </MenuButton>
         <MenuList>
           {categories.map((category) => (
-            <MenuItem>{category.name["en-US"]}</MenuItem>
+            <MenuItem onClick={() => HandleFilterByCategory(category.id)}>{category.name["en-US"]}</MenuItem>
           ))}
         </MenuList>
       </Menu>
@@ -77,7 +83,7 @@ export default function CatalogMenus({
           Price
         </MenuButton>
         <MenuList>
-          <RangeSlider defaultValue={[0, 100]}>
+          <RangeSlider defaultValue={[0, 30000]} max={30000} onChangeEnd={(val) => HandlePriceRangeChange(val)}>
             <RangeSliderTrack>
               <RangeSliderFilledTrack />
             </RangeSliderTrack>
@@ -92,7 +98,7 @@ export default function CatalogMenus({
         </MenuButton>
         <MenuList>
           {[...colors].map((color) => (
-            <MenuItem onClick={() => HandleColorClick(color)}>{color}</MenuItem>
+            <MenuItem onClick={() => HandleCustomAttributeClick("Color", color)}>{color}</MenuItem>
           ))}
         </MenuList>
       </Menu>
@@ -102,7 +108,7 @@ export default function CatalogMenus({
         </MenuButton>
         <MenuList>
           {[...sizes].map((size) => (
-            <MenuItem>{size}</MenuItem>
+            <MenuItem onClick={() => HandleCustomAttributeClick("Size", size)}>{size}</MenuItem>
           ))}
         </MenuList>
       </Menu>

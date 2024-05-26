@@ -20,12 +20,57 @@ function CatalogPage() {
       });
   }, []);
 
-  const HandleSortByColor = useCallback((color: string) => {
+  const HandleFilterByCustomAttribute = useCallback((attribute: string, color: string) => {
     ClientCredentialsFlowApiClient()
       .products()
       .get({
         queryArgs: {
-          where: `masterData(current(masterVariant(attributes(name="Color" and value="${color}"))))`,
+          where: `masterData(current(masterVariant(attributes(name="${attribute}" and value="${color}"))))`,
+        },
+      })
+      .execute()
+      .then((result) => setProducts(result.body.results))
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const HandleFilterByCategory = useCallback((id: string) => {
+    ClientCredentialsFlowApiClient()
+    .productProjections()
+    .search()
+    .get({
+      queryArgs: {
+        filter: [`categories.id: subtree("${id}")`]
+      },
+    })
+    .execute()
+    .then(response => {
+      const productProjections = response.body.results;
+      const productKeys = productProjections.map(productProjection => productProjection.key);
+      const wherePredicate = productKeys.map(key => `key="${key}"`).join(' or ');
+
+      ClientCredentialsFlowApiClient()
+      .products()
+      .get({
+        queryArgs: {
+          where: wherePredicate,
+        },
+      })
+      .execute()
+      .then((result) => setProducts(result.body.results))
+      .catch((error) => {
+        console.error(error);
+      });
+  })
+  }, []);
+  
+  const HandleFilterByPrice = useCallback((value: number[]) => {
+    ClientCredentialsFlowApiClient()
+      .products()
+      .get({
+        queryArgs: {
+          where: `masterData(current(masterVariant(prices(value(centAmount < ${value[1]} and centAmount > ${value[0]})))))`,
         },
       })
       .execute()
@@ -37,7 +82,7 @@ function CatalogPage() {
 
   return (
     <Flex justifyContent="space-between">
-      <CatalogMenus HandleSortByColor={HandleSortByColor} />
+      <CatalogMenus HandleFilterByCustomAttribute={HandleFilterByCustomAttribute} HandleFilterByPrice={HandleFilterByPrice} HandleFilterByCategory={HandleFilterByCategory} />
       <SimpleGrid columns={3} gap="1em" as="main">
         {products
           ? products.map((product) => {
