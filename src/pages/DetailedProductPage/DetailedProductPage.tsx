@@ -4,7 +4,11 @@ import DetailedProduct from "../../components/DetailedProduct/DetailedProduct";
 
 function DetailedProductPage() {
   return (
-    <Flex justify="space-around" bgGradient="radial(#ded6cb, #bcb5ab)">
+    <Flex
+      justify="space-around"
+      bgGradient="radial(#ded6cb, #bcb5ab)"
+      minH="calc(100vh - 82px - 86px)"
+    >
       <DetailedProduct />
     </Flex>
   );

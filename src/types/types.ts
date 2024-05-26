@@ -10,6 +10,7 @@ export interface ParsedProductData {
   description: string;
   images: string[];
   price: string;
+  discountedPrice: string | undefined;
 }
 export interface ImageViewProps {
   images: string[];
@@ -19,5 +20,11 @@ export interface ImageViewProps {
 
 export interface AdditionalImageViewProps {
   imageSrc: string;
+  replaceMainImage: (src: string) => void;
+}
+
+export interface SliderProps {
+  imagesArray: string[];
+  mainImageSrc: string;
   replaceMainImage: (src: string) => void;
 }
