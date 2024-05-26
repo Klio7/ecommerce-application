@@ -16,7 +16,9 @@ import { Category } from "@commercetools/platform-sdk";
 import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
 
 export default function CatalogMenus({
-  HandleFilterByCustomAttribute, HandleFilterByPrice, HandleFilterByCategory
+  HandleFilterByCustomAttribute,
+  HandleFilterByPrice,
+  HandleFilterByCategory,
 }: {
   HandleFilterByCustomAttribute: (attribute: string, color: string) => void;
   HandleFilterByPrice: (value: number[]) => void;
@@ -74,7 +76,9 @@ export default function CatalogMenus({
         </MenuButton>
         <MenuList>
           {categories.map((category) => (
-            <MenuItem onClick={() => HandleFilterByCategory(category.id)}>{category.name["en-US"]}</MenuItem>
+            <MenuItem onClick={() => HandleFilterByCategory(category.id)}>
+              {category.name["en-US"]}
+            </MenuItem>
           ))}
         </MenuList>
       </Menu>
@@ -83,7 +87,11 @@ export default function CatalogMenus({
           Price
         </MenuButton>
         <MenuList>
-          <RangeSlider defaultValue={[0, 30000]} max={30000} onChangeEnd={(val) => HandlePriceRangeChange(val)}>
+          <RangeSlider
+            defaultValue={[0, 30000]}
+            max={30000}
+            onChangeEnd={(val) => HandlePriceRangeChange(val)}
+          >
             <RangeSliderTrack>
               <RangeSliderFilledTrack />
             </RangeSliderTrack>
@@ -98,7 +106,11 @@ export default function CatalogMenus({
         </MenuButton>
         <MenuList>
           {[...colors].map((color) => (
-            <MenuItem onClick={() => HandleCustomAttributeClick("Color", color)}>{color}</MenuItem>
+            <MenuItem
+              onClick={() => HandleCustomAttributeClick("Color", color)}
+            >
+              {color}
+            </MenuItem>
           ))}
         </MenuList>
       </Menu>
@@ -108,7 +120,9 @@ export default function CatalogMenus({
         </MenuButton>
         <MenuList>
           {[...sizes].map((size) => (
-            <MenuItem onClick={() => HandleCustomAttributeClick("Size", size)}>{size}</MenuItem>
+            <MenuItem onClick={() => HandleCustomAttributeClick("Size", size)}>
+              {size}
+            </MenuItem>
           ))}
         </MenuList>
       </Menu>

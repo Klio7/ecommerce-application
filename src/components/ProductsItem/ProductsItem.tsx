@@ -20,7 +20,7 @@ function ProductsItem({
       <p>{description}</p>
       {discountedPrice !== "undefined" ? (
         <>
-          <p>{`${(Number(discountedPrice) / 100).toFixed(2)}$`}</p>
+          <p>{discountedPrice}</p>
           <p>
             <s>{price}</s>
           </p>

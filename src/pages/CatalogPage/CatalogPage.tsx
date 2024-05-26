@@ -20,51 +20,58 @@ function CatalogPage() {
       });
   }, []);
 
-  const HandleFilterByCustomAttribute = useCallback((attribute: string, color: string) => {
-    ClientCredentialsFlowApiClient()
-      .products()
-      .get({
-        queryArgs: {
-          where: `masterData(current(masterVariant(attributes(name="${attribute}" and value="${color}"))))`,
-        },
-      })
-      .execute()
-      .then((result) => setProducts(result.body.results))
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  const HandleFilterByCustomAttribute = useCallback(
+    (attribute: string, color: string) => {
+      ClientCredentialsFlowApiClient()
+        .products()
+        .get({
+          queryArgs: {
+            where: `masterData(current(masterVariant(attributes(name="${attribute}" and value="${color}"))))`,
+          },
+        })
+        .execute()
+        .then((result) => setProducts(result.body.results))
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    [],
+  );
 
   const HandleFilterByCategory = useCallback((id: string) => {
     ClientCredentialsFlowApiClient()
-    .productProjections()
-    .search()
-    .get({
-      queryArgs: {
-        filter: [`categories.id: subtree("${id}")`]
-      },
-    })
-    .execute()
-    .then(response => {
-      const productProjections = response.body.results;
-      const productKeys = productProjections.map(productProjection => productProjection.key);
-      const wherePredicate = productKeys.map(key => `key="${key}"`).join(' or ');
-
-      ClientCredentialsFlowApiClient()
-      .products()
+      .productProjections()
+      .search()
       .get({
         queryArgs: {
-          where: wherePredicate,
+          filter: [`categories.id: subtree("${id}")`],
         },
       })
       .execute()
-      .then((result) => setProducts(result.body.results))
-      .catch((error) => {
-        console.error(error);
+      .then((response) => {
+        const productProjections = response.body.results;
+        const productKeys = productProjections.map(
+          (productProjection) => productProjection.key,
+        );
+        const wherePredicate = productKeys
+          .map((key) => `key="${key}"`)
+          .join(" or ");
+
+        ClientCredentialsFlowApiClient()
+          .products()
+          .get({
+            queryArgs: {
+              where: wherePredicate,
+            },
+          })
+          .execute()
+          .then((result) => setProducts(result.body.results))
+          .catch((error) => {
+            console.error(error);
+          });
       });
-  })
   }, []);
-  
+
   const HandleFilterByPrice = useCallback((value: number[]) => {
     ClientCredentialsFlowApiClient()
       .products()
@@ -82,7 +89,11 @@ function CatalogPage() {
 
   return (
     <Flex justifyContent="space-between">
-      <CatalogMenus HandleFilterByCustomAttribute={HandleFilterByCustomAttribute} HandleFilterByPrice={HandleFilterByPrice} HandleFilterByCategory={HandleFilterByCategory} />
+      <CatalogMenus
+        HandleFilterByCustomAttribute={HandleFilterByCustomAttribute}
+        HandleFilterByPrice={HandleFilterByPrice}
+        HandleFilterByCategory={HandleFilterByCategory}
+      />
       <SimpleGrid columns={3} gap="1em" as="main">
         {products
           ? products.map((product) => {
@@ -95,7 +106,7 @@ function CatalogPage() {
                   description={productData?.description}
                   imageURL={productData?.images[0]}
                   price={productData?.price}
-                  discountedPrice={`${product.masterData.current.masterVariant.prices![0].discounted?.value.centAmount}`}
+                  discountedPrice={productData?.discountedPrice}
                 />
               );
             })
