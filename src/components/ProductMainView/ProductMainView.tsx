@@ -1,12 +1,8 @@
 import React from "react";
 import { Flex, Image } from "@chakra-ui/react";
+import { MainViewModal } from "../../types/types";
 
-export interface ModalPropsMainView {
-  mainImage: string;
-  setModalOpen: (prop: boolean) => void;
-}
-
-function ProductMainView({ mainImage, setModalOpen }: ModalPropsMainView) {
+function ProductMainView({ mainImage, setModalOpen }: MainViewModal) {
   return (
     <Flex justify="center" grow="1">
       <Image

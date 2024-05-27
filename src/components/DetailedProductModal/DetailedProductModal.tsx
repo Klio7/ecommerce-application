@@ -10,14 +10,8 @@ import {
 import ProductMainView from "../ProductMainView/ProductMainView";
 import ImageSlider from "../ImageSlider/ImageSlider";
 import ProductAdditionalView from "../ProductAdditionalView/ProductAdditionalView";
+import { ModalProps } from "../../types/types";
 
-export interface ModalProps {
-  images: string[];
-  mainImage: string;
-  setMainImage: (src: string) => void;
-  isOpen: boolean;
-  setModalOpen: (prop: boolean) => void;
-}
 function DetailedProductModal({
   images,
   mainImage,

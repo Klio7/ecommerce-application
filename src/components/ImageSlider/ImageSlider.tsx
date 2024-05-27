@@ -2,20 +2,14 @@ import React from "react";
 import { IconButton, Flex } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import ProductMainView from "../ProductMainView/ProductMainView";
+import { SliderModal } from "../../types/types";
 
-export interface ModalPropsSlider {
-  images: string[];
-  mainImage: string;
-  setMainImage: (src: string) => void;
-
-  setModalOpen: (prop: boolean) => void;
-}
 function ImageSlider({
   images,
   mainImage,
   setMainImage,
   setModalOpen,
-}: ModalPropsSlider) {
+}: SliderModal) {
   function goNextSlide() {
     const mainImageIndex = images.findIndex(
       (imageUrl) => imageUrl === mainImage,
