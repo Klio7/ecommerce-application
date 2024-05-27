@@ -23,7 +23,12 @@ function DetailedProductModal({
     return (
       <>
         <ProductMainView mainImage={mainImage} setModalOpen={setModalOpen} />
-        <Modal isOpen={isOpen} onClose={() => setModalOpen(false)}>
+        <Modal
+          size="6xl"
+          blockScrollOnMount={false}
+          isOpen={isOpen}
+          onClose={() => setModalOpen(false)}
+        >
           <ModalOverlay />
           <ModalContent>
             <ModalCloseButton />
@@ -57,7 +62,12 @@ function DetailedProductModal({
           ))}
         </HStack>
       )}
-      <Modal isOpen={isOpen} onClose={() => setModalOpen(false)}>
+      <Modal
+        size="6xl"
+        blockScrollOnMount={false}
+        isOpen={isOpen}
+        onClose={() => setModalOpen(false)}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />

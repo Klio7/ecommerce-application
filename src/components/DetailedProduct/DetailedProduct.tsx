@@ -7,6 +7,7 @@ import {
   StackDivider,
   Heading,
   Highlight,
+  useToast,
 } from "@chakra-ui/react";
 import { ParsedProductData } from "../../types/types";
 import getProductDetails from "../../services/getProductDetails";
@@ -16,19 +17,49 @@ function DetailedProduct() {
   const [productData, setProductData] = useState<ParsedProductData>();
   const [mainImage, setMainImage] = useState("");
   const [isOpen, setModalOpen] = useState(false);
-  async function getProductData() {
-    const data = await getProductDetails("utensil_crock");
-    if (data) {
-      const { title, description, images, price, discountedPrice } = data;
-      setProductData({ title, description, images, price, discountedPrice });
-      setMainImage(images[0]);
-    }
-    return null;
-  }
+  const toast = useToast();
 
   useEffect(() => {
+    async function getProductData() {
+      try {
+        const data = await getProductDetails("utensil_crock");
+        if (data) {
+          const { title, description, images, price, discountedPrice } = data;
+          setProductData({
+            title,
+            description,
+            images,
+            price,
+            discountedPrice,
+          });
+          setMainImage(images[0]);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          if (error.message === "NotFound") {
+            toast({
+              position: "top",
+              title: "Sorry!",
+              description: "Product is not found",
+              status: "error",
+              duration: 6000,
+              isClosable: true,
+            });
+          } else {
+            toast({
+              position: "top",
+              title: "Sorry! There is temporary error.",
+              description: `Check your Internet connection.`,
+              status: "error",
+              duration: 6000,
+              isClosable: true,
+            });
+          }
+        }
+      }
+    }
     getProductData();
-  }, []);
+  }, [toast]);
 
   if (productData === undefined) {
     return null;
