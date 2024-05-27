@@ -2,9 +2,20 @@ import React from "react";
 import { IconButton, Flex } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import ProductMainView from "../ProductMainView/ProductMainView";
-import { ImageViewProps } from "../../types/types";
 
-function ImageSlider({ images, mainImage, setMainImage }: ImageViewProps) {
+export interface ModalPropsSlider {
+  images: string[];
+  mainImage: string;
+  setMainImage: (src: string) => void;
+
+  setModalOpen: (prop: boolean) => void;
+}
+function ImageSlider({
+  images,
+  mainImage,
+  setMainImage,
+  setModalOpen,
+}: ModalPropsSlider) {
   function goNextSlide() {
     const mainImageIndex = images.findIndex(
       (imageUrl) => imageUrl === mainImage,
@@ -40,7 +51,9 @@ function ImageSlider({ images, mainImage, setMainImage }: ImageViewProps) {
         _hover={{ backgroundColor: "#ffffff20" }}
         onClick={() => goPreviousSlide()}
       />
-      <Flex boxSize="xl">{ProductMainView(mainImage)}</Flex>
+      <Flex boxSize="xl" onClick={() => setModalOpen(true)}>
+        {ProductMainView({ mainImage, setModalOpen })}
+      </Flex>
       <IconButton
         aria-label="Search database"
         icon={<ChevronRightIcon />}

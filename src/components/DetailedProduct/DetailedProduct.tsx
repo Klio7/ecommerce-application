@@ -10,13 +10,14 @@ import {
 } from "@chakra-ui/react";
 import { ParsedProductData } from "../../types/types";
 import getProductDetails from "../../services/getProductDetails";
-import ImagesView from "../ImagesView/ImagesView";
+import DetailedProductModal from "../DetailedProductModal/DetailedProductModal";
 
 function DetailedProduct() {
   const [productData, setProductData] = useState<ParsedProductData>();
   const [mainImage, setMainImage] = useState("");
+  const [isOpen, setModalOpen] = useState(false);
   async function getProductData() {
-    const data = await getProductDetails("stocked_set");
+    const data = await getProductDetails("utensil_crock");
     if (data) {
       const { title, description, images, price, discountedPrice } = data;
       setProductData({ title, description, images, price, discountedPrice });
@@ -36,10 +37,12 @@ function DetailedProduct() {
   return (
     <HStack align="strech">
       <VStack>
-        <ImagesView
+        <DetailedProductModal
           images={productData?.images}
           mainImage={mainImage}
           setMainImage={setMainImage}
+          isOpen={isOpen}
+          setModalOpen={setModalOpen}
         />
       </VStack>
       <VStack
