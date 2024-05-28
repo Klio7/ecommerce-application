@@ -55,7 +55,10 @@ function DetailedProductModal({
         />
 
         {images.length > 1 && (
-          <Flex width="xl" justify="space-between">
+          <Flex
+            width={["20em", "sm", "lg", "lg", "xl"]}
+            justify="space-between"
+          >
             {images.map((src) => (
               <ProductAdditionalView
                 imageSrc={src}

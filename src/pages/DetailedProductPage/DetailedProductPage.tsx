@@ -5,7 +5,8 @@ import DetailedProduct from "../../components/DetailedProduct/DetailedProduct";
 function DetailedProductPage() {
   return (
     <Flex
-      justify="center"
+      justifyContent="center"
+      alignItems="center"
       bgGradient="radial(basicColorLight,basicColorDark)"
       minH="calc(100vh - 82px - 86px)"
     >

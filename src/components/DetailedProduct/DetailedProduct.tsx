@@ -21,7 +21,7 @@ function DetailedProduct() {
   useEffect(() => {
     async function getProductData() {
       try {
-        const data = await getProductDetails("utensil_crock");
+        const data = await getProductDetails("stocked_set");
         if (data) {
           const { title, description, images, price, discountedPrice } = data;
           setProductData({
@@ -65,7 +65,10 @@ function DetailedProduct() {
   }
 
   return (
-    <Flex align="strech">
+    <Flex
+      direction={["column", "column", "column", "row"]}
+      align={["center", "center", "stretch"]}
+    >
       <Flex direction="column">
         <DetailedProductModal
           images={productData?.images}
@@ -80,13 +83,16 @@ function DetailedProduct() {
         bg="white"
         border="2px"
         borderColor="#3A3845"
-        padding="50px"
+        alignItems="center"
+        maxW={["20em", "md", "2xl", "md", "xl"]}
+        px={[0, 0, "5px", "20px", "50px"]}
+        py={[0, 0, "5px", "50px", "50px"]}
       >
-        <Container marginBottom={10}>
+        <Container my={10}>
           <Heading
             textAlign="center"
             fontFamily="detailedPageHeading"
-            fontSize={[null, null, "2xl", "3xl", "5xl"]}
+            fontSize={["2xl", "2xl", "2xl", "3xl", "5xl"]}
           >
             {productData.title}
           </Heading>
@@ -95,7 +101,7 @@ function DetailedProduct() {
         <Container my={7}>
           {!productData.discountedPrice && (
             <Text
-              fontSize={[null, null, "2xl", "3xl", "4xl"]}
+              fontSize={["2xl", "xl", "2xl", "2xl", "4xl"]}
               textAlign="center"
               fontFamily="detailedPageHeading"
             >
@@ -104,7 +110,7 @@ function DetailedProduct() {
           )}
           {productData.discountedPrice && (
             <Text
-              fontSize={[null, null, "3xl", "3xl", "4xl"]}
+              fontSize={["2xl", "xl", "2xl", "2xl", "4xl"]}
               textAlign="center"
               fontFamily="detailedPageHeading"
             >
@@ -123,7 +129,7 @@ function DetailedProduct() {
         <Divider orientation="horizontal" />
         <Container mt={7}>
           <Text
-            fontSize={[null, null, "xl", "2xl", "3xl"]}
+            fontSize={["xl", "lg", "xl", "xl", "3xl"]}
             textAlign="center"
             fontFamily="detailedPageBody"
           >
