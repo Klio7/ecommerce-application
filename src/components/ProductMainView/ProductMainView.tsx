@@ -8,7 +8,7 @@ function ProductMainView({ mainImage, setModalOpen }: MainViewModal) {
       <Image
         src={mainImage}
         alt=""
-        boxSize="xl"
+        boxSize="100%"
         objectFit="cover"
         onClick={() => setModalOpen(true)}
       />

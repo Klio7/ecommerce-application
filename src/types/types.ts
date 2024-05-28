@@ -28,6 +28,7 @@ export interface SliderModal {
   mainImage: string;
   setMainImage: (src: string) => void;
   setModalOpen: (prop: boolean) => void;
+  isOpen: boolean;
 }
 
 export interface ModalProps extends SliderModal {

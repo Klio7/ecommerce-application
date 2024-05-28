@@ -5,7 +5,7 @@ import {
   ModalContent,
   ModalBody,
   ModalCloseButton,
-  HStack,
+  Flex,
 } from "@chakra-ui/react";
 import ProductMainView from "../ProductMainView/ProductMainView";
 import ImageSlider from "../ImageSlider/ImageSlider";
@@ -31,8 +31,8 @@ function DetailedProductModal({
         >
           <ModalOverlay />
           <ModalContent>
-            <ModalCloseButton />
-            <ModalBody>
+            <ModalCloseButton colorScheme="white" />
+            <ModalBody bgGradient="linear(to-b, basicColorDark, basicColorLight)">
               <ProductMainView
                 mainImage={mainImage}
                 setModalOpen={setModalOpen}
@@ -45,23 +45,27 @@ function DetailedProductModal({
   }
   return (
     <>
-      <ImageSlider
-        images={images}
-        mainImage={mainImage}
-        setMainImage={setMainImage}
-        setModalOpen={setModalOpen}
-      />
-      {images.length > 1 && (
-        <HStack width="xl" justify="center">
-          {images.map((src) => (
-            <ProductAdditionalView
-              imageSrc={src}
-              setMainImage={setMainImage}
-              key={src}
-            />
-          ))}
-        </HStack>
-      )}
+      <Flex direction="column" align="center">
+        <ImageSlider
+          images={images}
+          mainImage={mainImage}
+          setMainImage={setMainImage}
+          setModalOpen={setModalOpen}
+          isOpen={isOpen}
+        />
+
+        {images.length > 1 && (
+          <Flex width="xl" justify="space-between">
+            {images.map((src) => (
+              <ProductAdditionalView
+                imageSrc={src}
+                setMainImage={setMainImage}
+                key={src}
+              />
+            ))}
+          </Flex>
+        )}
+      </Flex>
       <Modal
         size="6xl"
         blockScrollOnMount={false}
@@ -70,13 +74,14 @@ function DetailedProductModal({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalCloseButton />
-          <ModalBody>
+          <ModalCloseButton colorScheme="white" />
+          <ModalBody bgGradient="linear(to-b, basicColorDark, basicColorLight)">
             <ImageSlider
               images={images}
               mainImage={mainImage}
               setMainImage={setMainImage}
               setModalOpen={setModalOpen}
+              isOpen={isOpen}
             />
           </ModalBody>
         </ModalContent>

@@ -9,6 +9,7 @@ function ImageSlider({
   mainImage,
   setMainImage,
   setModalOpen,
+  isOpen,
 }: SliderModal) {
   function goNextSlide() {
     const mainImageIndex = images.findIndex(
@@ -35,7 +36,7 @@ function ImageSlider({
     }
   }
   return (
-    <Flex align="center">
+    <Flex alignItems="center" grow="1">
       <IconButton
         aria-label="Search database"
         icon={<ChevronLeftIcon />}
@@ -45,9 +46,16 @@ function ImageSlider({
         _hover={{ backgroundColor: "#ffffff20" }}
         onClick={() => goPreviousSlide()}
       />
-      <Flex boxSize="xl" onClick={() => setModalOpen(true)}>
-        {ProductMainView({ mainImage, setModalOpen })}
-      </Flex>
+      {isOpen ? (
+        <Flex boxSize="5xl" onClick={() => setModalOpen(true)}>
+          {ProductMainView({ mainImage, setModalOpen })}
+        </Flex>
+      ) : (
+        <Flex boxSize="xl" grow="1" onClick={() => setModalOpen(true)}>
+          {ProductMainView({ mainImage, setModalOpen })}
+        </Flex>
+      )}
+
       <IconButton
         aria-label="Search database"
         icon={<ChevronRightIcon />}

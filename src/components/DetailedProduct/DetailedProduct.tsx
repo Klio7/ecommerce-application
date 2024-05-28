@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
-  HStack,
+  Flex,
   Container,
-  VStack,
   Text,
-  StackDivider,
+  Divider,
   Heading,
   Highlight,
   useToast,
@@ -66,8 +65,8 @@ function DetailedProduct() {
   }
 
   return (
-    <HStack align="strech">
-      <VStack>
+    <Flex align="strech">
+      <Flex direction="column">
         <DetailedProductModal
           images={productData?.images}
           mainImage={mainImage}
@@ -75,24 +74,28 @@ function DetailedProduct() {
           isOpen={isOpen}
           setModalOpen={setModalOpen}
         />
-      </VStack>
-      <VStack
+      </Flex>
+      <Flex
+        direction="column"
         bg="white"
         border="2px"
         borderColor="#3A3845"
-        spacing="30px"
         padding="50px"
-        divider={<StackDivider borderColor="#3A3845" />}
       >
         <Container marginBottom={10}>
-          <Heading textAlign="center" fontFamily="detailedPageHeading">
+          <Heading
+            textAlign="center"
+            fontFamily="detailedPageHeading"
+            fontSize={[null, null, "2xl", "3xl", "5xl"]}
+          >
             {productData.title}
           </Heading>
         </Container>
-        <Container>
+        <Divider orientation="horizontal" />
+        <Container my={7}>
           {!productData.discountedPrice && (
             <Text
-              fontSize="3xl"
+              fontSize={[null, null, "2xl", "3xl", "4xl"]}
               textAlign="center"
               fontFamily="detailedPageHeading"
             >
@@ -101,14 +104,13 @@ function DetailedProduct() {
           )}
           {productData.discountedPrice && (
             <Text
-              fontSize="3xl"
+              fontSize={[null, null, "3xl", "3xl", "4xl"]}
               textAlign="center"
               fontFamily="detailedPageHeading"
             >
               <Highlight
                 query={`${productData.price}`}
                 styles={{
-                  fontSize: "xl",
                   textDecorationLine: "line-through",
                   color: "gray.500",
                 }}
@@ -118,13 +120,18 @@ function DetailedProduct() {
             </Text>
           )}
         </Container>
-        <Container>
-          <Text fontSize="2xl" textAlign="center" fontFamily="detailedPageBody">
+        <Divider orientation="horizontal" />
+        <Container mt={7}>
+          <Text
+            fontSize={[null, null, "xl", "2xl", "3xl"]}
+            textAlign="center"
+            fontFamily="detailedPageBody"
+          >
             {productData.description}
           </Text>
         </Container>
-      </VStack>
-    </HStack>
+      </Flex>
+    </Flex>
   );
 }
 
