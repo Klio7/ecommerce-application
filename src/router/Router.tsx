@@ -6,6 +6,7 @@ import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import CatalogPage from "../pages/CatalogPage/CatalogPage";
 import DetailedProductPage from "../pages/DetailedProductPage/DetailedProductPage";
+import ProfilePage from "../pages/ProfilePage/ProfilePage";
 
 function Router() {
   return (
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/catalog" element={<CatalogPage />} />
       <Route path="*" element={<NotFoundPage />} />
       <Route path="/about" element={<DetailedProductPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Routes>
   );
 }

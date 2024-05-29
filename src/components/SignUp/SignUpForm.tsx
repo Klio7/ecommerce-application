@@ -27,9 +27,9 @@ import {
   streetValidation,
   zipValidation,
 } from "../../utils/validation";
-import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
+import { ClientCredentialsFlowApiClient } from "../../services/ApiClients";
 import useAuth from "../../hooks/useAuth";
-import signInCustomer from "../../services/authenication";
+import signInCustomer from "../../services/Authenication";
 
 interface SignUpFormInputs {
   email: string;
@@ -107,6 +107,7 @@ function SignUpForm() {
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
+        dateOfBirth: data.birthDate,
         addresses,
         shippingAddresses: [0],
         billingAddresses: [useSameAddress ? 0 : 1],
