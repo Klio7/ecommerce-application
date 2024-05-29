@@ -27,9 +27,9 @@ import {
   streetValidation,
   zipValidation,
 } from "../../utils/validation";
-import { ClientCredentialsFlowApiClient } from "../../services/ApiClients";
+import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
 import useAuth from "../../hooks/useAuth";
-import signInCustomer from "../../services/Authenication";
+import signInCustomer from "../../services/authenication";
 
 interface SignUpFormInputs {
   email: string;

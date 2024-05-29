@@ -6,9 +6,7 @@ export function setTokenToLocalStorage(
   localStorage.setItem("isAuthenticated", isAuthenticated.toString());
 }
 
-export function setClientIdToLocalStorage(
-  clientId: string
-) {
+export function setClientIdToLocalStorage(clientId: string) {
   localStorage.setItem("client_id", clientId);
 }
 

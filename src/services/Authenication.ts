@@ -3,7 +3,7 @@ import {
   CustomerSignin,
   ClientResponse,
 } from "@commercetools/platform-sdk";
-import { PasswordFlowApiClient } from "./ApiClients";
+import { PasswordFlowApiClient } from "./apiClients";
 import { setClientIdToLocalStorage } from "../store/LocalStorage";
 
 async function signInCustomer(

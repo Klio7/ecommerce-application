@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Center } from "@chakra-ui/react";
-import { Link as  Navigate } from "react-router-dom";
+import { Link as Navigate } from "react-router-dom";
 import UserProfile from "../../components/UserProfile/UserProfile";
 import useAuth from "../../hooks/useAuth";
 
