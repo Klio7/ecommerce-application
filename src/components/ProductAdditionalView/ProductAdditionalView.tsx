@@ -13,6 +13,11 @@ function ProductAdditionalView({
         boxSize="140px"
         alt=""
         onClick={() => setMainImage(imageSrc)}
+        _hover={{
+          cursor: "pointer",
+          border: "2px solid white",
+          transform: "scale(1.1)",
+        }}
       />
     </Flex>
   );

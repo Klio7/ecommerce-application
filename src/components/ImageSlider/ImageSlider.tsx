@@ -47,7 +47,10 @@ function ImageSlider({
         onClick={() => goPreviousSlide()}
       />
       {isOpen ? (
-        <Flex boxSize="5xl" onClick={() => setModalOpen(true)}>
+        <Flex
+          boxSize={["md", "xl", "2xl", "4xl", "5xl"]}
+          onClick={() => setModalOpen(true)}
+        >
           {ProductMainView({ mainImage, setModalOpen })}
         </Flex>
       ) : (

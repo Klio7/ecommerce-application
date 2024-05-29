@@ -12,7 +12,7 @@ import { ParsedProductData } from "../../types/types";
 import getProductDetails from "../../services/getProductDetails";
 import DetailedProductModal from "../DetailedProductModal/DetailedProductModal";
 
-function DetailedProduct() {
+function DetailedProduct({ productKey = "stocked_set" }) {
   const [productData, setProductData] = useState<ParsedProductData>();
   const [mainImage, setMainImage] = useState("");
   const [isOpen, setModalOpen] = useState(false);
@@ -21,7 +21,7 @@ function DetailedProduct() {
   useEffect(() => {
     async function getProductData() {
       try {
-        const data = await getProductDetails("stocked_set");
+        const data = await getProductDetails(productKey);
         if (data) {
           const { title, description, images, price, discountedPrice } = data;
           setProductData({
@@ -58,7 +58,7 @@ function DetailedProduct() {
       }
     }
     getProductData();
-  }, [toast]);
+  }, [toast, productKey]);
 
   if (productData === undefined) {
     return null;
