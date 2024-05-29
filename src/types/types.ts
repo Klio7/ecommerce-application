@@ -12,19 +12,25 @@ export interface ParsedProductData {
   price: string;
   discountedPrice: string | undefined;
 }
-export interface ImageViewProps {
-  images: string[];
-  mainImageURL: string;
-  handleMainImageChange: (src: string) => void;
-}
 
-export interface AdditionalImageViewProps {
+export interface AdditionalImageView {
   imageSrc: string;
-  replaceMainImage: (src: string) => void;
+  setMainImage: (src: string) => void;
 }
 
-export interface SliderProps {
-  imagesArray: string[];
-  mainImageSrc: string;
-  replaceMainImage: (src: string) => void;
+export interface MainViewModal {
+  mainImage: string;
+  setModalOpen: (prop: boolean) => void;
+}
+
+export interface SliderModal {
+  images: string[];
+  mainImage: string;
+  setMainImage: (src: string) => void;
+  setModalOpen: (prop: boolean) => void;
+  isOpen: boolean;
+}
+
+export interface ModalProps extends SliderModal {
+  isOpen: boolean;
 }

@@ -1,64 +1,107 @@
 import React, { useState, useEffect } from "react";
 import {
-  HStack,
+  Flex,
   Container,
-  VStack,
   Text,
-  StackDivider,
+  Divider,
   Heading,
   Highlight,
+  useToast,
 } from "@chakra-ui/react";
 import { ParsedProductData } from "../../types/types";
 import getProductDetails from "../../services/getProductDetails";
-import ImagesView from "../ImagesView/ImagesView";
+import DetailedProductModal from "../DetailedProductModal/DetailedProductModal";
 
-function DetailedProduct() {
+function DetailedProduct({ productKey = "stocked_set" }) {
   const [productData, setProductData] = useState<ParsedProductData>();
   const [mainImage, setMainImage] = useState("");
-  async function getProductData() {
-    const data = await getProductDetails("stocked_set");
-    if (data) {
-      const { title, description, images, price, discountedPrice } = data;
-      setProductData({ title, description, images, price, discountedPrice });
-      setMainImage(images[0]);
-    }
-    return null;
-  }
+  const [isOpen, setModalOpen] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
+    async function getProductData() {
+      try {
+        const data = await getProductDetails(productKey);
+        if (data) {
+          const { title, description, images, price, discountedPrice } = data;
+          setProductData({
+            title,
+            description,
+            images,
+            price,
+            discountedPrice,
+          });
+          setMainImage(images[0]);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          if (error.message === "NotFound") {
+            toast({
+              position: "top",
+              title: "Sorry!",
+              description: "Product is not found",
+              status: "error",
+              duration: 6000,
+              isClosable: true,
+            });
+          } else {
+            toast({
+              position: "top",
+              title: "Sorry! There is temporary error.",
+              description: `Check your Internet connection.`,
+              status: "error",
+              duration: 6000,
+              isClosable: true,
+            });
+          }
+        }
+      }
+    }
     getProductData();
-  }, []);
+  }, [toast, productKey]);
 
   if (productData === undefined) {
     return null;
   }
 
   return (
-    <HStack align="strech">
-      <VStack>
-        <ImagesView
+    <Flex
+      direction={["column", "column", "column", "row"]}
+      align={["center", "center", "stretch"]}
+    >
+      <Flex direction="column">
+        <DetailedProductModal
           images={productData?.images}
-          mainImageURL={mainImage}
-          handleMainImageChange={setMainImage}
+          mainImage={mainImage}
+          setMainImage={setMainImage}
+          isOpen={isOpen}
+          setModalOpen={setModalOpen}
         />
-      </VStack>
-      <VStack
+      </Flex>
+      <Flex
+        direction="column"
         bg="white"
         border="2px"
         borderColor="#3A3845"
-        spacing="30px"
-        padding="50px"
-        divider={<StackDivider borderColor="#3A3845" />}
+        alignItems="center"
+        maxW={["20em", "md", "2xl", "md", "xl"]}
+        px={[0, 0, "5px", "20px", "50px"]}
+        py={[0, 0, "5px", "50px", "50px"]}
       >
-        <Container marginBottom={10}>
-          <Heading textAlign="center" fontFamily="detailedPageHeading">
+        <Container my={10}>
+          <Heading
+            textAlign="center"
+            fontFamily="detailedPageHeading"
+            fontSize={["2xl", "2xl", "2xl", "3xl", "5xl"]}
+          >
             {productData.title}
           </Heading>
         </Container>
-        <Container>
+        <Divider orientation="horizontal" />
+        <Container my={7}>
           {!productData.discountedPrice && (
             <Text
-              fontSize="3xl"
+              fontSize={["2xl", "xl", "2xl", "2xl", "4xl"]}
               textAlign="center"
               fontFamily="detailedPageHeading"
             >
@@ -67,14 +110,13 @@ function DetailedProduct() {
           )}
           {productData.discountedPrice && (
             <Text
-              fontSize="3xl"
+              fontSize={["2xl", "xl", "2xl", "2xl", "4xl"]}
               textAlign="center"
               fontFamily="detailedPageHeading"
             >
               <Highlight
                 query={`${productData.price}`}
                 styles={{
-                  fontSize: "xl",
                   textDecorationLine: "line-through",
                   color: "gray.500",
                 }}
@@ -84,13 +126,18 @@ function DetailedProduct() {
             </Text>
           )}
         </Container>
-        <Container>
-          <Text fontSize="2xl" textAlign="center" fontFamily="detailedPageBody">
+        <Divider orientation="horizontal" />
+        <Container mt={7}>
+          <Text
+            fontSize={["xl", "lg", "xl", "xl", "3xl"]}
+            textAlign="center"
+            fontFamily="detailedPageBody"
+          >
             {productData.description}
           </Text>
         </Container>
-      </VStack>
-    </HStack>
+      </Flex>
+    </Flex>
   );
 }
 

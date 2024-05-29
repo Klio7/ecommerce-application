@@ -5,11 +5,11 @@ import { ChakraProvider } from "@chakra-ui/react";
 import App from "./App";
 import "normalize.css";
 import "./styles.scss";
-import theme from "./theme";
+import customTheme from "./theme";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLDivElement).render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={customTheme}>
       <BrowserRouter>
         <App />
       </BrowserRouter>

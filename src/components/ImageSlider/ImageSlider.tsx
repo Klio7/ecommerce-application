@@ -2,39 +2,41 @@ import React from "react";
 import { IconButton, Flex } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import ProductMainView from "../ProductMainView/ProductMainView";
-import { SliderProps } from "../../types/types";
+import { SliderModal } from "../../types/types";
 
 function ImageSlider({
-  imagesArray,
-  mainImageSrc,
-  replaceMainImage,
-}: SliderProps) {
+  images,
+  mainImage,
+  setMainImage,
+  setModalOpen,
+  isOpen,
+}: SliderModal) {
   function goNextSlide() {
-    const mainImageIndex = imagesArray.findIndex(
-      (imageUrl) => imageUrl === mainImageSrc,
+    const mainImageIndex = images.findIndex(
+      (imageUrl) => imageUrl === mainImage,
     );
-    if (mainImageIndex === imagesArray.length - 1) {
-      replaceMainImage(imagesArray[0]);
+    if (mainImageIndex === images.length - 1) {
+      setMainImage(images[0]);
     } else {
       const nextSlideIndex = mainImageIndex + 1;
-      const nextSlide = imagesArray[nextSlideIndex];
-      replaceMainImage(nextSlide);
+      const nextSlide = images[nextSlideIndex];
+      setMainImage(nextSlide);
     }
   }
   function goPreviousSlide() {
-    const mainImageIndex = imagesArray.findIndex(
-      (imageUrl) => imageUrl === mainImageSrc,
+    const mainImageIndex = images.findIndex(
+      (imageUrl) => imageUrl === mainImage,
     );
     if (mainImageIndex === 0) {
-      replaceMainImage(imagesArray[imagesArray.length - 1]);
+      setMainImage(images[images.length - 1]);
     } else {
       const previousSlideIndex = mainImageIndex - 1;
-      const previousSlide = imagesArray[previousSlideIndex];
-      replaceMainImage(previousSlide);
+      const previousSlide = images[previousSlideIndex];
+      setMainImage(previousSlide);
     }
   }
   return (
-    <Flex align="center">
+    <Flex alignItems="center" grow="1">
       <IconButton
         aria-label="Search database"
         icon={<ChevronLeftIcon />}
@@ -44,7 +46,23 @@ function ImageSlider({
         _hover={{ backgroundColor: "#ffffff20" }}
         onClick={() => goPreviousSlide()}
       />
-      <Flex boxSize="xl">{ProductMainView(mainImageSrc)}</Flex>
+      {isOpen ? (
+        <Flex
+          boxSize={["md", "xl", "2xl", "4xl", "5xl"]}
+          onClick={() => setModalOpen(true)}
+        >
+          {ProductMainView({ mainImage, setModalOpen })}
+        </Flex>
+      ) : (
+        <Flex
+          boxSize={["17em", "sm", "lg", "lg", "xl"]}
+          grow="1"
+          onClick={() => setModalOpen(true)}
+        >
+          {ProductMainView({ mainImage, setModalOpen })}
+        </Flex>
+      )}
+
       <IconButton
         aria-label="Search database"
         icon={<ChevronRightIcon />}
