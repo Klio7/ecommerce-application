@@ -4,6 +4,7 @@ import {
   ClientResponse,
 } from "@commercetools/platform-sdk";
 import { PasswordFlowApiClient } from "./apiClients";
+import { setClientIdToLocalStorage } from "../store/LocalStorage";
 
 async function signInCustomer(
   email: string,
@@ -23,6 +24,7 @@ async function signInCustomer(
       })
       .execute();
     if (response.statusCode === 200) {
+      setClientIdToLocalStorage(response.body.customer.id);
       return response;
     }
     return response;

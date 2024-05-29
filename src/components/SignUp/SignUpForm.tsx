@@ -107,6 +107,7 @@ function SignUpForm() {
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
+        dateOfBirth: data.birthDate,
         addresses,
         shippingAddresses: [0],
         billingAddresses: [useSameAddress ? 0 : 1],
