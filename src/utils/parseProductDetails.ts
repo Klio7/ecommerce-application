@@ -1,7 +1,9 @@
-import { ProductData } from "@commercetools/platform-sdk";
+import { ProductData, ProductProjection } from "@commercetools/platform-sdk";
 import { ParsedProductData } from "../types/types";
 
-function parseProductDetails(data: ProductData): ParsedProductData | null {
+function parseProductDetails(
+  data: ProductData | ProductProjection,
+): ParsedProductData | null {
   const title = data.name["en-US"];
   let description;
   let images;

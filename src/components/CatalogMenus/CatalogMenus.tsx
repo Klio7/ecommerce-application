@@ -20,7 +20,7 @@ export default function CatalogMenus({
   HandleFilterByPrice,
   HandleFilterByCategory,
 }: {
-  HandleFilterByCustomAttribute: (attribute: string, color: string) => void;
+  HandleFilterByCustomAttribute: (attribute: string, value: string) => void;
   HandleFilterByPrice: (value: number[]) => void;
   HandleFilterByCategory: (id: string) => void;
 }) {
