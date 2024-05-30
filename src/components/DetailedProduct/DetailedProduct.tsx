@@ -12,7 +12,7 @@ import { ParsedProductData } from "../../types/types";
 import getProductDetails from "../../services/getProductDetails";
 import DetailedProductModal from "../DetailedProductModal/DetailedProductModal";
 
-function DetailedProduct({ productKey = "stocked_set" }) {
+function DetailedProduct({ productKey }: { productKey: string }) {
   const [productData, setProductData] = useState<ParsedProductData>();
   const [mainImage, setMainImage] = useState("");
   const [isOpen, setModalOpen] = useState(false);

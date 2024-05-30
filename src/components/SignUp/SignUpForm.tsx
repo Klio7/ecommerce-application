@@ -29,7 +29,7 @@ import {
 } from "../../utils/validation";
 import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
 import useAuth from "../../hooks/useAuth";
-import signInCustomer from "../../services/authenication";
+import signInCustomer from "../../services/authentication";
 
 interface SignUpFormInputs {
   email: string;

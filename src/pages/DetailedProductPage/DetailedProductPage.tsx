@@ -2,7 +2,7 @@ import React from "react";
 import { Flex } from "@chakra-ui/react";
 import DetailedProduct from "../../components/DetailedProduct/DetailedProduct";
 
-function DetailedProductPage() {
+function DetailedProductPage({ productKey = "stocked_set" }) {
   return (
     <Flex
       justifyContent="center"
@@ -10,7 +10,7 @@ function DetailedProductPage() {
       bgGradient="radial(basicColorLight,basicColorDark)"
       minH="calc(100vh - 82px - 86px)"
     >
-      <DetailedProduct />
+      <DetailedProduct productKey={productKey} />
     </Flex>
   );
 }
