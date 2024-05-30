@@ -12,7 +12,11 @@ import {
   Hide,
   ListItem,
   List,
+  Text,
+  IconButton,
+  Tooltip,
 } from "@chakra-ui/react";
+import { LuLogOut } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import "./Header.scss";
@@ -25,6 +29,7 @@ function Header() {
     <Flex
       as="header"
       h="82px"
+      w="100%"
       alignItems="center"
       justifyContent="space-around"
     >
@@ -59,32 +64,119 @@ function Header() {
         <Link to="/">
           <img className="icon" src="images/icons/blyudo.png" alt="Blyudo" />
         </Link>
-        <Link to="/">Blyudo</Link>
+        <Link to="/">
+          <Text
+            fontSize={["xl", "2xl", "2xl", "2xl", "3xl"]}
+            color="gray.800"
+            transition="0.3s linear all"
+            _hover={{
+              transform: "scale(1.2)",
+              transition: "0.3s linear all",
+            }}
+          >
+            Blyudo
+          </Text>
+        </Link>
       </Flex>
       <Hide breakpoint="(max-width: 493px)">
         <Flex className="links" gap="1em">
-          <Link to="/">Main</Link>
-          <Link to="/catalog">Catalog</Link>
-          <Link to="/about">About</Link>
+          <Link to="/">
+            <Text
+              transition="0.3s linear all"
+              _hover={{
+                transform: "scale(1.2)",
+                transition: "0.3s linear all",
+              }}
+            >
+              Main
+            </Text>
+          </Link>
+          <Link to="/catalog">
+            <Text
+              transition="0.3s linear all"
+              _hover={{
+                transform: "scale(1.2)",
+                transition: "0.3s linear all",
+              }}
+            >
+              Catalog
+            </Text>
+          </Link>
+          <Link to="/about">
+            <Text
+              transition="0.3s linear all"
+              _hover={{
+                transform: "scale(1.2)",
+                transition: "0.3s linear all",
+              }}
+            >
+              About
+            </Text>
+          </Link>
         </Flex>
       </Hide>
+
       <Flex gap="1em" alignItems="center">
-        <Link to="/profile">
-          <img className="icon" src="images/icons/Avatar.svg" alt="profile" />
-        </Link>
+        {isAuthenticated ? (
+          <Link to="/profile">
+            <Tooltip label="Your profile" font-size="lg">
+              <img
+                className="icon"
+                src="images/icons/Avatar.svg"
+                alt="profile"
+              />
+            </Tooltip>
+          </Link>
+        ) : null}
         <Link to="/basket">
-          <img
-            className="icon"
-            src="images/icons/Shopping cart.svg"
-            alt="basket"
-          />
+          <Tooltip label="Cart" font-size="lg">
+            <img
+              className="icon"
+              src="images/icons/Shopping cart.svg"
+              alt="basket"
+            />
+          </Tooltip>
         </Link>
         {isAuthenticated ? (
-          <Button onClick={() => setAuth(false)}>Sign Out</Button>
+          <Tooltip label="Sign out" font-size="lg">
+            <IconButton
+              aria-label="Search database"
+              icon={<LuLogOut />}
+              bg="white"
+              onClick={() => setAuth(false)}
+              fontSize="18px"
+              color="gray.600"
+              transition="0.3s linear all"
+              _hover={{
+                transform: "scale(1.2)",
+                transition: "0.3s linear all",
+              }}
+            />
+          </Tooltip>
         ) : (
           <Flex gap="1em">
-            <Link to="/signin">Sign In</Link>
-            <Link to="/signup">Sign Up</Link>
+            <Link to="/signin">
+              <Text
+                transition="0.3s linear all"
+                _hover={{
+                  transform: "scale(1.2)",
+                  transition: "0.3s linear all",
+                }}
+              >
+                Sign In
+              </Text>
+            </Link>
+            <Link to="/signup">
+              <Text
+                transition="0.3s linear all"
+                _hover={{
+                  transform: "scale(1.2)",
+                  transition: "0.3s linear all",
+                }}
+              >
+                Sign Up
+              </Text>
+            </Link>
           </Flex>
         )}
       </Flex>
