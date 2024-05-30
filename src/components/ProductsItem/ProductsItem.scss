@@ -1,0 +1,12 @@
+.grey-price {
+    color: grey;
+}
+
+.products-item {
+    transition: 1s;
+}
+
+.products-item:hover {
+    background-color: #ded6cb;
+    cursor: pointer;
+}

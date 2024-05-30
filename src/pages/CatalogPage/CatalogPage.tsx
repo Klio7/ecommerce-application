@@ -6,8 +6,9 @@ import {
   Input,
   Menu,
   MenuButton,
-  MenuItem,
+  MenuItemOption,
   MenuList,
+  MenuOptionGroup,
   SimpleGrid,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -112,15 +113,17 @@ function CatalogPage() {
               Sort By
             </MenuButton>
             <MenuList>
-              <MenuItem onClick={() => HandleSort("name.en-US asc")}>
+            <MenuOptionGroup type='radio'>
+              <MenuItemOption value="name" onClick={() => HandleSort("name.en-US asc")}>
                 Name
-              </MenuItem>
-              <MenuItem onClick={() => HandleSort("price asc")}>
+              </MenuItemOption>
+              <MenuItemOption value="asc" onClick={() => HandleSort("price asc")}>
                 Price Ascending
-              </MenuItem>
-              <MenuItem onClick={() => HandleSort("price desc")}>
+              </MenuItemOption>
+              <MenuItemOption value="desc" onClick={() => HandleSort("price desc")}>
                 Price Descending
-              </MenuItem>
+              </MenuItemOption>
+              </MenuOptionGroup>
             </MenuList>
           </Menu>
         </Flex>
