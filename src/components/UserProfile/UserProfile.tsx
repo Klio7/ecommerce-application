@@ -163,12 +163,12 @@ function UserProfile() {
         </Box>
       ) : (
         <Spinner
-  thickness='4px'
-  speed='0.65s'
-  emptyColor='gray.200'
-  color='blue.500'
-  size='xl'
-/>
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
       )}
 
       <Modal isOpen={isEditMode} onClose={() => setIsEditMode(false)}>
@@ -185,7 +185,9 @@ function UserProfile() {
                     placeholder="First Name"
                     {...register("firstName", firstNameValidation)}
                   />
-                  <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
+                  <FormErrorMessage>
+                    {errors.firstName?.message}
+                  </FormErrorMessage>
                 </FormControl>
                 <FormControl isRequired isInvalid={!!errors.lastName?.message}>
                   <FormLabel mt={5}>Last name</FormLabel>
@@ -194,7 +196,9 @@ function UserProfile() {
                     type="lastName"
                     placeholder="Last name"
                   />
-                  <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
+                  <FormErrorMessage>
+                    {errors.lastName?.message}
+                  </FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={!!errors.email} isRequired>
                   <FormLabel>Email</FormLabel>
@@ -210,7 +214,9 @@ function UserProfile() {
                     placeholder="Date of Birth"
                     {...register("dateOfBirth", birthDateValidation)}
                   />
-                  <FormErrorMessage>{errors.dateOfBirth?.message}</FormErrorMessage>
+                  <FormErrorMessage>
+                    {errors.dateOfBirth?.message}
+                  </FormErrorMessage>
                 </FormControl>
                 {/* Add inputs for addresses if needed */}
               </VStack>
