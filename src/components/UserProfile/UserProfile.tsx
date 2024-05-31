@@ -151,12 +151,12 @@ function UserProfile() {
             <Heading as="h1" size="lg">
               User Profile
             </Heading>
-            <Button onClick={handleEditClick}>Edit Profile</Button>
 
             <Box>
               <Heading as="h2" size="md" mb={2}>
                 Personal Information
               </Heading>
+              <Button onClick={handleEditClick}>Edit Profile</Button>
               <Text>
                 <b>First Name:</b> {user?.firstName || "Not provided"}
               </Text>
@@ -269,6 +269,7 @@ function UserProfile() {
                   <Input
                     placeholder="Date of Birth"
                     {...register("dateOfBirth", birthDateValidation)}
+                    type="date"
                   />
                   <FormErrorMessage>
                     {errors.dateOfBirth?.message}
