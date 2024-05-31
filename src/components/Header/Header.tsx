@@ -50,17 +50,38 @@ function Header() {
             <List spacing="30px">
               <ListItem>
                 <Link to="/">
-                  <Text onClick={onClose}> Main</Text>
+                  <Text
+                    onClick={onClose}
+                    transition="0.3s"
+                    borderBottom="2px solid transparent"
+                    _hover={{ borderColor: " white" }}
+                  >
+                    Main
+                  </Text>
                 </Link>
               </ListItem>
               <ListItem>
                 <Link to="/catalog">
-                  <Text onClick={onClose}>Catalog</Text>
+                  <Text
+                    onClick={onClose}
+                    transition="0.3s"
+                    borderBottom="2px solid transparent"
+                    _hover={{ borderColor: " white" }}
+                  >
+                    Catalog
+                  </Text>
                 </Link>
               </ListItem>
               <ListItem>
                 <Link to="/about">
-                  <Text onClick={onClose}>About</Text>
+                  <Text
+                    onClick={onClose}
+                    transition="0.3s"
+                    borderBottom="2px solid transparent"
+                    _hover={{ borderColor: " white" }}
+                  >
+                    About
+                  </Text>
                 </Link>
               </ListItem>
             </List>
