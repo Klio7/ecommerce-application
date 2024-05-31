@@ -7,8 +7,28 @@ import {
   HStack,
   Badge,
   StackDivider,
+  Button,
+  Modal,
+  ModalFooter,
+  ModalContent,
+  ModalBody,
+  Input,
+  ModalOverlay,
+  ModalHeader,
+  ModalCloseButton,
+  Spinner,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
 } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
 import getUserProfile from "../../services/getUser";
+import {
+  birthDateValidation,
+  emailValidation,
+  firstNameValidation,
+  lastNameValidation,
+} from "../../utils/validation";
 
 interface Address {
   id: string;
@@ -30,6 +50,15 @@ interface UserData {
 
 function UserProfile() {
   const [user, setUser] = useState<UserData | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [, setEditedUser] = useState<UserData | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<UserData>();
 
   useEffect(() => {
     async function fetchUserData() {
@@ -46,6 +75,18 @@ function UserProfile() {
     fetchUserData();
   }, []);
 
+  const handleEditClick = () => {
+    setEditedUser(user);
+    reset(user); // Reset form values with current user data
+    setIsEditMode(true);
+  };
+
+  const onSubmit = (data: UserData) => {
+    // You can implement the save logic here
+    setUser(data);
+    setIsEditMode(false);
+  };
+
   return (
     <div>
       {user ? (
@@ -54,6 +95,7 @@ function UserProfile() {
             <Heading as="h1" size="lg">
               User Profile
             </Heading>
+            <Button onClick={handleEditClick}>Edit Profile</Button>
 
             <Box>
               <Heading as="h2" size="md" mb={2}>
@@ -120,8 +162,71 @@ function UserProfile() {
           </VStack>
         </Box>
       ) : (
-        <p>Loading...</p>
+        <Spinner
+  thickness='4px'
+  speed='0.65s'
+  emptyColor='gray.200'
+  color='blue.500'
+  size='xl'
+/>
       )}
+
+      <Modal isOpen={isEditMode} onClose={() => setIsEditMode(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit User Profile</ModalHeader>
+          <ModalCloseButton />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <ModalBody>
+              <VStack spacing={4}>
+                <FormControl isInvalid={!!errors.firstName} isRequired>
+                  <FormLabel>First Name</FormLabel>
+                  <Input
+                    placeholder="First Name"
+                    {...register("firstName", firstNameValidation)}
+                  />
+                  <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isRequired isInvalid={!!errors.lastName?.message}>
+                  <FormLabel mt={5}>Last name</FormLabel>
+                  <Input
+                    {...register("lastName", lastNameValidation)}
+                    type="lastName"
+                    placeholder="Last name"
+                  />
+                  <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={!!errors.email} isRequired>
+                  <FormLabel>Email</FormLabel>
+                  <Input
+                    placeholder="Email"
+                    {...register("email", emailValidation)}
+                  />
+                  <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={!!errors.dateOfBirth} isRequired>
+                  <FormLabel>Date of Birth</FormLabel>
+                  <Input
+                    placeholder="Date of Birth"
+                    {...register("dateOfBirth", birthDateValidation)}
+                  />
+                  <FormErrorMessage>{errors.dateOfBirth?.message}</FormErrorMessage>
+                </FormControl>
+                {/* Add inputs for addresses if needed */}
+              </VStack>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} type="submit">
+                Save
+              </Button>
+              <Button variant="ghost" onClick={() => setIsEditMode(false)}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }
