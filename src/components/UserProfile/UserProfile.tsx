@@ -75,8 +75,6 @@ function UserProfile() {
       }
     }
 
-
-
     fetchUserData();
   }, []);
 
@@ -94,7 +92,7 @@ function UserProfile() {
       }
 
       const updateCustomerDetails = {
-        version:  data.version,
+        version: data.version,
         actions: [
           {
             action: "setFirstName",
@@ -105,14 +103,14 @@ function UserProfile() {
             lastName: data.lastName,
           },
           {
-            action: 'changeEmail',
+            action: "changeEmail",
             email: data.email,
           },
           {
             action: "setDateOfBirth",
             dateOfBirth: data.dateOfBirth,
-          }
-        ]
+          },
+        ],
       };
 
       await ClientCredentialsFlowApiClient()
@@ -129,21 +127,21 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
-    
-    setUser(data);
-    setIsEditMode(false);
-  } catch (error) {
-    console.log("Error updating profile:", error);
-    toast({
-      position: "top",
-      title: "Error",
-      description: "There was an error updating your profile.",
-      status: "error",
-      duration: 3000,
-      isClosable: true,
-    });
-  }
-};
+
+      setUser(data);
+      setIsEditMode(false);
+    } catch (error) {
+      console.log("Error updating profile:", error);
+      toast({
+        position: "top",
+        title: "Error",
+        description: "There was an error updating your profile.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <>
