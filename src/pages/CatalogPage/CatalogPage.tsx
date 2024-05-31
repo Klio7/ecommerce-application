@@ -10,6 +10,7 @@ import {
   MenuList,
   MenuOptionGroup,
   SimpleGrid,
+  Spinner,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { ProductProjection } from "@commercetools/platform-sdk";
@@ -141,7 +142,7 @@ function CatalogPage() {
                   />
                 );
               })
-            : "Loading..."}
+            : <Spinner alignSelf='center' />}
         </SimpleGrid>
       </Box>
     </Flex>
