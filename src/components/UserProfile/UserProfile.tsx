@@ -12,6 +12,7 @@ import {
   ModalFooter,
   ModalContent,
   ModalBody,
+  useToast,
   Input,
   ModalOverlay,
   ModalHeader,
@@ -29,6 +30,8 @@ import {
   firstNameValidation,
   lastNameValidation,
 } from "../../utils/validation";
+import { getClientIdFromLocalStorage } from "../../store/LocalStorage";
+import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
 
 interface Address {
   id: string;
@@ -43,6 +46,7 @@ interface UserData {
   lastName: string;
   email: string;
   dateOfBirth: string;
+  version: number;
   addresses: Address[];
   defaultBillingAddressId: string;
   defaultShippingAddressId: string;
@@ -59,36 +63,90 @@ function UserProfile() {
     formState: { errors },
     reset,
   } = useForm<UserData>();
+  const toast = useToast();
 
   useEffect(() => {
     async function fetchUserData() {
       try {
         const response = await getUserProfile();
         setUser(response.body);
-        console.log(response);
-        console.log(response.body.email);
       } catch (error) {
         console.log(error);
       }
     }
+
+
 
     fetchUserData();
   }, []);
 
   const handleEditClick = () => {
     setEditedUser(user);
-    reset(user); // Reset form values with current user data
+    reset(user);
     setIsEditMode(true);
   };
 
-  const onSubmit = (data: UserData) => {
-    // You can implement the save logic here
+  const onSubmit = async (data: UserData) => {
+    try {
+      const clientId = getClientIdFromLocalStorage();
+      if (clientId === null) {
+        throw new Error("Client ID is null");
+      }
+
+      const updateCustomerDetails = {
+        version:  data.version,
+        actions: [
+          {
+            action: "setFirstName",
+            firstName: data.firstName,
+          },
+          {
+            action: "setLastName",
+            lastName: data.lastName,
+          },
+          {
+            action: 'changeEmail',
+            email: data.email,
+          },
+          {
+            action: "setDateOfBirth",
+            dateOfBirth: data.dateOfBirth,
+          }
+        ]
+      };
+
+      await ClientCredentialsFlowApiClient()
+        .customers()
+        .withId({ ID: clientId })
+        .post({ body: updateCustomerDetails })
+        .execute();
+
+      toast({
+        position: "top",
+        title: "Profile updated",
+        description: "Your profile has been updated successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    
     setUser(data);
     setIsEditMode(false);
-  };
+  } catch (error) {
+    console.log("Error updating profile:", error);
+    toast({
+      position: "top",
+      title: "Error",
+      description: "There was an error updating your profile.",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+  }
+};
 
   return (
-    <div>
+    <>
       {user ? (
         <Box p={5}>
           <VStack spacing={5} align="start">
@@ -233,7 +291,7 @@ function UserProfile() {
           </form>
         </ModalContent>
       </Modal>
-    </div>
+    </>
   );
 }
 
