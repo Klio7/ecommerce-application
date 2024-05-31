@@ -31,7 +31,7 @@ function Header() {
       h="82px"
       w="100%"
       alignItems="center"
-      justifyContent="space-around"
+      justifyContent="space-between"
       px="7px"
     >
       <Show breakpoint="(max-width: 525px)">
@@ -73,7 +73,7 @@ function Header() {
         </Link>
         <Link to="/">
           <Text
-            fontSize={["xl", "2xl", "2xl", "2xl", "3xl"]}
+            fontSize={["2xl", "2xl", "2xl", "2xl", "3xl"]}
             color="gray.800"
             transition="0.3s linear all"
             _hover={{

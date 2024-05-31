@@ -10,7 +10,7 @@ function Footer() {
       h="86px"
       bg="#3A3845"
       color="#A6A6A8"
-      justifyContent="center"
+      justifyContent="space-between"
       alignItems="center"
       gap="2em"
       pos="absolute"
