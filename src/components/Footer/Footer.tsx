@@ -15,15 +15,54 @@ function Footer() {
       gap="2em"
       pos="absolute"
       top="100%"
+      px="15px"
     >
-      <Link to="https://rs.school/">Rolling Scopes</Link>
-      <Text>
-        <Link to="https://github.com/Klio7">Klio7</Link>,{" "}
-        <Link to="https://github.com/AlexeyArhangelskiy">
-          AlexeyArhangelskiy
+      <Link to="https://rs.school/">
+        <Text
+          align="center"
+          transition="0.3s linear all"
+          _hover={{
+            color: "white",
+          }}
+        >
+          Rolling Scopes
+        </Text>
+      </Link>
+      <Flex gap="0.1em" direction={["column", "row", "row", "row"]}>
+        <Link to="https://github.com/Klio7">
+          <Text
+            align="center"
+            transition="0.3s linear all"
+            _hover={{
+              color: "white",
+            }}
+          >
+            Klio7,
+          </Text>
         </Link>
-        , <Link to="https://github.com/kaliganoff">kaliganoff</Link>
-      </Text>
+        <Link to="https://github.com/AlexeyArhangelskiy">
+          <Text
+            align="center"
+            transition="0.3s linear all"
+            _hover={{
+              color: "white",
+            }}
+          >
+            AlexeyArhangelskiy,
+          </Text>
+        </Link>
+        <Link to="https://github.com/kaliganoff">
+          <Text
+            align="center"
+            transition="0.3s linear all"
+            _hover={{
+              color: "white",
+            }}
+          >
+            kaliganoff
+          </Text>
+        </Link>
+      </Flex>
       <Text>2024</Text>
     </Flex>
   );

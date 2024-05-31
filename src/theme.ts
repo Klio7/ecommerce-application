@@ -3,7 +3,6 @@ import { extendTheme, theme as base } from "@chakra-ui/react";
 const fonts = {
   detailedPageHeading: `'Quincy CF Regular', ${base.fonts?.heading}, sans-serif`,
   detailedPageBody: `'Quincy CF Light', ${base.fonts?.body}, sans-serif`,
-  Urbanist: `"Urbanist Medium", ${base.fonts?.body}, sans-serif`,
   body: `"Urbanist Medium", ${base.fonts?.body}, sans-serif`,
   heading: `"Urbanist Medium Bold", ${base.fonts?.body}, sans-serif`,
 };
