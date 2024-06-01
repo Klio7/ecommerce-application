@@ -65,11 +65,19 @@ function CatalogPage() {
   }, []);
 
   function HandleSort(sortArg: string) {
+    const productKeys = products.map(
+      (product) => product.key,
+    );
+    const wherePredicate = productKeys
+      .map((key) => `"${key}"`)
+      .join(', ');
+
     ClientCredentialsFlowApiClient()
       .productProjections()
       .search()
       .get({
         queryArgs: {
+          filter: `key: ${wherePredicate}`,
           sort: sortArg,
         },
       })
