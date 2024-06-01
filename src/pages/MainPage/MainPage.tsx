@@ -1,15 +1,17 @@
 import React from "react";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import "./MainPage.scss";
 
 function MainPage() {
   return (
-    <Box as="main" position="relative">
-      <img
-        className="main_page_pic"
+    <Box as="main" position="relative" w="100%">
+      <Image
+        w="100%"
+        h="auto"
         src="images\pictures\main_page_pic.png"
-        alt=""
+        objectFit="cover"
+        alt=" "
       />
       <Flex as="aside" className="sidebar">
         <Link to="/">Main Page</Link>
