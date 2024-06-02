@@ -111,19 +111,44 @@ export default function CatalogMenus({
           {selectedCategory}
         </MenuButton>
         <MenuList>
-          {categories.map((category) => (
-            <MenuItem
-              onClick={() => {
-                HandleFilterByCategory(category.id);
-                setSelectedCategory(category.name["en-US"]);
-                setSelectedColor("Color");
-                setSelectedSize("Size");
-                setSelectedPrice("Price");
-              }}
-            >
-              {category.name["en-US"]}
-            </MenuItem>
-          ))}
+          {categories.map((category) => {
+            if (!category.parent)
+              return (
+                <>
+                  <MenuItem
+                    fontWeight="bold"
+                    onClick={() => {
+                      HandleFilterByCategory(category.id);
+                      setSelectedCategory(category.name["en-US"]);
+                      setSelectedColor("Color");
+                      setSelectedSize("Size");
+                      setSelectedPrice("Price");
+                    }}
+                  >
+                    {category.name["en-US"]}
+                  </MenuItem>
+                  {categories.map((subcategory) => {
+                    if (subcategory.parent?.id === category.id) {
+                      return (
+                        <MenuItem
+                          onClick={() => {
+                            HandleFilterByCategory(subcategory.id);
+                            setSelectedCategory(subcategory.name["en-US"]);
+                            setSelectedColor("Color");
+                            setSelectedSize("Size");
+                            setSelectedPrice("Price");
+                          }}
+                        >
+                          {subcategory.name["en-US"]}
+                        </MenuItem>
+                      );
+                    }
+                    return null;
+                  })}
+                </>
+              );
+              return null;
+          })}
         </MenuList>
       </Menu>
       <Menu>

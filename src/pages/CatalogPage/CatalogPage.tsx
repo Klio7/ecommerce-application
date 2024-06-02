@@ -1,17 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Box,
-  Flex,
-  Input,
-  Select,
-  SimpleGrid,
-  Spinner,
-} from "@chakra-ui/react";
+import { Box, Flex, Grid, Input, Select, Spinner } from "@chakra-ui/react";
 import { ProductProjection } from "@commercetools/platform-sdk";
 import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
 import ProductsItem from "../../components/ProductsItem/ProductsItem";
 import CatalogMenus from "../../components/CatalogMenus/CatalogMenus";
 import parseProductDetails from "../../utils/parseProductDetails";
+import "./CatalogPage.scss";
 
 function CatalogPage() {
   const [products, setProducts] = useState<ProductProjection[]>([]);
@@ -110,7 +104,7 @@ function CatalogPage() {
         HandleFilterByCategory={HandleFilterByCategory}
         searchValue={searchValue}
       />
-      <Box>
+      <Box flexGrow={1}>
         <Flex>
           <Input
             placeholder="Search"
@@ -130,7 +124,7 @@ function CatalogPage() {
             <option value="price desc">Price Descending</option>
           </Select>
         </Flex>
-        <SimpleGrid columns={3} gap="1em" as="main">
+        <Grid className="grid" as="main">
           {products ? (
             products.map((product) => {
               const productData = parseProductDetails(product);
@@ -147,7 +141,7 @@ function CatalogPage() {
           ) : (
             <Spinner alignSelf="center" />
           )}
-        </SimpleGrid>
+        </Grid>
       </Box>
     </Flex>
   );
