@@ -114,35 +114,46 @@ function CatalogPage() {
               Sort By
             </MenuButton>
             <MenuList>
-            <MenuOptionGroup type='radio'>
-              <MenuItemOption value="name" onClick={() => HandleSort("name.en-US asc")}>
-                Name
-              </MenuItemOption>
-              <MenuItemOption value="asc" onClick={() => HandleSort("price asc")}>
-                Price Ascending
-              </MenuItemOption>
-              <MenuItemOption value="desc" onClick={() => HandleSort("price desc")}>
-                Price Descending
-              </MenuItemOption>
+              <MenuOptionGroup type="radio">
+                <MenuItemOption
+                  value="name"
+                  onClick={() => HandleSort("name.en-US asc")}
+                >
+                  Name
+                </MenuItemOption>
+                <MenuItemOption
+                  value="asc"
+                  onClick={() => HandleSort("price asc")}
+                >
+                  Price Ascending
+                </MenuItemOption>
+                <MenuItemOption
+                  value="desc"
+                  onClick={() => HandleSort("price desc")}
+                >
+                  Price Descending
+                </MenuItemOption>
               </MenuOptionGroup>
             </MenuList>
           </Menu>
         </Flex>
         <SimpleGrid columns={3} gap="1em" as="main">
-          {products
-            ? products.map((product) => {
-                const productData = parseProductDetails(product);
-                return (
-                  <ProductsItem
-                    name={productData?.title}
-                    description={productData?.description}
-                    imageURL={productData?.images[0]}
-                    price={productData?.price}
-                    discountedPrice={productData?.discountedPrice}
-                  />
-                );
-              })
-            : <Spinner alignSelf='center' />}
+          {products ? (
+            products.map((product) => {
+              const productData = parseProductDetails(product);
+              return (
+                <ProductsItem
+                  name={productData?.title}
+                  description={productData?.description}
+                  imageURL={productData?.images[0]}
+                  price={productData?.price}
+                  discountedPrice={productData?.discountedPrice}
+                />
+              );
+            })
+          ) : (
+            <Spinner alignSelf="center" />
+          )}
         </SimpleGrid>
       </Box>
     </Flex>

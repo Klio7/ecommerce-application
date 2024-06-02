@@ -11,12 +11,12 @@ function MainPage() {
             direction="column"
             justify="center"
             align="center"
-            gap="20px"
+            gap={["5px", "15px", "20px"]}
             w="30%"
             flexGrow="1"
             bg="#826F66"
             color="white"
-            fontSize="xl"
+            fontSize={["s", "s", "xl"]}
           >
             <Link to="/">
               <Text
@@ -46,8 +46,8 @@ function MainPage() {
               </Text>
             </Link>
             <Image
-              boxSize="100px"
-              mt="80px"
+              boxSize={["50px", "70px", "100px"]}
+              mt={["10px", "10px", "50px", "80px"]}
               src="images\pictures\shop-icon.svg"
               alt="icon"
             />
@@ -60,7 +60,7 @@ function MainPage() {
             alt=" "
           />
         </Flex>
-        <Flex direction="column" align="center" p="60px" bg="#F9F2EC">
+        <Flex direction="column" align="center" p="60px" bg="#F9F2EC" px="10%">
           <Heading mb="10px" textAlign="center">
             From Mondays to birthdays,
           </Heading>
@@ -69,10 +69,10 @@ function MainPage() {
             family. That’s why we believe it’s worth it to set a table you love.
           </Text>
         </Flex>
-        <Flex direction="row">
+        <Flex direction={["column", "column", "row"]}>
           <Image
             flexGrow="1"
-            boxSize="50%"
+            boxSize={["100%", "100%", "50%"]}
             src="images\pictures\plates-2.jpg"
             objectFit="cover"
             alt=" "
@@ -82,12 +82,22 @@ function MainPage() {
             direction="column"
             align="center"
             justify="center"
-            px="10%"
+            px="7%"
+            my="20px"
           >
-            <Heading mb="20px" textAlign="center">
+            <Heading
+              mb="20px"
+              textAlign="center"
+              fontSize={["3xl", "4xl", "3xl", "4xl"]}
+            >
               We make this easy
             </Heading>
-            <Text fontSize="xl" textAlign="center">
+            <Text
+              fontSize="lg"
+              textAlign="center"
+              color="gray.600"
+              lineHeight="1.8"
+            >
               Forget weekends spent schlepping to home goods stores, overwhelmed
               by quantities, underwhelmed by design, and dodging registry guns.
               We reinvented the tedious process of finding and styling
@@ -96,18 +106,28 @@ function MainPage() {
             </Text>
           </Flex>
         </Flex>
-        <Flex>
+        <Flex direction={["column-reverse", "column-reverse", "row"]}>
           <Flex
             flexGrow="1"
             direction="column"
             align="center"
             justify="center"
-            px="10%"
+            px="7%"
+            my="20px"
           >
-            <Heading mb="20px" textAlign="center">
-              Beauty meets utility{" "}
+            <Heading
+              mb="20px"
+              textAlign="center"
+              fontSize={["3xl", "4xl", "3xl", "4xl"]}
+            >
+              Beauty meets utility
             </Heading>
-            <Text fontSize="xl" textAlign="center">
+            <Text
+              fontSize="lg"
+              textAlign="center"
+              color="gray.600"
+              lineHeight="1.8"
+            >
               We studied the shelves of people like you to learn what you
               actually use and love. Every detail of our assortment is designed
               for your modern life. You’ll love our elegant silhouettes and chic
@@ -117,7 +137,7 @@ function MainPage() {
           </Flex>
           <Image
             flexGrow="1"
-            boxSize="50%"
+            boxSize={["100%", "100%", "50%"]}
             src="images\pictures\plates-3.jpg"
             objectFit="cover"
             alt=" "
