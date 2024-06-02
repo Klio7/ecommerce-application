@@ -19,10 +19,12 @@ export default function CatalogMenus({
   HandleFilterByCustomAttribute,
   HandleFilterByPrice,
   HandleFilterByCategory,
+  searchValue
 }: {
   HandleFilterByCustomAttribute: (attribute: string, value: string) => void;
   HandleFilterByPrice: (value: number[]) => void;
   HandleFilterByCategory: (id: string) => void;
+  searchValue: string
 }) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [colors, setColors] = useState<Set<string>>(new Set());
@@ -63,6 +65,15 @@ export default function CatalogMenus({
         console.error("Error fetching products:", error);
       });
   }, []);
+
+  useEffect(() => {
+    if (searchValue !== '') {
+      setSelectedSize('Size');
+      setSelectedCategory('Categories');
+      setSelectedPrice('Price');
+      setSelectedColor('Color');
+    }
+  }, [searchValue]);
 
   function HandleCustomAttributeClick(attribute: string, value: string) {
     if (attribute === 'Color') {

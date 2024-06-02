@@ -1,18 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
-  Button,
   Flex,
   Input,
-  Menu,
-  MenuButton,
-  MenuItemOption,
-  MenuList,
-  MenuOptionGroup,
+  Select,
   SimpleGrid,
   Spinner,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import { ProductProjection } from "@commercetools/platform-sdk";
 import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
 import ProductsItem from "../../components/ProductsItem/ProductsItem";
@@ -21,6 +15,8 @@ import parseProductDetails from "../../utils/parseProductDetails";
 
 function CatalogPage() {
   const [products, setProducts] = useState<ProductProjection[]>([]);
+  const [sortValue, setSortValue] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>('');
 
   useEffect(() => {
     ClientCredentialsFlowApiClient()
@@ -47,6 +43,8 @@ function CatalogPage() {
       .catch((error) => {
         console.error(error);
       });
+      setSortValue('');
+      setSearchValue('');
   }
 
   const HandleFilterByCustomAttribute = useCallback(
@@ -65,6 +63,8 @@ function CatalogPage() {
   }, []);
 
   function HandleSort(sortArg: string) {
+    setSortValue(sortArg);
+
     const productKeys = products.map(
       (product) => product.key,
     );
@@ -102,6 +102,8 @@ function CatalogPage() {
       .catch((error) => {
         console.error(error);
       });
+      setSearchValue(value);
+      setSortValue('');
   }
 
   return (
@@ -110,31 +112,20 @@ function CatalogPage() {
         HandleFilterByCustomAttribute={HandleFilterByCustomAttribute}
         HandleFilterByPrice={HandleFilterByPrice}
         HandleFilterByCategory={HandleFilterByCategory}
+        searchValue={searchValue}
       />
       <Box>
         <Flex>
           <Input
             placeholder="Search"
-            onChange={(e) => HandleSearch(e.target.value)}
+            onChange={(e) => { HandleSearch(e.target.value)}}
+            value={searchValue}
           />
-          <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-              Sort By
-            </MenuButton>
-            <MenuList>
-            <MenuOptionGroup type='radio'>
-              <MenuItemOption value="name" onClick={() => HandleSort("name.en-US asc")}>
-                Name
-              </MenuItemOption>
-              <MenuItemOption value="asc" onClick={() => HandleSort("price asc")}>
-                Price Ascending
-              </MenuItemOption>
-              <MenuItemOption value="desc" onClick={() => HandleSort("price desc")}>
-                Price Descending
-              </MenuItemOption>
-              </MenuOptionGroup>
-            </MenuList>
-          </Menu>
+          <Select value={sortValue} onChange={(e) => HandleSort(e.target.value)} w='20%' placeholder="Sort By">
+            <option value="name.en-US asc">Name</option>
+            <option value="price asc">Price Ascending</option>
+            <option value="price desc">Price Descending</option>
+          </Select>
         </Flex>
         <SimpleGrid columns={3} gap="1em" as="main">
           {products
