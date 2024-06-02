@@ -61,7 +61,11 @@ function MainPage() {
           />
         </Flex>
         <Flex direction="column" align="center" p="60px" bg="#F9F2EC" px="10%">
-          <Heading mb="10px" textAlign="center">
+          <Heading
+            mb="10px"
+            textAlign="center"
+            fontSize={["2xl", "3xl", "3xl", "4xl"]}
+          >
             From Mondays to birthdays,
           </Heading>
           <Text fontSize="xl" textAlign="center">
@@ -88,7 +92,7 @@ function MainPage() {
             <Heading
               mb="20px"
               textAlign="center"
-              fontSize={["3xl", "4xl", "3xl", "4xl"]}
+              fontSize={["2xl", "3xl", "2xl", "4xl"]}
             >
               We make this easy
             </Heading>
@@ -118,7 +122,7 @@ function MainPage() {
             <Heading
               mb="20px"
               textAlign="center"
-              fontSize={["3xl", "4xl", "3xl", "4xl"]}
+              fontSize={["2xl", "3xl", "2xl", "4xl"]}
             >
               Beauty meets utility
             </Heading>
