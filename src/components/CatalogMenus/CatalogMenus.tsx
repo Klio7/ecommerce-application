@@ -144,6 +144,7 @@ export default function CatalogMenus({
               return (
                 <>
                   <MenuItem
+                    key={category.id}
                     fontWeight="bold"
                     onClick={() => {
                       HandleFilterByCategory(category.id);
@@ -160,6 +161,7 @@ export default function CatalogMenus({
                     if (subcategory.parent?.id === category.id) {
                       return (
                         <MenuItem
+                          key={subcategory.id}
                           onClick={() => {
                             HandleFilterByCategory(subcategory.id);
                             setBreadcrumbs([

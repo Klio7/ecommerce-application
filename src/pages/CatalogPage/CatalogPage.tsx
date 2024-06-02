@@ -165,6 +165,7 @@ function CatalogPage() {
               const productData = parseProductDetails(product);
               return (
                 <ProductsItem
+                  key={productData?.title}
                   name={productData?.title}
                   description={productData?.description}
                   imageURL={productData?.images[0]}
