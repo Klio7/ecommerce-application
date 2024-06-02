@@ -20,11 +20,15 @@ export default function CatalogMenus({
   HandleFilterByPrice,
   HandleFilterByCategory,
   searchValue,
+  breadcrumbs,
+  setBreadcrumbs,
 }: {
   HandleFilterByCustomAttribute: (attribute: string, value: string) => void;
   HandleFilterByPrice: (value: number[]) => void;
   HandleFilterByCategory: (id: string) => void;
   searchValue: string;
+  breadcrumbs: string[][];
+  setBreadcrumbs: React.Dispatch<React.SetStateAction<string[][]>>;
 }) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [colors, setColors] = useState<Set<string>>(new Set());
@@ -38,7 +42,11 @@ export default function CatalogMenus({
   useEffect(() => {
     ClientCredentialsFlowApiClient()
       .categories()
-      .get()
+      .get({
+        queryArgs: {
+          limit: 30,
+        },
+      })
       .execute()
       .then((result) => setCategories(result.body.results))
       .catch((error) => {
@@ -73,19 +81,29 @@ export default function CatalogMenus({
       setSelectedCategory("Categories");
       setSelectedPrice("Price");
       setSelectedColor("Color");
+      setBreadcrumbs([[], []]);
     }
-  }, [searchValue]);
+  }, [searchValue, setBreadcrumbs]);
+
+  useEffect(() => {
+    if (breadcrumbs[0][breadcrumbs[0].length - 1] !== selectedCategory) {
+      setSelectedCategory(breadcrumbs[0][breadcrumbs[0].length - 1]);
+    }
+    if (breadcrumbs[0].length === 0) setSelectedCategory("Categories");
+  }, [breadcrumbs, selectedCategory]);
 
   function HandleCustomAttributeClick(attribute: string, value: string) {
     if (attribute === "Color") {
       setSelectedSize("Size");
       setSelectedCategory("Categories");
       setSelectedPrice("Price");
+      setBreadcrumbs([[], []]);
     }
     if (attribute === "Size") {
       setSelectedColor("Color");
       setSelectedCategory("Categories");
       setSelectedPrice("Price");
+      setBreadcrumbs([[], []]);
     }
     HandleFilterByCustomAttribute(attribute, value);
   }
@@ -97,7 +115,17 @@ export default function CatalogMenus({
     setSelectedSize("Size");
     setSelectedCategory("Categories");
     setSelectedColor("Color");
+    setBreadcrumbs([[], []]);
     HandleFilterByPrice(value);
+  }
+
+  function HandleResetFilters() {
+    setSelectedSize("Size");
+    setSelectedCategory("Categories");
+    setSelectedColor("Color");
+    setSelectedPrice("Price");
+    setBreadcrumbs([[], []]);
+    HandleFilterByPrice([0, 30000]);
   }
 
   return (
@@ -119,6 +147,7 @@ export default function CatalogMenus({
                     fontWeight="bold"
                     onClick={() => {
                       HandleFilterByCategory(category.id);
+                      setBreadcrumbs([[category.name["en-US"]], [category.id]]);
                       setSelectedCategory(category.name["en-US"]);
                       setSelectedColor("Color");
                       setSelectedSize("Size");
@@ -133,6 +162,13 @@ export default function CatalogMenus({
                         <MenuItem
                           onClick={() => {
                             HandleFilterByCategory(subcategory.id);
+                            setBreadcrumbs([
+                              [
+                                category.name["en-US"],
+                                subcategory.name["en-US"],
+                              ],
+                              [category.id, subcategory.id],
+                            ]);
                             setSelectedCategory(subcategory.name["en-US"]);
                             setSelectedColor("Color");
                             setSelectedSize("Size");
@@ -147,7 +183,7 @@ export default function CatalogMenus({
                   })}
                 </>
               );
-              return null;
+            return null;
           })}
         </MenuList>
       </Menu>
@@ -215,6 +251,9 @@ export default function CatalogMenus({
           ))}
         </MenuList>
       </Menu>
+      <Button marginTop="1em" onClick={() => HandleResetFilters}>
+        Reset Filters
+      </Button>
     </Flex>
   );
 }

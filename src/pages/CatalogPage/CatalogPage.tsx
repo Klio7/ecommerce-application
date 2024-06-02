@@ -1,5 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Box, Flex, Grid, Input, Select, Spinner } from "@chakra-ui/react";
+import {
+  Box,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  Flex,
+  Grid,
+  Input,
+  Select,
+  Spinner,
+} from "@chakra-ui/react";
 import { ProductProjection } from "@commercetools/platform-sdk";
 import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
 import ProductsItem from "../../components/ProductsItem/ProductsItem";
@@ -11,6 +21,7 @@ function CatalogPage() {
   const [products, setProducts] = useState<ProductProjection[]>([]);
   const [sortValue, setSortValue] = useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
+  const [breadcrumbs, setBreadcrumbs] = useState<string[][]>([[], []]);
 
   useEffect(() => {
     ClientCredentialsFlowApiClient()
@@ -96,6 +107,16 @@ function CatalogPage() {
     setSortValue("");
   }
 
+  function HandleBreadcrumbsClick(crumb: string) {
+    if (crumb !== breadcrumbs[0][breadcrumbs[0].length - 1]) {
+      setBreadcrumbs([
+        breadcrumbs[0].slice(0, breadcrumbs[0].indexOf(crumb) + 1),
+        breadcrumbs[1].slice(0, breadcrumbs[0].indexOf(crumb) + 1),
+      ]);
+      HandleFilterByCategory(breadcrumbs[1][breadcrumbs[0].indexOf(crumb)]);
+    }
+  }
+
   return (
     <Flex justifyContent="space-between">
       <CatalogMenus
@@ -103,6 +124,8 @@ function CatalogPage() {
         HandleFilterByPrice={HandleFilterByPrice}
         HandleFilterByCategory={HandleFilterByCategory}
         searchValue={searchValue}
+        breadcrumbs={breadcrumbs}
+        setBreadcrumbs={setBreadcrumbs}
       />
       <Box flexGrow={1}>
         <Flex>
@@ -124,6 +147,18 @@ function CatalogPage() {
             <option value="price desc">Price Descending</option>
           </Select>
         </Flex>
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <BreadcrumbLink>Category</BreadcrumbLink>
+          </BreadcrumbItem>
+          {breadcrumbs[0].map((crumb) => (
+            <BreadcrumbItem>
+              <BreadcrumbLink onClick={() => HandleBreadcrumbsClick(crumb)}>
+                {crumb}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          ))}
+        </Breadcrumb>
         <Grid className="grid" as="main">
           {products ? (
             products.map((product) => {
