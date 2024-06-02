@@ -19,20 +19,21 @@ export default function CatalogMenus({
   HandleFilterByCustomAttribute,
   HandleFilterByPrice,
   HandleFilterByCategory,
-  searchValue
+  searchValue,
 }: {
   HandleFilterByCustomAttribute: (attribute: string, value: string) => void;
   HandleFilterByPrice: (value: number[]) => void;
   HandleFilterByCategory: (id: string) => void;
-  searchValue: string
+  searchValue: string;
 }) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [colors, setColors] = useState<Set<string>>(new Set());
   const [sizes, setSizes] = useState<Set<string>>(new Set());
-  const [selectedCategory, setSelectedCategory] = useState<string>('Categories');
-  const [selectedPrice, setSelectedPrice] = useState<string>('Price');
-  const [selectedColor, setSelectedColor] = useState<string>('Color');
-  const [selectedSize, setSelectedSize] = useState<string>('Size');
+  const [selectedCategory, setSelectedCategory] =
+    useState<string>("Categories");
+  const [selectedPrice, setSelectedPrice] = useState<string>("Price");
+  const [selectedColor, setSelectedColor] = useState<string>("Color");
+  const [selectedSize, setSelectedSize] = useState<string>("Size");
 
   useEffect(() => {
     ClientCredentialsFlowApiClient()
@@ -67,52 +68,70 @@ export default function CatalogMenus({
   }, []);
 
   useEffect(() => {
-    if (searchValue !== '') {
-      setSelectedSize('Size');
-      setSelectedCategory('Categories');
-      setSelectedPrice('Price');
-      setSelectedColor('Color');
+    if (searchValue !== "") {
+      setSelectedSize("Size");
+      setSelectedCategory("Categories");
+      setSelectedPrice("Price");
+      setSelectedColor("Color");
     }
   }, [searchValue]);
 
   function HandleCustomAttributeClick(attribute: string, value: string) {
-    if (attribute === 'Color') {
-      setSelectedSize('Size');
-      setSelectedCategory('Categories');
-      setSelectedPrice('Price');
+    if (attribute === "Color") {
+      setSelectedSize("Size");
+      setSelectedCategory("Categories");
+      setSelectedPrice("Price");
     }
-    if (attribute === 'Size') {
-      setSelectedColor('Color');
-      setSelectedCategory('Categories');
-      setSelectedPrice('Price');
+    if (attribute === "Size") {
+      setSelectedColor("Color");
+      setSelectedCategory("Categories");
+      setSelectedPrice("Price");
     }
     HandleFilterByCustomAttribute(attribute, value);
   }
 
   function HandlePriceRangeChange(value: number[]) {
-    setSelectedPrice(`${(value[0] / 100).toFixed(2)}$–${(value[1] / 100).toFixed(2)}$`)
-    setSelectedSize('Size');
-    setSelectedCategory('Categories');
-    setSelectedColor('Color');
+    setSelectedPrice(
+      `${(value[0] / 100).toFixed(2)}$–${(value[1] / 100).toFixed(2)}$`,
+    );
+    setSelectedSize("Size");
+    setSelectedCategory("Categories");
+    setSelectedColor("Color");
     HandleFilterByPrice(value);
   }
 
   return (
     <Flex flexDirection="column">
       <Menu>
-        <MenuButton bgColor={selectedCategory !== 'Categories' ? '#ded6cb' : ''} as={Button} rightIcon={<ChevronDownIcon />}>
+        <MenuButton
+          bgColor={selectedCategory !== "Categories" ? "#ded6cb" : ""}
+          as={Button}
+          rightIcon={<ChevronDownIcon />}
+        >
           {selectedCategory}
         </MenuButton>
         <MenuList>
           {categories.map((category) => (
-            <MenuItem onClick={() => {HandleFilterByCategory(category.id); setSelectedCategory(category.name["en-US"]); setSelectedColor('Color'); setSelectedSize('Size'); setSelectedPrice('Price'); }}>
+            <MenuItem
+              onClick={() => {
+                HandleFilterByCategory(category.id);
+                setSelectedCategory(category.name["en-US"]);
+                setSelectedColor("Color");
+                setSelectedSize("Size");
+                setSelectedPrice("Price");
+              }}
+            >
               {category.name["en-US"]}
             </MenuItem>
           ))}
         </MenuList>
       </Menu>
       <Menu>
-        <MenuButton bgColor={selectedPrice !== 'Price' ? '#ded6cb' : ''} as={Button} rightIcon={<ChevronDownIcon />}>
+        <MenuButton
+          bgColor={selectedPrice !== "Price" ? "#ded6cb" : ""}
+          as={Button}
+          rightIcon={<ChevronDownIcon />}
+        >
           {selectedPrice}
         </MenuButton>
         <MenuList>
@@ -129,14 +148,21 @@ export default function CatalogMenus({
           </RangeSlider>
         </MenuList>
       </Menu>
-      <Menu >
-        <MenuButton bgColor={selectedColor !== 'Color' ? '#ded6cb' : ''} as={Button} rightIcon={<ChevronDownIcon />}>
+      <Menu>
+        <MenuButton
+          bgColor={selectedColor !== "Color" ? "#ded6cb" : ""}
+          as={Button}
+          rightIcon={<ChevronDownIcon />}
+        >
           {selectedColor}
         </MenuButton>
         <MenuList>
           {[...colors].map((color) => (
             <MenuItem
-              onClick={() => { HandleCustomAttributeClick("Color", color); setSelectedColor(color)}}
+              onClick={() => {
+                HandleCustomAttributeClick("Color", color);
+                setSelectedColor(color);
+              }}
             >
               {color}
             </MenuItem>
@@ -144,12 +170,21 @@ export default function CatalogMenus({
         </MenuList>
       </Menu>
       <Menu>
-        <MenuButton bgColor={selectedSize !== 'Size' ? '#ded6cb' : ''} as={Button} rightIcon={<ChevronDownIcon />}>
+        <MenuButton
+          bgColor={selectedSize !== "Size" ? "#ded6cb" : ""}
+          as={Button}
+          rightIcon={<ChevronDownIcon />}
+        >
           {selectedSize}
         </MenuButton>
         <MenuList>
           {[...sizes].map((size) => (
-            <MenuItem onClick={() => { HandleCustomAttributeClick("Size", size); setSelectedSize(size) }}>
+            <MenuItem
+              onClick={() => {
+                HandleCustomAttributeClick("Size", size);
+                setSelectedSize(size);
+              }}
+            >
               {size}
             </MenuItem>
           ))}

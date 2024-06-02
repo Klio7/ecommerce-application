@@ -15,8 +15,8 @@ import parseProductDetails from "../../utils/parseProductDetails";
 
 function CatalogPage() {
   const [products, setProducts] = useState<ProductProjection[]>([]);
-  const [sortValue, setSortValue] = useState<string>('');
-  const [searchValue, setSearchValue] = useState<string>('');
+  const [sortValue, setSortValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>("");
 
   useEffect(() => {
     ClientCredentialsFlowApiClient()
@@ -43,8 +43,8 @@ function CatalogPage() {
       .catch((error) => {
         console.error(error);
       });
-      setSortValue('');
-      setSearchValue('');
+    setSortValue("");
+    setSearchValue("");
   }
 
   const HandleFilterByCustomAttribute = useCallback(
@@ -65,12 +65,8 @@ function CatalogPage() {
   function HandleSort(sortArg: string) {
     setSortValue(sortArg);
 
-    const productKeys = products.map(
-      (product) => product.key,
-    );
-    const wherePredicate = productKeys
-      .map((key) => `"${key}"`)
-      .join(', ');
+    const productKeys = products.map((product) => product.key);
+    const wherePredicate = productKeys.map((key) => `"${key}"`).join(", ");
 
     ClientCredentialsFlowApiClient()
       .productProjections()
@@ -102,8 +98,8 @@ function CatalogPage() {
       .catch((error) => {
         console.error(error);
       });
-      setSearchValue(value);
-      setSortValue('');
+    setSearchValue(value);
+    setSortValue("");
   }
 
   return (
@@ -118,30 +114,39 @@ function CatalogPage() {
         <Flex>
           <Input
             placeholder="Search"
-            onChange={(e) => { HandleSearch(e.target.value)}}
+            onChange={(e) => {
+              HandleSearch(e.target.value);
+            }}
             value={searchValue}
           />
-          <Select value={sortValue} onChange={(e) => HandleSort(e.target.value)} w='20%' placeholder="Sort By">
+          <Select
+            value={sortValue}
+            onChange={(e) => HandleSort(e.target.value)}
+            w="20%"
+            placeholder="Sort By"
+          >
             <option value="name.en-US asc">Name</option>
             <option value="price asc">Price Ascending</option>
             <option value="price desc">Price Descending</option>
           </Select>
         </Flex>
         <SimpleGrid columns={3} gap="1em" as="main">
-          {products
-            ? products.map((product) => {
-                const productData = parseProductDetails(product);
-                return (
-                  <ProductsItem
-                    name={productData?.title}
-                    description={productData?.description}
-                    imageURL={productData?.images[0]}
-                    price={productData?.price}
-                    discountedPrice={productData?.discountedPrice}
-                  />
-                );
-              })
-            : <Spinner alignSelf='center' />}
+          {products ? (
+            products.map((product) => {
+              const productData = parseProductDetails(product);
+              return (
+                <ProductsItem
+                  name={productData?.title}
+                  description={productData?.description}
+                  imageURL={productData?.images[0]}
+                  price={productData?.price}
+                  discountedPrice={productData?.discountedPrice}
+                />
+              );
+            })
+          ) : (
+            <Spinner alignSelf="center" />
+          )}
         </SimpleGrid>
       </Box>
     </Flex>
