@@ -30,7 +30,3 @@ export interface SliderModal {
   setModalOpen: (prop: boolean) => void;
   isOpen: boolean;
 }
-
-export interface ModalProps extends SliderModal {
-  isOpen: boolean;
-}

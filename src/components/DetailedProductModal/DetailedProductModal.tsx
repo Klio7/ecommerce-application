@@ -10,7 +10,7 @@ import {
 import ProductMainView from "../ProductMainView/ProductMainView";
 import ImageSlider from "../ImageSlider/ImageSlider";
 import ProductAdditionalView from "../ProductAdditionalView/ProductAdditionalView";
-import { ModalProps } from "../../types/types";
+import { SliderModal } from "../../types/types";
 
 function DetailedProductModal({
   images,
@@ -18,7 +18,7 @@ function DetailedProductModal({
   setMainImage,
   isOpen,
   setModalOpen,
-}: ModalProps) {
+}: SliderModal) {
   if (images.length === 1) {
     return (
       <>
