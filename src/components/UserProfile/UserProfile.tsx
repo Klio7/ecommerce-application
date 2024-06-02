@@ -21,7 +21,11 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
+  IconButton,
+  InputRightElement,
+  InputGroup,
 } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
 import getUserProfile from "../../services/getUser";
 import {
@@ -29,6 +33,7 @@ import {
   emailValidation,
   firstNameValidation,
   lastNameValidation,
+  passwordValidation,
 } from "../../utils/validation";
 import { getClientIdFromLocalStorage } from "../../store/LocalStorage";
 import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
@@ -43,6 +48,7 @@ interface Address {
 
 interface UserData {
   firstName: string;
+  password: string;
   lastName: string;
   email: string;
   dateOfBirth: string;
@@ -52,10 +58,19 @@ interface UserData {
   defaultShippingAddressId: string;
 }
 
+interface PasswordChangeFormData {
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
 function UserProfile() {
   const [user, setUser] = useState<UserData | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [, setEditedUser] = useState<UserData | null>(null);
+  const [isPasswordChangeMode, setIsPasswordChangeMode] = useState(false);
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
 
   const {
     register,
@@ -63,6 +78,10 @@ function UserProfile() {
     formState: { errors },
     reset,
   } = useForm<UserData>();
+
+  const { register: registerPassword, handleSubmit: handleSubmitPassword, formState: { errors: passwordErrors } } =
+    useForm<PasswordChangeFormData>();
+
   const toast = useToast();
 
   useEffect(() => {
@@ -80,8 +99,70 @@ function UserProfile() {
 
   const handleEditClick = () => {
     setEditedUser(user);
-    reset(user);
+    if (user) {
+      reset(user);
+    }
     setIsEditMode(true);
+  };
+
+  const handlePasswordChangeClick = () => {
+    // resetPassword();
+    setIsPasswordChangeMode(true);
+  };
+
+  const onSubmitPasswordChange = async (data: PasswordChangeFormData) => {
+    if (data.newPassword !== data.confirmNewPassword) {
+      toast({
+        position: "top",
+        title: "Error",
+        description: "New passwords do not match.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      const clientId = getClientIdFromLocalStorage();
+      if (clientId === null) {
+        throw new Error("Client ID is null");
+      }
+
+      const updatePasswordDetails = {
+        id: clientId,
+        version: user?.version,
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      };
+
+      await ClientCredentialsFlowApiClient()
+        .customers()
+        .password()
+        .post({ body: updatePasswordDetails })
+        .execute();
+
+      toast({
+        position: "top",
+        title: "Password updated",
+        description: "Your password has been updated successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      setIsPasswordChangeMode(false);
+    } catch (error) {
+      console.log("Error updating password:", error);
+      toast({
+        position: "top",
+        title: "Error",
+        description: "There was an error updating your password.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   const onSubmit = async (data: UserData) => {
@@ -167,6 +248,8 @@ function UserProfile() {
                 <b>Date of Birth:</b> {user?.dateOfBirth || "Not provided"}
               </Text>
             </Box>
+
+            <Button onClick={handlePasswordChangeClick}>Change Password</Button>
 
             <Box>
               <Heading as="h2" size="md" mb={2}>
@@ -275,7 +358,6 @@ function UserProfile() {
                     {errors.dateOfBirth?.message}
                   </FormErrorMessage>
                 </FormControl>
-                {/* Add inputs for addresses if needed */}
               </VStack>
             </ModalBody>
 
@@ -284,6 +366,86 @@ function UserProfile() {
                 Save
               </Button>
               <Button variant="ghost" onClick={() => setIsEditMode(false)}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={isPasswordChangeMode}
+        onClose={() => setIsPasswordChangeMode(false)}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Change Password</ModalHeader>
+          <ModalCloseButton />
+          <form onSubmit={handleSubmitPassword(onSubmitPasswordChange)}>
+            <ModalBody>
+              <VStack spacing={4}>
+                <FormControl isInvalid={!!passwordErrors.currentPassword?.message} isRequired>
+                  <FormLabel mt={5}>Current Password</FormLabel>
+                  <InputGroup>
+                    <Input
+                      type={show ? "text" : "password"}
+                      placeholder="Current Password"
+                      {...registerPassword(
+                        "currentPassword",
+                        passwordValidation,
+                      )}
+                    />
+                    <InputRightElement width="4rem">
+                      <IconButton
+                        h="95%"
+                        aria-label="Search database"
+                        bg="white"
+                        onClick={handleClick}
+                      >
+                        {show ? <ViewIcon /> : <ViewOffIcon />}
+                      </IconButton>
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormErrorMessage>
+                    {passwordErrors.currentPassword?.message}
+                  </FormErrorMessage>
+                </FormControl>
+
+                <FormControl isInvalid={!!passwordErrors.newPassword?.message} isRequired>
+                  <FormLabel>New Password</FormLabel>
+                  <Input
+                    type="password"
+                    placeholder="New Password"
+                    {...registerPassword("newPassword", passwordValidation)}
+                  />
+                  <FormErrorMessage>
+                    {passwordErrors.newPassword?.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={!!passwordErrors.confirmNewPassword?.message} isRequired>
+                  <FormLabel>Confirm New Password</FormLabel>
+                  <Input
+                    type="password"
+                    placeholder="Confirm New Password"
+                    {...registerPassword(
+                      "confirmNewPassword",
+                      passwordValidation,
+                    )}
+                  />
+                  <FormErrorMessage>
+                    {passwordErrors.confirmNewPassword?.message}
+                  </FormErrorMessage>
+                </FormControl>
+              </VStack>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} type="submit">
+                Save
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => setIsPasswordChangeMode(false)}
+              >
                 Cancel
               </Button>
             </ModalFooter>
