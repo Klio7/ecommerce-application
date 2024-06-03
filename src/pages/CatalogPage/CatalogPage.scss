@@ -9,7 +9,7 @@
     padding: 0 10px;
 }
 
-@media screen and (max-width: 790px) {
+@media screen and (width <= 790px) {
     .catalog-page-wrapper {
         flex-direction: column;
     }

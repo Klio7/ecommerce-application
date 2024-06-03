@@ -139,7 +139,7 @@ function CatalogPage() {
           <Select
             value={sortValue}
             onChange={(e) => HandleSort(e.target.value)}
-            w='9em'
+            w="9em"
             placeholder="Sort By"
           >
             <option value="name.en-US asc">Name</option>
@@ -148,7 +148,7 @@ function CatalogPage() {
           </Select>
         </Flex>
         <Breadcrumb>
-          <BreadcrumbItem key='Catalog'>
+          <BreadcrumbItem key="Catalog">
             <BreadcrumbLink>Catalog</BreadcrumbLink>
           </BreadcrumbItem>
           {breadcrumbs[0].map((crumb) => (
