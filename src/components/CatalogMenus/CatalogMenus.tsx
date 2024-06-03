@@ -160,7 +160,7 @@ export default function CatalogMenus({
                     if (subcategory.parent?.id === category.id) {
                       return (
                         <MenuItem
-                        key={subcategory.id}
+                          key={subcategory.id}
                           onClick={() => {
                             HandleFilterByCategory(subcategory.id);
                             setBreadcrumbs([

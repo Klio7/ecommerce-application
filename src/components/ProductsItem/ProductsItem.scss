@@ -4,9 +4,20 @@
 
 .products-item {
     transition: 1s;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 2%;
+    height: max-content;
 }
 
 .products-item:hover {
     background-color: #ded6cb;
     cursor: pointer;
+}
+
+@media screen and (max-width: 410px) {
+    .products-item {
+        max-width: 85%;
+    }
 }

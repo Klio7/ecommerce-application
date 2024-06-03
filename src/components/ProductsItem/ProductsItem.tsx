@@ -18,8 +18,6 @@ function ProductsItem({
   return (
     <Box
       className="products-item"
-      width="sm"
-      height="max-content"
       border="1px solid black"
       padding="1em"
     >
@@ -35,7 +33,7 @@ function ProductsItem({
       ) : (
         <Text>{price}</Text>
       )}
-      <Image boxSize="sm" objectFit="cover" src={imageURL} alt="" />
+      <Image alignSelf='center' boxSize="sm" objectFit="cover" src={imageURL} alt="" />
     </Box>
   );
 }

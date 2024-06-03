@@ -118,7 +118,7 @@ function CatalogPage() {
   }
 
   return (
-    <Flex justifyContent="space-between">
+    <Flex className="catalog-page-wrapper">
       <CatalogMenus
         HandleFilterByCustomAttribute={HandleFilterByCustomAttribute}
         HandleFilterByPrice={HandleFilterByPrice}
@@ -139,7 +139,7 @@ function CatalogPage() {
           <Select
             value={sortValue}
             onChange={(e) => HandleSort(e.target.value)}
-            w="20%"
+            w='9em'
             placeholder="Sort By"
           >
             <option value="name.en-US asc">Name</option>
@@ -148,11 +148,11 @@ function CatalogPage() {
           </Select>
         </Flex>
         <Breadcrumb>
-          <BreadcrumbItem>
+          <BreadcrumbItem key='Catalog'>
             <BreadcrumbLink>Catalog</BreadcrumbLink>
           </BreadcrumbItem>
           {breadcrumbs[0].map((crumb) => (
-            <BreadcrumbItem>
+            <BreadcrumbItem key={crumb}>
               <BreadcrumbLink onClick={() => HandleBreadcrumbsClick(crumb)}>
                 {crumb}
               </BreadcrumbLink>
