@@ -10,6 +10,7 @@ import {
   RangeSliderFilledTrack,
   RangeSliderThumb,
   RangeSliderTrack,
+  useToast,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Category } from "@commercetools/platform-sdk";
@@ -38,6 +39,7 @@ export default function CatalogMenus({
   const [selectedPrice, setSelectedPrice] = useState<string>("Price");
   const [selectedColor, setSelectedColor] = useState<string>("Color");
   const [selectedSize, setSelectedSize] = useState<string>("Size");
+  const toast = useToast();
 
   useEffect(() => {
     ClientCredentialsFlowApiClient()
@@ -50,8 +52,16 @@ export default function CatalogMenus({
       .execute()
       .then((result) => setCategories(result.body.results))
       .catch((error) => {
-        console.error(error);
-      });
+        toast({
+          position: "top",
+          title: "Error",
+          description:
+            `An error occured: ${error}`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+    });
 
     ClientCredentialsFlowApiClient()
       .products()
@@ -71,9 +81,17 @@ export default function CatalogMenus({
         setSizes(new Set(sizesToSet));
       })
       .catch((error) => {
-        console.error("Error fetching products:", error);
+        toast({
+          position: "top",
+          title: "Error",
+          description:
+            `An error occured: ${error}`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });      
       });
-  }, []);
+  }, [toast]);
 
   useEffect(() => {
     if (searchValue !== "") {
@@ -83,7 +101,7 @@ export default function CatalogMenus({
       setSelectedColor("Color");
       setBreadcrumbs([[], []]);
     }
-  }, [searchValue, setBreadcrumbs]);
+  }, [searchValue, setBreadcrumbs, toast]);
 
   useEffect(() => {
     if (breadcrumbs[0][breadcrumbs[0].length - 1] !== selectedCategory) {

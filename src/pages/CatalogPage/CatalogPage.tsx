@@ -9,6 +9,7 @@ import {
   Input,
   Select,
   Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { ProductProjection } from "@commercetools/platform-sdk";
 import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
@@ -22,6 +23,7 @@ function CatalogPage() {
   const [sortValue, setSortValue] = useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
   const [breadcrumbs, setBreadcrumbs] = useState<string[][]>([[], []]);
+  const toast = useToast();
 
   useEffect(() => {
     ClientCredentialsFlowApiClient()
@@ -30,11 +32,19 @@ function CatalogPage() {
       .execute()
       .then((result) => setProducts(result.body.results))
       .catch((error) => {
-        console.error(error);
+        toast({
+          position: "top",
+          title: "Error",
+          description:
+            `An error occured: ${error}`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       });
-  }, []);
+  }, [toast]);
 
-  function filter(filterArg: string) {
+  const filter = useCallback((filterArg: string) => {
     ClientCredentialsFlowApiClient()
       .productProjections()
       .search()
@@ -46,26 +56,34 @@ function CatalogPage() {
       .execute()
       .then((result) => setProducts(result.body.results))
       .catch((error) => {
-        console.error(error);
+        toast({
+          position: "top",
+          title: "Error",
+          description:
+            `An error occured: ${error}`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       });
     setSortValue("");
     setSearchValue("");
-  }
+  }, [toast]);
 
   const HandleFilterByCustomAttribute = useCallback(
     (attribute: string, value: string) => {
       filter(`variants.attributes.${attribute}:"${value}"`);
     },
-    [],
+    [filter],
   );
 
   const HandleFilterByCategory = useCallback((id: string) => {
     filter(`categories.id: subtree("${id}")`);
-  }, []);
+  }, [filter]);
 
   const HandleFilterByPrice = useCallback((value: number[]) => {
     filter(`variants.price.centAmount:range(${value[0]} to ${value[1]})`);
-  }, []);
+  }, [filter]);
 
   function HandleSort(sortArg: string) {
     setSortValue(sortArg);
@@ -85,7 +103,15 @@ function CatalogPage() {
       .execute()
       .then((result) => setProducts(result.body.results))
       .catch((error) => {
-        console.error(error);
+        toast({
+          position: "top",
+          title: "Error",
+          description:
+            `An error occured: ${error}`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });      
       });
   }
 
@@ -101,7 +127,15 @@ function CatalogPage() {
       .execute()
       .then((result) => setProducts(result.body.results))
       .catch((error) => {
-        console.error(error);
+        toast({
+          position: "top",
+          title: "Error",
+          description:
+            `An error occured: ${error}`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       });
     setSearchValue(value);
     setSortValue("");
