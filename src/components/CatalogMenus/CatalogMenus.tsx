@@ -55,13 +55,12 @@ export default function CatalogMenus({
         toast({
           position: "top",
           title: "Error",
-          description:
-            `An error occured: ${error}`,
+          description: `An error occured: ${error}`,
           status: "error",
           duration: 3000,
           isClosable: true,
         });
-    });
+      });
 
     ClientCredentialsFlowApiClient()
       .products()
@@ -84,12 +83,11 @@ export default function CatalogMenus({
         toast({
           position: "top",
           title: "Error",
-          description:
-            `An error occured: ${error}`,
+          description: `An error occured: ${error}`,
           status: "error",
           duration: 3000,
           isClosable: true,
-        });      
+        });
       });
   }, [toast]);
 

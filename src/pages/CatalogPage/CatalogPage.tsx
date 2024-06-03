@@ -35,8 +35,7 @@ function CatalogPage() {
         toast({
           position: "top",
           title: "Error",
-          description:
-            `An error occured: ${error}`,
+          description: `An error occured: ${error}`,
           status: "error",
           duration: 3000,
           isClosable: true,
@@ -44,31 +43,33 @@ function CatalogPage() {
       });
   }, [toast]);
 
-  const filter = useCallback((filterArg: string) => {
-    ClientCredentialsFlowApiClient()
-      .productProjections()
-      .search()
-      .get({
-        queryArgs: {
-          filter: filterArg,
-        },
-      })
-      .execute()
-      .then((result) => setProducts(result.body.results))
-      .catch((error) => {
-        toast({
-          position: "top",
-          title: "Error",
-          description:
-            `An error occured: ${error}`,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
+  const filter = useCallback(
+    (filterArg: string) => {
+      ClientCredentialsFlowApiClient()
+        .productProjections()
+        .search()
+        .get({
+          queryArgs: {
+            filter: filterArg,
+          },
+        })
+        .execute()
+        .then((result) => setProducts(result.body.results))
+        .catch((error) => {
+          toast({
+            position: "top",
+            title: "Error",
+            description: `An error occured: ${error}`,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
         });
-      });
-    setSortValue("");
-    setSearchValue("");
-  }, [toast]);
+      setSortValue("");
+      setSearchValue("");
+    },
+    [toast],
+  );
 
   const HandleFilterByCustomAttribute = useCallback(
     (attribute: string, value: string) => {
@@ -77,13 +78,19 @@ function CatalogPage() {
     [filter],
   );
 
-  const HandleFilterByCategory = useCallback((id: string) => {
-    filter(`categories.id: subtree("${id}")`);
-  }, [filter]);
+  const HandleFilterByCategory = useCallback(
+    (id: string) => {
+      filter(`categories.id: subtree("${id}")`);
+    },
+    [filter],
+  );
 
-  const HandleFilterByPrice = useCallback((value: number[]) => {
-    filter(`variants.price.centAmount:range(${value[0]} to ${value[1]})`);
-  }, [filter]);
+  const HandleFilterByPrice = useCallback(
+    (value: number[]) => {
+      filter(`variants.price.centAmount:range(${value[0]} to ${value[1]})`);
+    },
+    [filter],
+  );
 
   function HandleSort(sortArg: string) {
     setSortValue(sortArg);
@@ -106,12 +113,11 @@ function CatalogPage() {
         toast({
           position: "top",
           title: "Error",
-          description:
-            `An error occured: ${error}`,
+          description: `An error occured: ${error}`,
           status: "error",
           duration: 3000,
           isClosable: true,
-        });      
+        });
       });
   }
 
@@ -130,8 +136,7 @@ function CatalogPage() {
         toast({
           position: "top",
           title: "Error",
-          description:
-            `An error occured: ${error}`,
+          description: `An error occured: ${error}`,
           status: "error",
           duration: 3000,
           isClosable: true,
