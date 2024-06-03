@@ -15,7 +15,6 @@ import {
   Box,
   Checkbox,
 } from "@chakra-ui/react";
-// import { CustomerDraft } from "@commercetools/platform-sdk";
 import {
   birthDateValidation,
   cityValidation,
