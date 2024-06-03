@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Divider, Flex, Image, Text } from "@chakra-ui/react";
 import "./ProductsItem.scss";
 
 function ProductsItem({
@@ -16,26 +16,32 @@ function ProductsItem({
   discountedPrice: string | undefined;
 }) {
   return (
-    <Box
-      className="products-item"
-      width="sm"
-      height="max-content"
-      border="1px solid black"
-      padding="1em"
-    >
-      <Text>{name}</Text>
-      <Text>{description}</Text>
+    <Box className="products-item" border="1px solid black" padding="1em">
+      <Box boxSize="xl" maxWidth="100%">
+        <Text justifySelf="center" fontSize="1.5em" fontWeight="bold">
+          {name}
+        </Text>
+        <Text>{description}</Text>
+      </Box>
+      <Divider />
       {discountedPrice !== undefined ? (
-        <>
-          <Text>{discountedPrice}</Text>
-          <Text className="grey-price">
+        <Flex alignItems="center" gap="1em">
+          <Text fontSize="1.5em">{discountedPrice}</Text>
+          <Text fontSize="big" className="grey-price">
             <s>{price}</s>
           </Text>
-        </>
+        </Flex>
       ) : (
-        <Text>{price}</Text>
+        <Text fontSize="1.5em">{price}</Text>
       )}
-      <Image boxSize="sm" objectFit="cover" src={imageURL} alt="" />
+      <Image
+        alignSelf="center"
+        boxSize="sm"
+        objectFit="cover"
+        src={imageURL}
+        alt="product-image"
+        marginTop="1em"
+      />
     </Box>
   );
 }

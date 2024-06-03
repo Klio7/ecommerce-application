@@ -1,0 +1,16 @@
+.catalog-page-wrapper {
+    justify-content: "space-between";
+    padding-bottom: 10px;
+}
+
+.grid {
+    grid-template-columns: repeat(auto-fit, minmax(368px, 1fr));
+    gap: 1em;
+    padding: 0 10px;
+}
+
+@media screen and (width <= 790px) {
+    .catalog-page-wrapper {
+        flex-direction: column;
+    }
+}

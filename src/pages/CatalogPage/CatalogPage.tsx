@@ -1,26 +1,27 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
-  Button,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
   Flex,
+  Grid,
   Input,
-  Menu,
-  MenuButton,
-  MenuItemOption,
-  MenuList,
-  MenuOptionGroup,
-  SimpleGrid,
+  Select,
   Spinner,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import { ProductProjection } from "@commercetools/platform-sdk";
 import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
 import ProductsItem from "../../components/ProductsItem/ProductsItem";
 import CatalogMenus from "../../components/CatalogMenus/CatalogMenus";
 import parseProductDetails from "../../utils/parseProductDetails";
+import "./CatalogPage.scss";
 
 function CatalogPage() {
   const [products, setProducts] = useState<ProductProjection[]>([]);
+  const [sortValue, setSortValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [breadcrumbs, setBreadcrumbs] = useState<string[][]>([[], []]);
 
   useEffect(() => {
     ClientCredentialsFlowApiClient()
@@ -47,6 +48,8 @@ function CatalogPage() {
       .catch((error) => {
         console.error(error);
       });
+    setSortValue("");
+    setSearchValue("");
   }
 
   const HandleFilterByCustomAttribute = useCallback(
@@ -65,11 +68,17 @@ function CatalogPage() {
   }, []);
 
   function HandleSort(sortArg: string) {
+    setSortValue(sortArg);
+
+    const productKeys = products.map((product) => product.key);
+    const wherePredicate = productKeys.map((key) => `"${key}"`).join(", ");
+
     ClientCredentialsFlowApiClient()
       .productProjections()
       .search()
       .get({
         queryArgs: {
+          filter: `key: ${wherePredicate}`,
           sort: sortArg,
         },
       })
@@ -94,55 +103,69 @@ function CatalogPage() {
       .catch((error) => {
         console.error(error);
       });
+    setSearchValue(value);
+    setSortValue("");
+  }
+
+  function HandleBreadcrumbsClick(crumb: string) {
+    if (crumb !== breadcrumbs[0][breadcrumbs[0].length - 1]) {
+      setBreadcrumbs([
+        breadcrumbs[0].slice(0, breadcrumbs[0].indexOf(crumb) + 1),
+        breadcrumbs[1].slice(0, breadcrumbs[0].indexOf(crumb) + 1),
+      ]);
+      HandleFilterByCategory(breadcrumbs[1][breadcrumbs[0].indexOf(crumb)]);
+    }
   }
 
   return (
-    <Flex justifyContent="space-between">
+    <Flex className="catalog-page-wrapper">
       <CatalogMenus
         HandleFilterByCustomAttribute={HandleFilterByCustomAttribute}
         HandleFilterByPrice={HandleFilterByPrice}
         HandleFilterByCategory={HandleFilterByCategory}
+        searchValue={searchValue}
+        breadcrumbs={breadcrumbs}
+        setBreadcrumbs={setBreadcrumbs}
       />
-      <Box>
+      <Box flexGrow={1}>
         <Flex>
           <Input
             placeholder="Search"
-            onChange={(e) => HandleSearch(e.target.value)}
+            onChange={(e) => {
+              HandleSearch(e.target.value);
+            }}
+            value={searchValue}
           />
-          <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-              Sort By
-            </MenuButton>
-            <MenuList>
-              <MenuOptionGroup type="radio">
-                <MenuItemOption
-                  value="name"
-                  onClick={() => HandleSort("name.en-US asc")}
-                >
-                  Name
-                </MenuItemOption>
-                <MenuItemOption
-                  value="asc"
-                  onClick={() => HandleSort("price asc")}
-                >
-                  Price Ascending
-                </MenuItemOption>
-                <MenuItemOption
-                  value="desc"
-                  onClick={() => HandleSort("price desc")}
-                >
-                  Price Descending
-                </MenuItemOption>
-              </MenuOptionGroup>
-            </MenuList>
-          </Menu>
+          <Select
+            value={sortValue}
+            onChange={(e) => HandleSort(e.target.value)}
+            w="9em"
+            placeholder="Sort By"
+          >
+            <option value="name.en-US asc">Name</option>
+            <option value="price asc">Price Ascending</option>
+            <option value="price desc">Price Descending</option>
+          </Select>
         </Flex>
-        <SimpleGrid columns={3} gap="1em" as="main">
+        <Breadcrumb>
+          <BreadcrumbItem key="Catalog">
+            <BreadcrumbLink>Catalog</BreadcrumbLink>
+          </BreadcrumbItem>
+          {breadcrumbs[0].map((crumb) => (
+            <BreadcrumbItem key={crumb}>
+              <BreadcrumbLink onClick={() => HandleBreadcrumbsClick(crumb)}>
+                {crumb}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          ))}
+        </Breadcrumb>
+        <Grid className="grid" as="main">
           {products ? (
             products.map((product) => {
               const productData = parseProductDetails(product);
               return (
                 <ProductsItem
+                  key={productData?.title}
                   name={productData?.title}
                   description={productData?.description}
                   imageURL={productData?.images[0]}
@@ -154,7 +177,7 @@ function CatalogPage() {
           ) : (
             <Spinner alignSelf="center" />
           )}
-        </SimpleGrid>
+        </Grid>
       </Box>
     </Flex>
   );
