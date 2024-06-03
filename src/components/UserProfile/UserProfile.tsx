@@ -27,6 +27,7 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
+import { Customer, CustomerChangePassword, CustomerUpdate } from "@commercetools/platform-sdk";
 import getUserProfile from "../../services/getUser";
 import {
   birthDateValidation,
@@ -38,26 +39,6 @@ import {
 import { getClientIdFromLocalStorage } from "../../store/LocalStorage";
 import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
 
-interface Address {
-  id: string;
-  streetName: string;
-  postalCode: string;
-  city: string;
-  country: string;
-}
-
-interface UserData {
-  firstName: string;
-  password: string;
-  lastName: string;
-  email: string;
-  dateOfBirth: string;
-  version: number;
-  addresses: Address[];
-  defaultBillingAddressId: string;
-  defaultShippingAddressId: string;
-}
-
 interface PasswordChangeFormData {
   currentPassword: string;
   newPassword: string;
@@ -65,9 +46,9 @@ interface PasswordChangeFormData {
 }
 
 function UserProfile() {
-  const [user, setUser] = useState<UserData | null>(null);
+  const [user, setUser] = useState<Customer | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [, setEditedUser] = useState<UserData | null>(null);
+  const [, setEditedUser] = useState<Customer | null>(null);
   const [isPasswordChangeMode, setIsPasswordChangeMode] = useState(false);
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
@@ -77,10 +58,13 @@ function UserProfile() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<UserData>();
+  } = useForm<Customer>();
 
-  const { register: registerPassword, handleSubmit: handleSubmitPassword, formState: { errors: passwordErrors } } =
-    useForm<PasswordChangeFormData>();
+  const {
+    register: registerPassword,
+    handleSubmit: handleSubmitPassword,
+    formState: { errors: passwordErrors },
+  } = useForm<PasswordChangeFormData>();
 
   const toast = useToast();
 
@@ -129,9 +113,9 @@ function UserProfile() {
         throw new Error("Client ID is null");
       }
 
-      const updatePasswordDetails = {
+      const updatePasswordDetails: CustomerChangePassword = {
         id: clientId,
-        version: user?.version,
+        version: user?.version ?? 0,
         currentPassword: data.currentPassword,
         newPassword: data.newPassword,
       };
@@ -165,14 +149,14 @@ function UserProfile() {
     }
   };
 
-  const onSubmit = async (data: UserData) => {
+  const onSubmit = async (data: Customer) => {
     try {
       const clientId = getClientIdFromLocalStorage();
       if (clientId === null) {
         throw new Error("Client ID is null");
       }
 
-      const updateCustomerDetails = {
+      const updateCustomerDetails: CustomerUpdate = {
         version: data.version,
         actions: [
           {
@@ -212,7 +196,6 @@ function UserProfile() {
       setUser(data);
       setIsEditMode(false);
     } catch (error) {
-      console.log("Error updating profile:", error);
       toast({
         position: "top",
         title: "Error",
@@ -261,7 +244,7 @@ function UserProfile() {
                   align="stretch"
                   divider={<StackDivider borderColor="gray.200" />}
                 >
-                  {user.addresses.map((address: Address) => (
+                  {user.addresses.map((address) => (
                     <Box
                       key={address.id}
                       p={3}
@@ -384,7 +367,10 @@ function UserProfile() {
           <form onSubmit={handleSubmitPassword(onSubmitPasswordChange)}>
             <ModalBody>
               <VStack spacing={4}>
-                <FormControl isInvalid={!!passwordErrors.currentPassword?.message} isRequired>
+                <FormControl
+                  isInvalid={!!passwordErrors.currentPassword?.message}
+                  isRequired
+                >
                   <FormLabel mt={5}>Current Password</FormLabel>
                   <InputGroup>
                     <Input
@@ -411,7 +397,10 @@ function UserProfile() {
                   </FormErrorMessage>
                 </FormControl>
 
-                <FormControl isInvalid={!!passwordErrors.newPassword?.message} isRequired>
+                <FormControl
+                  isInvalid={!!passwordErrors.newPassword?.message}
+                  isRequired
+                >
                   <FormLabel>New Password</FormLabel>
                   <Input
                     type="password"
@@ -422,7 +411,10 @@ function UserProfile() {
                     {passwordErrors.newPassword?.message}
                   </FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={!!passwordErrors.confirmNewPassword?.message} isRequired>
+                <FormControl
+                  isInvalid={!!passwordErrors.confirmNewPassword?.message}
+                  isRequired
+                >
                   <FormLabel>Confirm New Password</FormLabel>
                   <Input
                     type="password"
