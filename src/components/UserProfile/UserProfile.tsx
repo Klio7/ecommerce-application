@@ -57,6 +57,38 @@ interface PasswordChangeFormData {
   confirmNewPassword: string;
 }
 
+type LoadingOverlayProps = {
+  isLoading: boolean
+}
+
+function LoadingOverlay({ isLoading }: LoadingOverlayProps) {
+  if (!isLoading) { 
+    return null;
+  }
+  return (
+    <Box background="gray.400" sx={{ 
+      position: "fixed",
+      top: "0", 
+      left: "0", 
+      width: "100%", 
+      height:"100%", 
+      opacity: .9,
+      display: "flex",
+      alignItems: "center",
+      zIndex: "1600",
+      justifyContent: "center"
+    }}>
+      <Spinner
+        thickness="4px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="blue.500"
+        size="xl"
+      />
+    </Box>
+  );
+}
+
 function UserProfile() {
   const [user, setUser] = useState<Customer | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -65,6 +97,7 @@ function UserProfile() {
   const [isEditAddressMode, setIsEditAddressMode] = useState(false);
   const [currentEditAddressIndex, setCurrentEditAddressIndex] =
     useState<number>(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
@@ -90,7 +123,6 @@ function UserProfile() {
     reset: addAddressReset,
   } = useForm<_BaseAddress>();
 
-
   const {
     register: registerEditAddress,
     handleSubmit: handleSubmitEditAddress,
@@ -103,15 +135,24 @@ function UserProfile() {
   useEffect(() => {
     async function fetchUserData() {
       try {
+        setIsLoading(true);
         const response = await getUserProfile();
         setUser(response.body);
       } catch (error) {
-        console.log(error);
+        toast({
+          title: "Error",
+          description: "Something went wrong",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } finally {
+        setIsLoading(false);
       }
     }
 
     fetchUserData();
-  }, []);
+  }, [toast]);
 
   const handleEditClick = () => {
     if (user) {
@@ -130,7 +171,10 @@ function UserProfile() {
     setIsAddAddressMode(true);
   };
 
-  const handleEditAddressClick = (addressId: string) => {
+  const handleEditAddressClick = (addressId?: string) => {
+    if (!addressId) {
+      return;
+    }
     const addressIndex =
       user?.addresses?.findIndex(
         (userAddress) => userAddress.id === addressId,
@@ -159,6 +203,7 @@ function UserProfile() {
       ],
     };
     try {
+      setIsLoading(true);
       const response = await ClientCredentialsFlowApiClient()
         .customers()
         .withId({ ID: clientId })
@@ -175,7 +220,6 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
-
       setUser(response.body);
     } catch (error) {
       toast({
@@ -186,6 +230,8 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -200,12 +246,12 @@ function UserProfile() {
         version: user?.version ?? 0,
         actions: [
           {
-            action: 'setDefaultShippingAddress',
+            action: "setDefaultShippingAddress",
             addressId,
           },
         ],
       };
-
+      setIsLoading(true);
       const response = await ClientCredentialsFlowApiClient()
         .customers()
         .withId({ ID: clientId })
@@ -215,11 +261,13 @@ function UserProfile() {
       toast({
         position: "top",
         title: "Default shipping address changed",
-        description: "Your default shipping address had been changed successfully.",
+        description:
+          "Your default shipping address had been changed successfully.",
         status: "success",
         duration: 3000,
         isClosable: true,
       });
+
 
       setUser(response.body);
       setIsEditMode(false);
@@ -227,13 +275,16 @@ function UserProfile() {
       toast({
         position: "top",
         title: "Error",
-        description: "There was an error setting your default shipping address.",
+        description:
+          "There was an error setting your default shipping address.",
         status: "error",
         duration: 3000,
         isClosable: true,
-      });
+      }) ;
+    }  finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleOnChangeBillingAddress = async (addressId: string) => {
     try {
@@ -246,12 +297,12 @@ function UserProfile() {
         version: user?.version ?? 0,
         actions: [
           {
-            action: 'setDefaultBillingAddress',
+            action: "setDefaultBillingAddress",
             addressId,
           },
         ],
       };
-
+      setIsLoading(true);
       const response = await ClientCredentialsFlowApiClient()
         .customers()
         .withId({ ID: clientId })
@@ -261,7 +312,8 @@ function UserProfile() {
       toast({
         position: "top",
         title: "Default shipping address changed",
-        description: "Your default shipping address had been changed successfully.",
+        description:
+          "Your default shipping address had been changed successfully.",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -273,13 +325,16 @@ function UserProfile() {
       toast({
         position: "top",
         title: "Error",
-        description: "There was an error setting your default shipping address.",
+        description:
+          "There was an error setting your default shipping address.",
         status: "error",
         duration: 3000,
         isClosable: true,
       });
+    }  finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   const onSubmitPasswordChange = async (data: PasswordChangeFormData) => {
     if (data.newPassword !== data.confirmNewPassword) {
@@ -299,7 +354,7 @@ function UserProfile() {
       if (clientId === null) {
         throw new Error("Client ID is null");
       }
-
+      setIsLoading(true);
       const updatePasswordDetails: CustomerChangePassword = {
         id: clientId,
         version: user?.version ?? 0,
@@ -321,7 +376,6 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
-
       setIsPasswordChangeMode(false);
     } catch (error) {
       toast({
@@ -332,6 +386,8 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -341,7 +397,7 @@ function UserProfile() {
       if (clientId === null) {
         throw new Error("Client ID is null");
       }
-
+      setIsLoading(true);
       const updateCustomerDetails: CustomerUpdate = {
         version: data.version,
         actions: [
@@ -378,7 +434,6 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
-
       setUser(data);
       setIsEditMode(false);
     } catch (error) {
@@ -390,6 +445,8 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
+    }  finally {
+      setIsLoading(false);
     }
   };
 
@@ -399,7 +456,7 @@ function UserProfile() {
       if (clientId === null) {
         throw new Error("Client ID is null");
       }
-
+      setIsLoading(true);
       const addAddressDetails: CustomerUpdate = {
         version: user?.version ?? 0,
         actions: [
@@ -429,7 +486,6 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
-
       setUser(response.body);
       setIsAddAddressMode(false);
     } catch (error) {
@@ -441,6 +497,8 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
+    }  finally {
+      setIsLoading(false);
     }
   };
 
@@ -468,7 +526,7 @@ function UserProfile() {
           },
         ],
       };
-
+      setIsLoading(true);
       const response = await ClientCredentialsFlowApiClient()
         .customers()
         .withId({ ID: clientId })
@@ -483,7 +541,6 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
-
       setUser(response.body);
       setIsEditAddressMode(false);
     } catch (error) {
@@ -495,13 +552,15 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
+    }  finally {
+      setIsLoading(false);
     }
   };
   
-
   return (
     <>
-      {user ? (
+      <LoadingOverlay isLoading={isLoading} />
+      {user && (
         <Box p={5}>
           <VStack spacing={5} align="start">
             <Heading as="h1" size="lg">
@@ -512,7 +571,14 @@ function UserProfile() {
               <Heading as="h2" size="md" mb={2}>
                 Personal Information
               </Heading>
-              <Button onClick={handleEditClick}>Edit Profile</Button>
+              <VStack
+                spacing={2}
+                mb={2}
+                align="stretch"
+              >
+                <Button onClick={handleEditClick}>Edit Profile</Button>
+                <Button onClick={handlePasswordChangeClick}>Change Password</Button>
+              </VStack>
               <Text>
                 <b>First Name:</b> {user?.firstName || "Not provided"}
               </Text>
@@ -524,14 +590,12 @@ function UserProfile() {
               </Text>
             </Box>
 
-            <Button onClick={handlePasswordChangeClick}>Change Password</Button>
-
             <Box>
               <Heading as="h2" size="md" mb={2}>
                 Addresses
               </Heading>
 
-              <Button mb={2} onClick={handleAddAddressClick}>
+              <Button mb={3} onClick={handleAddAddressClick}>
                 Add Address
               </Button>
 
@@ -542,27 +606,33 @@ function UserProfile() {
                   divider={<StackDivider borderColor="gray.200" />}
                 >
                   <FormControl as="fieldset">
-                  <FormLabel as="legend">Default Billing Address</FormLabel>
-                  <RadioGroup onChange={handleOnChangeBillingAddress} value={user.defaultBillingAddressId}>
-                    {user.addresses.map((address) => (
-                      <HStack key={address.id}>
-                        <Radio value={address.id} />
-                        <Text>{address.streetName}</Text>
-                      </HStack>
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-                <FormControl as="fieldset">
-                  <FormLabel as="legend">Default Shipping Address</FormLabel>
-                  <RadioGroup onChange={handleOnChangeShippingAddress} value={user.defaultShippingAddressId}>
-                    {user.addresses.map((address) => (
-                      <HStack key={address.id}>
-                        <Radio value={address.id} />
-                        <Text>{address.streetName}</Text>
-                      </HStack>
-                    ))}
-                  </RadioGroup>
-                </FormControl>
+                    <FormLabel as="legend">Default Billing Address</FormLabel>
+                    <RadioGroup
+                      onChange={handleOnChangeBillingAddress}
+                      value={user.defaultBillingAddressId}
+                    >
+                      {user.addresses.map((address) => (
+                        <HStack key={address.id}>
+                          <Radio value={address.id} />
+                          <Text>{address.streetName}, {address.city}, {address.country}</Text>
+                        </HStack>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                  <FormControl as="fieldset">
+                    <FormLabel as="legend">Default Shipping Address</FormLabel>
+                    <RadioGroup
+                      onChange={handleOnChangeShippingAddress}
+                      value={user.defaultShippingAddressId}
+                    >
+                      {user.addresses.map((address) => (
+                        <HStack key={address.id}>
+                          <Radio value={address.id} />
+                          <Text>{address.streetName}, {address.city}, {address.country}</Text>
+                        </HStack>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
                   {user.addresses.map((address) => (
                     <Box
                       key={address.id}
@@ -614,14 +684,6 @@ function UserProfile() {
             </Box>
           </VStack>
         </Box>
-      ) : (
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
       )}
 
       <Modal isOpen={isEditMode} onClose={() => setIsEditMode(false)}>
@@ -733,11 +795,23 @@ function UserProfile() {
                   isRequired
                 >
                   <FormLabel>New Password</FormLabel>
-                  <Input
-                    type="password"
-                    placeholder="New Password"
-                    {...registerPassword("newPassword", passwordValidation)}
-                  />
+                  <InputGroup>
+                    <Input
+                      type={show ? "text" : "password"}
+                      placeholder="New Password"
+                      {...registerPassword("newPassword", passwordValidation)}
+                    />
+                    <InputRightElement width="4rem">
+                      <IconButton
+                        h="95%"
+                        aria-label="Search database"
+                        bg="white"
+                        onClick={handleClick}
+                      >
+                        {show ? <ViewIcon /> : <ViewOffIcon />}
+                      </IconButton>
+                    </InputRightElement>
+                  </InputGroup>
                   <FormErrorMessage>
                     {passwordErrors.newPassword?.message}
                   </FormErrorMessage>
@@ -747,14 +821,26 @@ function UserProfile() {
                   isRequired
                 >
                   <FormLabel>Confirm New Password</FormLabel>
-                  <Input
-                    type="password"
-                    placeholder="Confirm New Password"
-                    {...registerPassword(
-                      "confirmNewPassword",
-                      passwordValidation,
-                    )}
-                  />
+                  <InputGroup>
+                    <Input
+                      type={show ? "text" : "password"}
+                      placeholder="Confirm New Password"
+                      {...registerPassword(
+                        "confirmNewPassword",
+                        passwordValidation,
+                      )}
+                    />
+                    <InputRightElement width="4rem">
+                      <IconButton
+                        h="95%"
+                        aria-label="Search database"
+                        bg="white"
+                        onClick={handleClick}
+                      >
+                        {show ? <ViewIcon /> : <ViewOffIcon />}
+                      </IconButton>
+                    </InputRightElement>
+                  </InputGroup>
                   <FormErrorMessage>
                     {passwordErrors.confirmNewPassword?.message}
                   </FormErrorMessage>
@@ -879,13 +965,12 @@ function UserProfile() {
                 >
                   <FormLabel mt={5}>Street</FormLabel>
                   <Input
-                    {...registerEditAddress(
-                      `streetName`,
-                      streetValidation,
-                    )}
+                    {...registerEditAddress(`streetName`, streetValidation)}
                     type="text"
                     placeholder="Street"
-                    defaultValue={user?.addresses[currentEditAddressIndex].streetName}
+                    defaultValue={
+                      user?.addresses[currentEditAddressIndex].streetName
+                    }
                   />
                   <FormErrorMessage>
                     {editAddressErrors.streetName?.message}
@@ -915,7 +1000,9 @@ function UserProfile() {
                     {...registerEditAddress("postalCode", zipValidation)}
                     type="zip"
                     placeholder="Postal code"
-                    defaultValue={user?.addresses[currentEditAddressIndex].postalCode}
+                    defaultValue={
+                      user?.addresses[currentEditAddressIndex].postalCode
+                    }
                   />
                   <FormErrorMessage>
                     {editAddressErrors.postalCode?.message}
@@ -929,7 +1016,9 @@ function UserProfile() {
                   <Select
                     {...registerEditAddress("country", countryValidation)}
                     placeholder="Select country"
-                    defaultValue={user?.addresses[currentEditAddressIndex].country}
+                    defaultValue={
+                      user?.addresses[currentEditAddressIndex].country
+                    }
                   >
                     <option value="GB">United Kingdom</option>
                   </Select>
