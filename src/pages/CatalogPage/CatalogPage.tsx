@@ -163,6 +163,7 @@ function CatalogPage() {
           {products ? (
             products.map((product) => {
               const productData = parseProductDetails(product);
+              const productKey = product.key;
               return (
                 <ProductsItem
                   key={productData?.title}
@@ -171,6 +172,7 @@ function CatalogPage() {
                   imageURL={productData?.images[0]}
                   price={productData?.price}
                   discountedPrice={productData?.discountedPrice}
+                  productKey={productKey}
                 />
               );
             })
