@@ -675,12 +675,16 @@ function UserProfile() {
                             colorScheme="gray"
                             onClick={() => handleEditAddressClick(address.id)}
                           />
-                          <IconButton
-                            aria-label="Delete address"
-                            icon={<DeleteIcon />}
-                            colorScheme="gray"
-                            onClick={() => handleDeleteAddressClick(address.id)}
-                          />
+                          {user.addresses.length > 1 && (
+                            <IconButton
+                              aria-label="Delete address"
+                              icon={<DeleteIcon />}
+                              colorScheme="gray"
+                              onClick={() =>
+                                handleDeleteAddressClick(address.id)
+                              }
+                            />
+                          )}
                         </VStack>
                       </HStack>
                     </Box>
