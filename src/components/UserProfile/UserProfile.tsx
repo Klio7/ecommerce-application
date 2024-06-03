@@ -24,17 +24,28 @@ import {
   IconButton,
   InputRightElement,
   InputGroup,
+  Select,
 } from "@chakra-ui/react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
-import { Customer, CustomerChangePassword, CustomerUpdate } from "@commercetools/platform-sdk";
+import {
+  BaseAddress,
+  Customer,
+  CustomerChangePassword,
+  CustomerUpdate,
+  _BaseAddress,
+} from "@commercetools/platform-sdk";
 import getUserProfile from "../../services/getUser";
 import {
   birthDateValidation,
+  cityValidation,
+  countryValidation,
   emailValidation,
   firstNameValidation,
   lastNameValidation,
   passwordValidation,
+  streetValidation,
+  zipValidation,
 } from "../../utils/validation";
 import { getClientIdFromLocalStorage } from "../../store/LocalStorage";
 import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
@@ -50,6 +61,11 @@ function UserProfile() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [, setEditedUser] = useState<Customer | null>(null);
   const [isPasswordChangeMode, setIsPasswordChangeMode] = useState(false);
+  const [isAddAddressMode, setIsAddAddressMode] = useState(false);
+  const [isEditAddressMode, setIsEditAddressMode] = useState(false);
+  const [currentEditAddressIndex, setCurrentEditAddressIndex] =
+    useState<number>(0);
+
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
@@ -65,6 +81,13 @@ function UserProfile() {
     handleSubmit: handleSubmitPassword,
     formState: { errors: passwordErrors },
   } = useForm<PasswordChangeFormData>();
+
+  const {
+    register: registerAddAddress,
+    handleSubmit: handleSubmitAddAddress,
+    formState: { errors: addAddressErrors },
+    reset: addAddressReset,
+  } = useForm<_BaseAddress>();
 
   const toast = useToast();
 
@@ -92,6 +115,70 @@ function UserProfile() {
   const handlePasswordChangeClick = () => {
     // resetPassword();
     setIsPasswordChangeMode(true);
+  };
+
+  const handleAddAddressClick = () => {
+    addAddressReset();
+    setIsAddAddressMode(true);
+  };
+
+  const handleEditAddressClick = (addressId: string) => {
+    const addressIndex =
+      user?.addresses?.findIndex(
+        (userAddress) => userAddress.id === addressId,
+      ) || 0;
+    setIsEditAddressMode(true);
+    // reset();
+    setCurrentEditAddressIndex(addressIndex);
+  };
+
+  const handleDeleteAddressClick = async (addressId?: string) => {
+    if (!addressId) {
+      return;
+    }
+    const clientId = getClientIdFromLocalStorage();
+    if (clientId === null) {
+      throw new Error("Client ID is null");
+    }
+
+    const actions: CustomerUpdate = {
+      version: user?.version ?? 0,
+      actions: [
+        {
+          action: "removeAddress",
+          addressId,
+        },
+      ],
+    };
+    try {
+      const response = await ClientCredentialsFlowApiClient()
+        .customers()
+        .withId({ ID: clientId })
+        .post({
+          body: actions,
+        })
+        .execute();
+
+      toast({
+        position: "top",
+        title: "Address was removed",
+        description: "Your address has been removed successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      setUser(response.body);
+    } catch (error) {
+      toast({
+        position: "top",
+        title: "Error",
+        description: "There was an error removing your address.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   const onSubmitPasswordChange = async (data: PasswordChangeFormData) => {
@@ -137,7 +224,6 @@ function UserProfile() {
 
       setIsPasswordChangeMode(false);
     } catch (error) {
-      console.log("Error updating password:", error);
       toast({
         position: "top",
         title: "Error",
@@ -207,6 +293,57 @@ function UserProfile() {
     }
   };
 
+  const onSubmitAddAddress = async (data: _BaseAddress) => {
+    try {
+      const clientId = getClientIdFromLocalStorage();
+      if (clientId === null) {
+        throw new Error("Client ID is null");
+      }
+
+      const addAddressDetails: CustomerUpdate = {
+        version: user?.version ?? 0,
+        actions: [
+          {
+            action: "addAddress",
+            address: {
+              streetName: data.streetName,
+              city: data.city,
+              postalCode: data.postalCode,
+              country: data.country,
+            },
+          },
+        ],
+      };
+
+      const response = await ClientCredentialsFlowApiClient()
+        .customers()
+        .withId({ ID: clientId })
+        .post({ body: addAddressDetails })
+        .execute();
+
+      toast({
+        position: "top",
+        title: "New address added",
+        description: "Your address has been added successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      setUser(response.body);
+      setIsAddAddressMode(false);
+    } catch (error) {
+      toast({
+        position: "top",
+        title: "Error",
+        description: "There was an error adding new address.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <>
       {user ? (
@@ -238,6 +375,11 @@ function UserProfile() {
               <Heading as="h2" size="md" mb={2}>
                 Addresses
               </Heading>
+
+              <Button mb={2} onClick={handleAddAddressClick}>
+                Add Address
+              </Button>
+
               {user?.addresses?.length > 0 ? (
                 <VStack
                   spacing={3}
@@ -272,6 +414,18 @@ function UserProfile() {
                           {address.id === user.defaultShippingAddressId && (
                             <Badge colorScheme="blue">Default Shipping</Badge>
                           )}
+                          <IconButton
+                            aria-label="Edit address"
+                            icon={<EditIcon />}
+                            colorScheme="gray"
+                            onClick={() => handleEditAddressClick(address.id)}
+                          />
+                          <IconButton
+                            aria-label="Delete address"
+                            icon={<DeleteIcon />}
+                            colorScheme="gray"
+                            onClick={() => handleDeleteAddressClick(address.id)}
+                          />
                         </VStack>
                       </HStack>
                     </Box>
@@ -437,6 +591,180 @@ function UserProfile() {
               <Button
                 variant="ghost"
                 onClick={() => setIsPasswordChangeMode(false)}
+              >
+                Cancel
+              </Button>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={isAddAddressMode}
+        onClose={() => setIsAddAddressMode(false)}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add Address</ModalHeader>
+          <ModalCloseButton />
+          <form onSubmit={handleSubmitAddAddress(onSubmitAddAddress)}>
+            <ModalBody>
+              <VStack spacing={4}>
+                <FormControl
+                  isRequired
+                  isInvalid={!!addAddressErrors.streetName?.message}
+                >
+                  <FormLabel mt={5}>Street</FormLabel>
+                  <Input
+                    {...registerAddAddress("streetName", streetValidation)}
+                    type="street"
+                    placeholder="Street"
+                  />
+                  <FormErrorMessage>
+                    {addAddressErrors.streetName?.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  isRequired
+                  isInvalid={!!addAddressErrors.city?.message}
+                >
+                  <FormLabel mt={5}>City</FormLabel>
+                  <Input
+                    {...registerAddAddress("city", cityValidation)}
+                    type="city"
+                    placeholder="City"
+                  />
+                  <FormErrorMessage>
+                    {addAddressErrors.city?.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  isRequired
+                  isInvalid={!!addAddressErrors.postalCode?.message}
+                >
+                  <FormLabel mt={5}>Postal code</FormLabel>
+                  <Input
+                    {...registerAddAddress("postalCode", zipValidation)}
+                    type="zip"
+                    placeholder="Postal code"
+                  />
+                  <FormErrorMessage>
+                    {addAddressErrors.postalCode?.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  isRequired
+                  isInvalid={!!addAddressErrors.country?.message}
+                >
+                  <FormLabel mt={5}>Country</FormLabel>
+                  <Select
+                    {...registerAddAddress("country", countryValidation)}
+                    placeholder="Select country"
+                  >
+                    <option value="GB">United Kingdom</option>
+                  </Select>
+                  <FormErrorMessage>
+                    {addAddressErrors.country?.message}
+                  </FormErrorMessage>
+                </FormControl>
+              </VStack>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} type="submit">
+                Save
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => setIsAddAddressMode(false)}
+              >
+                Cancel
+              </Button>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
+
+      {/* EDIT ADDRESS */}
+      <Modal
+        isOpen={isEditAddressMode}
+        onClose={() => setIsEditAddressMode(false)}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Address</ModalHeader>
+          <ModalCloseButton />
+          <form onSubmit={handleSubmitAddAddress(onSubmitAddAddress)}>
+            <ModalBody>
+              <VStack spacing={4}>
+                <FormControl
+                  isRequired
+                  // isInvalid={!!addAddressErrors.streetName?.message}
+                >
+                  <FormLabel mt={5}>Street</FormLabel>
+                  <Input
+                    {...register(
+                      `addresses.${currentEditAddressIndex}.streetName`,
+                      streetValidation,
+                    )}
+                    type="text"
+                    placeholder="Street"
+                  />
+                  {/* <FormErrorMessage>
+                    {addAddressErrors.streetName?.message}
+                  </FormErrorMessage> */}
+                </FormControl>
+                <FormControl
+                  isRequired
+                  // isInvalid={!!addAddressErrors.city?.message}
+                >
+                  <FormLabel mt={5}>City</FormLabel>
+                  <Input
+                    {...registerAddAddress("city", cityValidation)}
+                    type="city"
+                    placeholder="City"
+                  />
+                  {/* <FormErrorMessage>
+                    {addAddressErrors.city?.message}
+                  </FormErrorMessage> */}
+                </FormControl>
+                <FormControl
+                  isRequired
+                  // isInvalid={!!addAddressErrors.postalCode?.message}
+                >
+                  <FormLabel mt={5}>Postal code</FormLabel>
+                  <Input
+                    {...registerAddAddress("postalCode", zipValidation)}
+                    type="zip"
+                    placeholder="Postal code"
+                  />
+                  {/* <FormErrorMessage>
+                    {addAddressErrors.postalCode?.message}
+                  </FormErrorMessage> */}
+                </FormControl>
+                <FormControl
+                  isRequired
+                  // isInvalid={!!addAddressErrors.country?.message}
+                >
+                  <FormLabel mt={5}>Country</FormLabel>
+                  <Select
+                    {...registerAddAddress("country", countryValidation)}
+                    placeholder="Select country"
+                  >
+                    <option value="GB">United Kingdom</option>
+                  </Select>
+                  {/* <FormErrorMessage>
+                    {addAddressErrors.country?.message}
+                  </FormErrorMessage> */}
+                </FormControl>
+              </VStack>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} type="submit">
+                Save
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => setIsEditAddressMode(false)}
               >
                 Cancel
               </Button>
