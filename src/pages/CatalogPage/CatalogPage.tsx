@@ -182,8 +182,8 @@ function CatalogPage() {
             placeholder="Sort By"
           >
             <option value="name.en-US asc">Name</option>
-            <option value="price asc">Price Ascending</option>
-            <option value="price desc">Price Descending</option>
+            <option value="price asc">Price ↑</option>
+            <option value="price desc">Price ↓</option>
           </Select>
         </Flex>
         <Breadcrumb>
