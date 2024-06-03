@@ -25,11 +25,12 @@ import {
   InputRightElement,
   InputGroup,
   Select,
+  RadioGroup,
+  Radio,
 } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
 import {
-  BaseAddress,
   Customer,
   CustomerChangePassword,
   CustomerUpdate,
@@ -59,7 +60,6 @@ interface PasswordChangeFormData {
 function UserProfile() {
   const [user, setUser] = useState<Customer | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [, setEditedUser] = useState<Customer | null>(null);
   const [isPasswordChangeMode, setIsPasswordChangeMode] = useState(false);
   const [isAddAddressMode, setIsAddAddressMode] = useState(false);
   const [isEditAddressMode, setIsEditAddressMode] = useState(false);
@@ -80,6 +80,7 @@ function UserProfile() {
     register: registerPassword,
     handleSubmit: handleSubmitPassword,
     formState: { errors: passwordErrors },
+    reset: resetPassword,
   } = useForm<PasswordChangeFormData>();
 
   const {
@@ -87,6 +88,14 @@ function UserProfile() {
     handleSubmit: handleSubmitAddAddress,
     formState: { errors: addAddressErrors },
     reset: addAddressReset,
+  } = useForm<_BaseAddress>();
+
+
+  const {
+    register: registerEditAddress,
+    handleSubmit: handleSubmitEditAddress,
+    formState: { errors: editAddressErrors },
+    reset: editAddressReset,
   } = useForm<_BaseAddress>();
 
   const toast = useToast();
@@ -105,7 +114,6 @@ function UserProfile() {
   }, []);
 
   const handleEditClick = () => {
-    setEditedUser(user);
     if (user) {
       reset(user);
     }
@@ -113,7 +121,7 @@ function UserProfile() {
   };
 
   const handlePasswordChangeClick = () => {
-    // resetPassword();
+    resetPassword();
     setIsPasswordChangeMode(true);
   };
 
@@ -127,8 +135,8 @@ function UserProfile() {
       user?.addresses?.findIndex(
         (userAddress) => userAddress.id === addressId,
       ) || 0;
+    editAddressReset();
     setIsEditAddressMode(true);
-    // reset();
     setCurrentEditAddressIndex(addressIndex);
   };
 
@@ -180,6 +188,98 @@ function UserProfile() {
       });
     }
   };
+
+  const handleOnChangeShippingAddress = async (addressId: string) => {
+    try {
+      const clientId = getClientIdFromLocalStorage();
+      if (clientId === null) {
+        throw new Error("Client ID is null");
+      }
+
+      const shippingAddressDetails: CustomerUpdate = {
+        version: user?.version ?? 0,
+        actions: [
+          {
+            action: 'setDefaultShippingAddress',
+            addressId,
+          },
+        ],
+      };
+
+      const response = await ClientCredentialsFlowApiClient()
+        .customers()
+        .withId({ ID: clientId })
+        .post({ body: shippingAddressDetails })
+        .execute();
+
+      toast({
+        position: "top",
+        title: "Default shipping address changed",
+        description: "Your default shipping address had been changed successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      setUser(response.body);
+      setIsEditMode(false);
+    } catch {
+      toast({
+        position: "top",
+        title: "Error",
+        description: "There was an error setting your default shipping address.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }
+
+  const handleOnChangeBillingAddress = async (addressId: string) => {
+    try {
+      const clientId = getClientIdFromLocalStorage();
+      if (clientId === null) {
+        throw new Error("Client ID is null");
+      }
+
+      const billingAddressDetails: CustomerUpdate = {
+        version: user?.version ?? 0,
+        actions: [
+          {
+            action: 'setDefaultBillingAddress',
+            addressId,
+          },
+        ],
+      };
+
+      const response = await ClientCredentialsFlowApiClient()
+        .customers()
+        .withId({ ID: clientId })
+        .post({ body: billingAddressDetails })
+        .execute();
+
+      toast({
+        position: "top",
+        title: "Default shipping address changed",
+        description: "Your default shipping address had been changed successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      setUser(response.body);
+      setIsEditMode(false);
+    } catch {
+      toast({
+        position: "top",
+        title: "Error",
+        description: "There was an error setting your default shipping address.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }
 
   const onSubmitPasswordChange = async (data: PasswordChangeFormData) => {
     if (data.newPassword !== data.confirmNewPassword) {
@@ -344,6 +444,61 @@ function UserProfile() {
     }
   };
 
+  const onSubmitEditAddress = async (data: _BaseAddress) => {
+    try {
+      const clientId = getClientIdFromLocalStorage();
+      if (clientId === null) {
+        throw new Error("Client ID is null");
+      }
+
+      const addressId = user?.addresses[currentEditAddressIndex].id;
+
+      const addAddressDetails: CustomerUpdate = {
+        version: user?.version ?? 0,
+        actions: [
+          {
+            action: "changeAddress",
+            addressId,
+            address: {
+              streetName: data.streetName,
+              city: data.city,
+              postalCode: data.postalCode,
+              country: data.country,
+            },
+          },
+        ],
+      };
+
+      const response = await ClientCredentialsFlowApiClient()
+        .customers()
+        .withId({ ID: clientId })
+        .post({ body: addAddressDetails })
+        .execute();
+
+      toast({
+        position: "top",
+        title: "Address changed",
+        description: "Your address has been changed successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      setUser(response.body);
+      setIsEditAddressMode(false);
+    } catch (error) {
+      toast({
+        position: "top",
+        title: "Error",
+        description: "There was an error changing your address.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+  
+
   return (
     <>
       {user ? (
@@ -386,6 +541,28 @@ function UserProfile() {
                   align="stretch"
                   divider={<StackDivider borderColor="gray.200" />}
                 >
+                  <FormControl as="fieldset">
+                  <FormLabel as="legend">Default Billing Address</FormLabel>
+                  <RadioGroup onChange={handleOnChangeBillingAddress} value={user.defaultBillingAddressId}>
+                    {user.addresses.map((address) => (
+                      <HStack key={address.id}>
+                        <Radio value={address.id} />
+                        <Text>{address.streetName}</Text>
+                      </HStack>
+                    ))}
+                  </RadioGroup>
+                </FormControl>
+                <FormControl as="fieldset">
+                  <FormLabel as="legend">Default Shipping Address</FormLabel>
+                  <RadioGroup onChange={handleOnChangeShippingAddress} value={user.defaultShippingAddressId}>
+                    {user.addresses.map((address) => (
+                      <HStack key={address.id}>
+                        <Radio value={address.id} />
+                        <Text>{address.streetName}</Text>
+                      </HStack>
+                    ))}
+                  </RadioGroup>
+                </FormControl>
                   {user.addresses.map((address) => (
                     <Box
                       key={address.id}
@@ -693,68 +870,72 @@ function UserProfile() {
         <ModalContent>
           <ModalHeader>Edit Address</ModalHeader>
           <ModalCloseButton />
-          <form onSubmit={handleSubmitAddAddress(onSubmitAddAddress)}>
+          <form onSubmit={handleSubmitEditAddress(onSubmitEditAddress)}>
             <ModalBody>
               <VStack spacing={4}>
                 <FormControl
                   isRequired
-                  // isInvalid={!!addAddressErrors.streetName?.message}
+                  isInvalid={!!editAddressErrors.streetName?.message}
                 >
                   <FormLabel mt={5}>Street</FormLabel>
                   <Input
-                    {...register(
-                      `addresses.${currentEditAddressIndex}.streetName`,
+                    {...registerEditAddress(
+                      `streetName`,
                       streetValidation,
                     )}
                     type="text"
                     placeholder="Street"
+                    defaultValue={user?.addresses[currentEditAddressIndex].streetName}
                   />
-                  {/* <FormErrorMessage>
-                    {addAddressErrors.streetName?.message}
-                  </FormErrorMessage> */}
+                  <FormErrorMessage>
+                    {editAddressErrors.streetName?.message}
+                  </FormErrorMessage>
                 </FormControl>
                 <FormControl
                   isRequired
-                  // isInvalid={!!addAddressErrors.city?.message}
+                  isInvalid={!!editAddressErrors.city?.message}
                 >
                   <FormLabel mt={5}>City</FormLabel>
                   <Input
-                    {...registerAddAddress("city", cityValidation)}
+                    {...registerEditAddress("city", cityValidation)}
                     type="city"
                     placeholder="City"
+                    defaultValue={user?.addresses[currentEditAddressIndex].city}
                   />
-                  {/* <FormErrorMessage>
-                    {addAddressErrors.city?.message}
-                  </FormErrorMessage> */}
+                  <FormErrorMessage>
+                    {editAddressErrors.city?.message}
+                  </FormErrorMessage>
                 </FormControl>
                 <FormControl
                   isRequired
-                  // isInvalid={!!addAddressErrors.postalCode?.message}
+                  isInvalid={!!editAddressErrors.postalCode?.message}
                 >
                   <FormLabel mt={5}>Postal code</FormLabel>
                   <Input
-                    {...registerAddAddress("postalCode", zipValidation)}
+                    {...registerEditAddress("postalCode", zipValidation)}
                     type="zip"
                     placeholder="Postal code"
+                    defaultValue={user?.addresses[currentEditAddressIndex].postalCode}
                   />
-                  {/* <FormErrorMessage>
-                    {addAddressErrors.postalCode?.message}
-                  </FormErrorMessage> */}
+                  <FormErrorMessage>
+                    {editAddressErrors.postalCode?.message}
+                  </FormErrorMessage>
                 </FormControl>
                 <FormControl
                   isRequired
-                  // isInvalid={!!addAddressErrors.country?.message}
+                  isInvalid={!!editAddressErrors.country?.message}
                 >
                   <FormLabel mt={5}>Country</FormLabel>
                   <Select
-                    {...registerAddAddress("country", countryValidation)}
+                    {...registerEditAddress("country", countryValidation)}
                     placeholder="Select country"
+                    defaultValue={user?.addresses[currentEditAddressIndex].country}
                   >
                     <option value="GB">United Kingdom</option>
                   </Select>
-                  {/* <FormErrorMessage>
-                    {addAddressErrors.country?.message}
-                  </FormErrorMessage> */}
+                  <FormErrorMessage>
+                    {editAddressErrors.country?.message}
+                  </FormErrorMessage>
                 </FormControl>
               </VStack>
             </ModalBody>
