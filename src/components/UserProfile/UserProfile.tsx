@@ -424,7 +424,7 @@ function UserProfile() {
         ],
       };
 
-      await ClientCredentialsFlowApiClient()
+      const response = await ClientCredentialsFlowApiClient()
         .customers()
         .withId({ ID: clientId })
         .post({ body: updateCustomerDetails })
@@ -438,7 +438,7 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
-      setUser(data);
+      setUser(response.body);
       setIsEditMode(false);
     } catch (error) {
       toast({
