@@ -142,9 +142,8 @@ export default function CatalogMenus({
           {categories.map((category) => {
             if (!category.parent)
               return (
-                <>
+                <React.Fragment key={category.id}>
                   <MenuItem
-                    key={category.id}
                     fontWeight="bold"
                     onClick={() => {
                       HandleFilterByCategory(category.id);
@@ -161,7 +160,7 @@ export default function CatalogMenus({
                     if (subcategory.parent?.id === category.id) {
                       return (
                         <MenuItem
-                          key={subcategory.id}
+                        key={subcategory.id}
                           onClick={() => {
                             HandleFilterByCategory(subcategory.id);
                             setBreadcrumbs([
@@ -183,7 +182,7 @@ export default function CatalogMenus({
                     }
                     return null;
                   })}
-                </>
+                </React.Fragment>
               );
             return null;
           })}
@@ -222,6 +221,7 @@ export default function CatalogMenus({
         <MenuList>
           {[...colors].map((color) => (
             <MenuItem
+              key={color}
               onClick={() => {
                 HandleCustomAttributeClick("Color", color);
                 setSelectedColor(color);
@@ -243,6 +243,7 @@ export default function CatalogMenus({
         <MenuList>
           {[...sizes].map((size) => (
             <MenuItem
+              key={size}
               onClick={() => {
                 HandleCustomAttributeClick("Size", size);
                 setSelectedSize(size);
@@ -253,7 +254,7 @@ export default function CatalogMenus({
           ))}
         </MenuList>
       </Menu>
-      <Button marginTop="1em" onClick={() => HandleResetFilters}>
+      <Button marginTop="1em" onClick={() => HandleResetFilters()}>
         Reset Filters
       </Button>
     </Flex>

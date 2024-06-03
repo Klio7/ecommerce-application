@@ -149,7 +149,7 @@ function CatalogPage() {
         </Flex>
         <Breadcrumb>
           <BreadcrumbItem>
-            <BreadcrumbLink>Category</BreadcrumbLink>
+            <BreadcrumbLink>Catalog</BreadcrumbLink>
           </BreadcrumbItem>
           {breadcrumbs[0].map((crumb) => (
             <BreadcrumbItem>
