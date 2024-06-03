@@ -58,26 +58,29 @@ interface PasswordChangeFormData {
 }
 
 type LoadingOverlayProps = {
-  isLoading: boolean
-}
+  isLoading: boolean;
+};
 
 function LoadingOverlay({ isLoading }: LoadingOverlayProps) {
-  if (!isLoading) { 
+  if (!isLoading) {
     return null;
   }
   return (
-    <Box background="gray.400" sx={{ 
-      position: "fixed",
-      top: "0", 
-      left: "0", 
-      width: "100%", 
-      height:"100%", 
-      opacity: .9,
-      display: "flex",
-      alignItems: "center",
-      zIndex: "1600",
-      justifyContent: "center"
-    }}>
+    <Box
+      background="gray.400"
+      sx={{
+        position: "fixed",
+        top: "0",
+        left: "0",
+        width: "100%",
+        height: "100%",
+        opacity: 0.9,
+        display: "flex",
+        alignItems: "center",
+        zIndex: "1600",
+        justifyContent: "center",
+      }}
+    >
       <Spinner
         thickness="4px"
         speed="0.65s"
@@ -268,7 +271,6 @@ function UserProfile() {
         isClosable: true,
       });
 
-
       setUser(response.body);
       setIsEditMode(false);
     } catch {
@@ -280,8 +282,8 @@ function UserProfile() {
         status: "error",
         duration: 3000,
         isClosable: true,
-      }) ;
-    }  finally {
+      });
+    } finally {
       setIsLoading(false);
     }
   };
@@ -331,7 +333,7 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
-    }  finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -362,7 +364,7 @@ function UserProfile() {
         newPassword: data.newPassword,
       };
 
-      await ClientCredentialsFlowApiClient()
+      const response = await ClientCredentialsFlowApiClient()
         .customers()
         .password()
         .post({ body: updatePasswordDetails })
@@ -376,6 +378,8 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
+
+      setUser(response.body);
       setIsPasswordChangeMode(false);
     } catch (error) {
       toast({
@@ -445,7 +449,7 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
-    }  finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -497,7 +501,7 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
-    }  finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -552,11 +556,11 @@ function UserProfile() {
         duration: 3000,
         isClosable: true,
       });
-    }  finally {
+    } finally {
       setIsLoading(false);
     }
   };
-  
+
   return (
     <>
       <LoadingOverlay isLoading={isLoading} />
@@ -571,13 +575,11 @@ function UserProfile() {
               <Heading as="h2" size="md" mb={2}>
                 Personal Information
               </Heading>
-              <VStack
-                spacing={2}
-                mb={2}
-                align="stretch"
-              >
+              <VStack spacing={2} mb={2} align="stretch">
                 <Button onClick={handleEditClick}>Edit Profile</Button>
-                <Button onClick={handlePasswordChangeClick}>Change Password</Button>
+                <Button onClick={handlePasswordChangeClick}>
+                  Change Password
+                </Button>
               </VStack>
               <Text>
                 <b>First Name:</b> {user?.firstName || "Not provided"}
@@ -614,7 +616,10 @@ function UserProfile() {
                       {user.addresses.map((address) => (
                         <HStack key={address.id}>
                           <Radio value={address.id} />
-                          <Text>{address.streetName}, {address.city}, {address.country}</Text>
+                          <Text>
+                            {address.streetName}, {address.city},{" "}
+                            {address.country}
+                          </Text>
                         </HStack>
                       ))}
                     </RadioGroup>
@@ -628,7 +633,10 @@ function UserProfile() {
                       {user.addresses.map((address) => (
                         <HStack key={address.id}>
                           <Radio value={address.id} />
-                          <Text>{address.streetName}, {address.city}, {address.country}</Text>
+                          <Text>
+                            {address.streetName}, {address.city},{" "}
+                            {address.country}
+                          </Text>
                         </HStack>
                       ))}
                     </RadioGroup>
