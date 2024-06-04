@@ -15,7 +15,6 @@ import {
   Box,
   Checkbox,
 } from "@chakra-ui/react";
-// import { CustomerDraft } from "@commercetools/platform-sdk";
 import {
   birthDateValidation,
   cityValidation,
@@ -27,9 +26,9 @@ import {
   streetValidation,
   zipValidation,
 } from "../../utils/validation";
-import { ClientCredentialsFlowApiClient } from "../../services/ApiClients";
+import { ClientCredentialsFlowApiClient } from "../../services/apiClients";
 import useAuth from "../../hooks/useAuth";
-import signInCustomer from "../../services/Authenication";
+import signInCustomer from "../../services/authentication";
 
 interface SignUpFormInputs {
   email: string;
@@ -107,6 +106,7 @@ function SignUpForm() {
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
+        dateOfBirth: data.birthDate,
         addresses,
         shippingAddresses: [0],
         billingAddresses: [useSameAddress ? 0 : 1],

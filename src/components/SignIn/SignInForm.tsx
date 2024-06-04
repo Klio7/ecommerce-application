@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import useAuth from "../../hooks/useAuth";
-import signInCustomer from "../../services/Authenication";
+import signInCustomer from "../../services/authentication";
 import { SignInFormInputs } from "../../types/types";
 import { passwordValidation, emailValidation } from "../../utils/validation";
 

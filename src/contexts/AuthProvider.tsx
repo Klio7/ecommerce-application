@@ -29,6 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("isAuthenticated", `${isAuthenticated}`);
     if (!isAuthenticated) {
       delete localStorage.sleepless_access_token;
+      delete localStorage.client_id;
     }
   }, [isAuthenticated]);
 
