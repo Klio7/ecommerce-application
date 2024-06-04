@@ -20,11 +20,20 @@ import { LuLogOut } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import "./Header.scss";
+// import createSampleCart from "../../services/sampleCart";
+// import addProductToCart from "../../services/addProductToCart";
+import getCart from "../../services/getCart";
 
 function Header() {
   const { isAuthenticated, setAuth } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  // createSampleCart().then((response) => console.log(response));
+  getCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b").then((response) =>
+    console.log(response),
+  );
+  /* addProductToCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b").then((response) =>
+    console.log(response),
+  ); */
   return (
     <Flex
       as="header"
