@@ -12,15 +12,24 @@ function parseCartData(data: Cart) {
       } else {
         imageUrl = undefined;
       }
-      const rawPrice = lineItem.price.value.centAmount;
-      const price = `${(rawPrice / 100).toFixed(2)}$`;
+      let price;
+      if (lineItem.price.discounted) {
+        const rawPrice = lineItem.price.discounted.value.centAmount;
+        price = `${(rawPrice / 100).toFixed(2)}$`;
+      } else {
+        const rawPrice = lineItem.price.value.centAmount;
+        price = `${(rawPrice / 100).toFixed(2)}$`;
+      }
+
       const number = lineItem.quantity;
       const rawTotalPrice = lineItem.totalPrice.centAmount;
-      const totalPrice = `${(rawTotalPrice / 100).toFixed(2)}$`;
-      return { title, imageUrl, price, number, totalPrice };
+      const totalProductPrice = `${(rawTotalPrice / 100).toFixed(2)}$`;
+      return { title, imageUrl, price, number, totalProductPrice };
     });
   }
-  return cartProducts;
+  const rawTotal = data.totalPrice.centAmount;
+  const total = `${(rawTotal / 100).toFixed(2)}$`;
+  return { cartProducts, total };
 }
 
 export default parseCartData;

@@ -36,5 +36,5 @@ export interface ICartProduct {
   imageUrl: string | undefined;
   price: string;
   number: number;
-  totalPrice: string;
+  totalProductPrice: string;
 }

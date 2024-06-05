@@ -1,7 +1,7 @@
 import { ClientCredentialsFlowApiClient } from "./apiClients";
 import parseCartData from "../utils/parseCartData";
 
-async function getCart(cartId: string) {
+async function getCartDetails(cartId: string) {
   try {
     const data = await ClientCredentialsFlowApiClient()
       .carts()
@@ -14,4 +14,4 @@ async function getCart(cartId: string) {
     return Promise.reject(error);
   }
 }
-export default getCart;
+export default getCartDetails;
