@@ -30,3 +30,11 @@ export interface SliderModal {
   setModalOpen: (prop: boolean) => void;
   isOpen: boolean;
 }
+
+export interface ICartProduct {
+  title: string;
+  imageUrl: string | undefined;
+  price: string;
+  number: number;
+  totalPrice: string;
+}

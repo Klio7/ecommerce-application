@@ -1,13 +1,15 @@
 import { ClientCredentialsFlowApiClient } from "./apiClients";
+import parseCartData from "../utils/parseCartData";
 
 async function getCart(cartId: string) {
   try {
-    const response = await ClientCredentialsFlowApiClient()
+    const data = await ClientCredentialsFlowApiClient()
       .carts()
       .withId({ ID: cartId })
       .get()
       .execute();
-    return response;
+    const cartData = data.body;
+    return parseCartData(cartData);
   } catch (error) {
     return Promise.reject(error);
   }
