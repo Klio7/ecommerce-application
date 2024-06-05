@@ -9,6 +9,7 @@ const fonts = {
 const colors = {
   basicColorLight: "#ded6cb",
   basicColorDark: "#bcb5ab",
+  footerColorDark: "#3A3845",
 };
 
 const customTheme = extendTheme({ fonts, colors });

@@ -4,7 +4,7 @@ import Cart from "../../components/Cart/Cart";
 
 function CartPage() {
   return (
-    <Flex bg="basicColorLight" justify="center">
+    <Flex justify="center" align="center">
       <Cart />
     </Flex>
   );

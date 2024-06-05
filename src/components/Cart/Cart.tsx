@@ -3,6 +3,7 @@ import { Flex } from "@chakra-ui/react";
 import getCartDetails from "../../services/getCartDetails";
 import { ICartProduct } from "../../types/types";
 import CartProduct from "../CartProduct/CartProduct";
+import CartHeader from "../CartHeader/CartHeader";
 
 interface ICartData {
   cartProducts: ICartProduct[] | undefined;
@@ -23,6 +24,7 @@ function Cart() {
   return (
     <Flex direction="column" px="10px" bg="lightBaseColor">
       <Flex direction="column">
+        <CartHeader />
         {cartData?.cartProducts?.map((product) => (
           <CartProduct
             imageUrl={product.imageUrl}
