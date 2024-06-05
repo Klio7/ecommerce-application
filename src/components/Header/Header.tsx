@@ -24,7 +24,6 @@ import "./Header.scss";
 function Header() {
   const { isAuthenticated, setAuth } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
     <Flex
       as="header"
@@ -152,7 +151,7 @@ function Header() {
             </Tooltip>
           </Link>
         ) : null}
-        <Link to="/basket">
+        <Link to="/cart">
           <Tooltip label="Cart" font-size="lg" openDelay={300}>
             <img
               className="icon"
