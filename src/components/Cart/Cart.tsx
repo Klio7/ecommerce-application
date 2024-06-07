@@ -22,22 +22,32 @@ function Cart() {
   }, []);
 
   return (
-    <Flex direction="column" px="10px" bg="lightBaseColor">
-      <Flex direction="column">
+    <Flex direction="column" alignItems="center">
+      <Flex direction="column" px="10px">
         <CartHeader />
         {cartData?.cartProducts?.map((product) => (
           <CartProduct
+            productId={product.productId}
             imageUrl={product.imageUrl}
             title={product.title}
             price={product.price}
             number={product.number}
             totalProductPrice={product.totalProductPrice}
-            key={product.imageUrl}
+            key={product.productId}
+            setCartData={setCartData}
           />
         ))}
       </Flex>
-      <Flex justify="flex-end" p="20px">
-        Total: {cartData?.total}
+      <Flex
+        justify="flex-end"
+        align="flex-end"
+        p="20px"
+        bg="footerColorDark"
+        color="white"
+        w="30%"
+        m="10px 10px 30px 10px"
+      >
+        Cart total: {cartData?.total}
       </Flex>
     </Flex>
   );

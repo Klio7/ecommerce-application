@@ -32,6 +32,7 @@ export interface SliderModal {
 }
 
 export interface ICartProduct {
+  productId: string;
   title: string;
   imageUrl: string | undefined;
   price: string;
