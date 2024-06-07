@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Flex } from "@chakra-ui/react";
 import getCartDetails from "../../services/getCartDetails";
 import { ICartProduct } from "../../types/types";
 import CartProduct from "../CartProduct/CartProduct";
 import CartHeader from "../CartHeader/CartHeader";
+import changeProductQuantity from "../../services/changeProductQuantity";
+import debounce from "../../utils/debounce";
 
 interface ICartData {
   cartProducts: ICartProduct[] | undefined;
@@ -16,10 +18,23 @@ function Cart() {
       const data = await getCartDetails(cardId);
       const { cartProducts, total } = data;
       setCartData({ cartProducts, total });
-      console.log(total);
     }
     getCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b");
   }, []);
+
+  async function onChangeQuantity(productId: string, value: string) {
+    const data = await changeProductQuantity(
+      "9ba8f627-278e-4fe4-b6e6-5b49c986b66b",
+      productId,
+      Number(value),
+    );
+    setCartData(data);
+  }
+
+  const handleQuantityChange = useMemo(
+    () => debounce(onChangeQuantity, 400),
+    [],
+  );
 
   return (
     <Flex direction="column" alignItems="center">
@@ -34,7 +49,7 @@ function Cart() {
             number={product.number}
             totalProductPrice={product.totalProductPrice}
             key={product.productId}
-            setCartData={setCartData}
+            handleQuantityChange={handleQuantityChange}
           />
         ))}
       </Flex>

@@ -39,3 +39,11 @@ export interface ICartProduct {
   number: number;
   totalProductPrice: string;
 }
+
+export interface ICart {
+  cartProducts: ICartProduct[] | undefined;
+  total: string;
+}
+export interface ISetCartProducts extends ICartProduct {
+  handleQuantityChange: (productId: string, value: string) => void;
+}

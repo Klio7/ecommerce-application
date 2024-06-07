@@ -9,8 +9,7 @@ import {
   useNumberInput,
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
-import { ICartProduct } from "../../types/types";
-import changeProductQuantity from "../../services/changeProductQuantity";
+import { ISetCartProducts } from "../../types/types";
 
 function CartProduct({
   productId,
@@ -19,8 +18,8 @@ function CartProduct({
   price,
   number,
   totalProductPrice,
-  setCartData,
-}: ICartProduct) {
+  handleQuantityChange,
+}: ISetCartProducts) {
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
       step: 1,
@@ -31,18 +30,11 @@ function CartProduct({
 
   const increment = getIncrementButtonProps();
   const decrement = getDecrementButtonProps();
-  const input = getInputProps();
-  async function onQuantityChange() {
-    const cartData = await changeProductQuantity(
-      "9ba8f627-278e-4fe4-b6e6-5b49c986b66b",
-      productId,
-      Number(input.value),
-    );
-    setCartData(cartData);
-  }
-  const handleQuantityChange = () => {
-    onQuantityChange();
-  };
+  const input = getInputProps(
+    (oninput = () => {
+      handleQuantityChange(productId, input.value);
+    }),
+  );
 
   return (
     <Flex
@@ -72,11 +64,21 @@ function CartProduct({
       </Flex>
       <Flex w="20%" align="center">
         <Flex>
-          <Button {...increment} onClick={() => handleQuantityChange()}>
+          <Button
+            {...increment}
+            onClick={() => handleQuantityChange(productId, input.value)}
+            colorScheme="white"
+            color="black"
+          >
             +
           </Button>
           <Input {...input} />
-          <Button {...decrement} onClick={() => handleQuantityChange()}>
+          <Button
+            {...decrement}
+            onClick={() => handleQuantityChange(productId, input.value)}
+            colorScheme="white"
+            color="black"
+          >
             -
           </Button>
         </Flex>
