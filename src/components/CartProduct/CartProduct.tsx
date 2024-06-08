@@ -52,6 +52,7 @@ function CartProduct({
         color="red.500"
         colorScheme="white"
         w="10%"
+        onClick={() => handleQuantityChange(productId, "0")}
       />
       <Image src={imageUrl} alt="photo" boxSize="100px" />
       <Flex w="20%">
