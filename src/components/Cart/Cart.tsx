@@ -59,7 +59,7 @@ function Cart() {
         p="20px"
         bg="footerColorDark"
         color="white"
-        w="30%"
+        w="40%"
         m="10px 10px 30px 10px"
       >
         Cart total: {cartData?.total}

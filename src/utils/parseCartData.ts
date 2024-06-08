@@ -1,6 +1,13 @@
 import { Cart, LineItem } from "@commercetools/platform-sdk";
 import { ICartProduct } from "../types/types";
 
+const formatConfig = {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2,
+  currencyDisplay: "symbol",
+};
+
 function parseCartData(data: Cart) {
   let cartProducts: ICartProduct[] | undefined;
   if (data.lineItems) {
@@ -16,20 +23,28 @@ function parseCartData(data: Cart) {
       let price;
       if (lineItem.price.discounted) {
         const rawPrice = lineItem.price.discounted.value.centAmount;
-        price = `${(rawPrice / 100).toFixed(2)}$`;
+        price = new Intl.NumberFormat("ru-RU", formatConfig).format(
+          rawPrice / 100,
+        );
       } else {
         const rawPrice = lineItem.price.value.centAmount;
-        price = `${(rawPrice / 100).toFixed(2)}$`;
+        price = new Intl.NumberFormat("ru-RU", formatConfig).format(
+          rawPrice / 100,
+        );
       }
-
       const number = lineItem.quantity;
       const rawTotalPrice = lineItem.totalPrice.centAmount;
-      const totalProductPrice = `${(rawTotalPrice / 100).toFixed(2)}$`;
+      const totalProductPrice = new Intl.NumberFormat(
+        "ru-RU",
+        formatConfig,
+      ).format(rawTotalPrice / 100);
       return { productId, title, imageUrl, price, number, totalProductPrice };
     });
   }
   const rawTotal = data.totalPrice.centAmount;
-  const total = `${(rawTotal / 100).toFixed(2)}$`;
+  const total = new Intl.NumberFormat("ru-RU", formatConfig).format(
+    rawTotal / 100,
+  );
   return { cartProducts, total };
 }
 
