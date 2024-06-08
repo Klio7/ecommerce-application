@@ -16,10 +16,10 @@ function CartHeader() {
       textAlign="center"
     >
       <DeleteIcon w="10%" />
-      <Text w="15%">PHOTO</Text>
+      <Text w="10%">PHOTO</Text>
       <Text w="25%">PRODUCT</Text>
       <Text w="20%">PRICE</Text>
-      <Text w="20%">QUANTITY</Text>
+      <Text w="22%">QUANTITY</Text>
       <Text w="20%">SUBTOTAL</Text>
     </Flex>
   );

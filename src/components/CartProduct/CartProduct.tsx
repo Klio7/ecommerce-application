@@ -71,8 +71,8 @@ function CartProduct({
       <Flex w="20%" direction="column">
         <Text> {price}</Text>
       </Flex>
-      <Flex w="20%" align="center">
-        <Flex>
+      <Flex w="22%" align="center">
+        <Flex justify="center">
           <Button
             {...increment}
             onClick={() => handleQuantityChange(productId, input.value)}
@@ -81,7 +81,7 @@ function CartProduct({
           >
             +
           </Button>
-          <Input {...input} />
+          <Input {...input} w="60px" />
           <Button
             {...decrement}
             onClick={() => handleQuantityChange(productId, input.value)}

@@ -62,7 +62,7 @@ function Cart() {
   );
 
   const handleQuantityChange = useMemo(
-    () => debounce(onChangeQuantity, 400),
+    () => debounce(onChangeQuantity, 300),
     [onChangeQuantity],
   );
 
