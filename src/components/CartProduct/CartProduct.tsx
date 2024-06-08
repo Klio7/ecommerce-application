@@ -7,6 +7,7 @@ import {
   Button,
   Input,
   useNumberInput,
+  Tooltip,
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
 import { ISetCartProducts } from "../../types/types";
@@ -45,17 +46,24 @@ function CartProduct({
       gap="10px"
       borderBottom="2px solid"
       borderColor="footerColorDark"
+      textAlign="center"
     >
-      <IconButton
-        aria-label="Search database"
-        icon={<SmallCloseIcon />}
-        color="red.500"
-        colorScheme="white"
-        w="10%"
-        onClick={() => handleQuantityChange(productId, "0")}
-      />
+      <Tooltip label="Remove from cart" font-size="lg" openDelay={200}>
+        <IconButton
+          aria-label="Search database"
+          icon={<SmallCloseIcon />}
+          color="red.500"
+          colorScheme="white"
+          w="10%"
+          transition="0.3s linear all"
+          _hover={{
+            transform: "scale(1.4)",
+          }}
+          onClick={() => handleQuantityChange(productId, "0")}
+        />
+      </Tooltip>
       <Image src={imageUrl} alt="photo" boxSize="100px" />
-      <Flex w="20%">
+      <Flex w="25%" justify="center">
         <Text fontWeight="600" px="10px">
           {title}
         </Text>
@@ -84,7 +92,7 @@ function CartProduct({
           </Button>
         </Flex>
       </Flex>
-      <Flex w="20%" color="orange.600">
+      <Flex w="20%" color="orange.600" justify="center">
         {totalProductPrice}
       </Flex>
     </Flex>
