@@ -5,6 +5,7 @@ function parseCartData(data: Cart) {
   let cartProducts: ICartProduct[] | undefined;
   if (data.lineItems) {
     cartProducts = data.lineItems.map((lineItem: LineItem) => {
+      const productId = lineItem.id;
       const title = lineItem.name["en-US"];
       let imageUrl;
       if (lineItem.variant.images) {
@@ -24,7 +25,7 @@ function parseCartData(data: Cart) {
       const number = lineItem.quantity;
       const rawTotalPrice = lineItem.totalPrice.centAmount;
       const totalProductPrice = `${(rawTotalPrice / 100).toFixed(2)}$`;
-      return { title, imageUrl, price, number, totalProductPrice };
+      return { productId, title, imageUrl, price, number, totalProductPrice };
     });
   }
   const rawTotal = data.totalPrice.centAmount;

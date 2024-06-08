@@ -32,9 +32,18 @@ export interface SliderModal {
 }
 
 export interface ICartProduct {
+  productId: string;
   title: string;
   imageUrl: string | undefined;
   price: string;
   number: number;
   totalProductPrice: string;
+}
+
+export interface ICart {
+  cartProducts: ICartProduct[] | undefined;
+  total: string;
+}
+export interface ISetCartProducts extends ICartProduct {
+  handleQuantityChange: (productId: string, value: string) => void;
 }
