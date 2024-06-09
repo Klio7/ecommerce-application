@@ -6,12 +6,13 @@ import CartProduct from "../CartProduct/CartProduct";
 import CartHeader from "../CartHeader/CartHeader";
 import changeProductQuantity from "../../services/changeProductQuantity";
 import debounce from "../../utils/debounce";
+import EmptyCart from "../EmptyCart/EmptyCart";
 
 interface ICartData {
   cartProducts: ICartProduct[] | undefined;
   total: string;
 }
-function Cart() {
+function Cart({ cartId }: { cartId: string }) {
   const [cartData, setCartData] = useState<ICartData>();
   const toast = useToast();
   useEffect(() => {
@@ -33,14 +34,14 @@ function Cart() {
         }
       }
     }
-    getCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b");
-  }, [toast]);
+    getCart(cartId);
+  }, [toast, cartId]);
 
   const onChangeQuantity = useCallback(
     async (productId: string, value: string) => {
       try {
         const data = await changeProductQuantity(
-          "9ba8f627-278e-4fe4-b6e6-5b49c986b66b",
+          cartId,
           productId,
           Number(value),
         );
@@ -58,14 +59,16 @@ function Cart() {
         }
       }
     },
-    [toast],
+    [toast, cartId],
   );
 
   const handleQuantityChange = useMemo(
     () => debounce(onChangeQuantity, 300),
     [onChangeQuantity],
   );
-
+  if (!cartData?.cartProducts?.length) {
+    return <EmptyCart />;
+  }
   return (
     <Flex direction="column" alignItems="flex-end">
       <Flex direction="column" px="10px">
