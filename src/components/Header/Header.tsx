@@ -37,7 +37,7 @@ function Header() {
         <Button
           className="icon"
           colorScheme="none"
-          leftIcon={<img src="images/icons/Burger.svg" alt="burger" />}
+          leftIcon={<img src="/images/icons/Burger.svg" alt="burger" />}
           onClick={onOpen}
         />
       </Show>
@@ -89,7 +89,7 @@ function Header() {
       </Drawer>
       <Flex align="center" gap="1em">
         <Link to="/">
-          <img className="icon" src="images/icons/blyudo.png" alt="Blyudo" />
+          <img className="icon" src="/images/icons/blyudo.png" alt="Blyudo" />
         </Link>
         <Link to="/">
           <Text
@@ -145,7 +145,7 @@ function Header() {
             <Tooltip label="Your profile" font-size="lg" openDelay={300}>
               <img
                 className="icon"
-                src="images/icons/Avatar.svg"
+                src="/images/icons/Avatar.svg"
                 alt="profile"
               />
             </Tooltip>
@@ -155,7 +155,7 @@ function Header() {
           <Tooltip label="Cart" font-size="lg" openDelay={300}>
             <img
               className="icon"
-              src="images/icons/Shopping cart.svg"
+              src="/images/icons/Shopping cart.svg"
               alt="basket"
             />
           </Tooltip>

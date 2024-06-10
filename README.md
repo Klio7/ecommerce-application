@@ -36,12 +36,12 @@ Firstly, ensure that Node.js is installed on your computer. If not, you can down
 To begin, download the project to your computer. Open your terminal and execute the following commands:
 
 ```bash
-git clone <repository URL>
+git clone https://github.com/Klio7/ecommerce-application.git
 ```
 
 Once the project is cloned, navigate to the project directory:
 ```bash
-cd <project name>
+cd ecommerce-application
 ```
 ### Installing Dependencies
 After you've navigated to the project directory, install all dependencies by entering the following command in your terminal:

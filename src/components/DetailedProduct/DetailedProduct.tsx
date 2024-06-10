@@ -7,22 +7,32 @@ import {
   Heading,
   Highlight,
   useToast,
+  Button,
 } from "@chakra-ui/react";
 import { ParsedProductData } from "../../types/types";
 import getProductDetails from "../../services/getProductDetails";
 import DetailedProductModal from "../DetailedProductModal/DetailedProductModal";
+import getProductId from "../../services/getProductId";
+import addProductToCart from "../../services/addProductToCart";
+import getCartProductIds from "../../services/getCartProductIds";
+import removeProductFromCart from "../../services/removeProductFromCart";
 
 function DetailedProduct({ productKey }: { productKey: string }) {
   const [productData, setProductData] = useState<ParsedProductData>();
-  const [mainImage, setMainImage] = useState("");
-  const [isOpen, setModalOpen] = useState(false);
+  const [productId, setProductId] = useState<string>();
+  const [mainImage, setMainImage] = useState<string>("");
+  const [isOpen, setModalOpen] = useState<boolean>(false);
+  const [isInCart, setIsInCart] = useState<boolean>();
+  const [cartIds, setCartIds] = useState<string[]>();
+  const [removalIds, setRemovalIds] = useState<string[]>();
   const toast = useToast();
 
   useEffect(() => {
     async function getProductData() {
       try {
         const data = await getProductDetails(productKey);
-        if (data) {
+        const id = await getProductId(productKey);
+        if (data && id) {
           const { title, description, images, price, discountedPrice } = data;
           setProductData({
             title,
@@ -31,6 +41,7 @@ function DetailedProduct({ productKey }: { productKey: string }) {
             price,
             discountedPrice,
           });
+          setProductId(id);
           setMainImage(images[0]);
         }
       } catch (error) {
@@ -59,6 +70,34 @@ function DetailedProduct({ productKey }: { productKey: string }) {
     }
     getProductData();
   }, [toast, productKey]);
+
+  useEffect(() => {
+    async function getCart(cardId: string) {
+      const data = await getCartProductIds(cardId);
+      setCartIds(data[0]);
+      setRemovalIds(data[1]);
+    }
+    getCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b");
+  }, [isInCart]);
+
+  useEffect(() => {
+    setIsInCart(cartIds?.some((id) => id === productId));
+  }, [cartIds, productId]);
+
+  function HandleAddToCart() {
+    addProductToCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b", productId);
+    setIsInCart(cartIds?.some((id) => id === productId));
+  }
+
+  function HandleRemoveFromCart() {
+    if (removalIds && cartIds && productId) {
+      removeProductFromCart(
+        "9ba8f627-278e-4fe4-b6e6-5b49c986b66b",
+        removalIds[cartIds?.indexOf(productId)],
+      );
+      setIsInCart(cartIds?.some((id) => id === productId));
+    }
+  }
 
   if (productData === undefined) {
     return null;
@@ -136,6 +175,15 @@ function DetailedProduct({ productKey }: { productKey: string }) {
             {productData.description}
           </Text>
         </Container>
+        {isInCart ? (
+          <Button marginTop="2em" onClick={() => HandleRemoveFromCart()}>
+            Remove from Cart
+          </Button>
+        ) : (
+          <Button marginTop="2em" onClick={() => HandleAddToCart()}>
+            Add to Cart
+          </Button>
+        )}
       </Flex>
     </Flex>
   );

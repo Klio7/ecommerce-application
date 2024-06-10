@@ -128,6 +128,7 @@ function CatalogPage() {
       .get({
         queryArgs: {
           "text.en-US": value,
+          fuzzy: true,
         },
       })
       .execute()
