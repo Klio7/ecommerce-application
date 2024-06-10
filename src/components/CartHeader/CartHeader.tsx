@@ -13,12 +13,13 @@ function CartHeader() {
       gap="10px"
       bg="footerColorDark"
       color="white"
+      textAlign="center"
     >
       <DeleteIcon w="10%" />
-      <Text w="20%">PHOTO</Text>
-      <Text w="20%">PRODUCT</Text>
+      <Text w="10%">PHOTO</Text>
+      <Text w="25%">PRODUCT</Text>
       <Text w="20%">PRICE</Text>
-      <Text w="20%">QUANTITY</Text>
+      <Text w="22%">QUANTITY</Text>
       <Text w="20%">SUBTOTAL</Text>
     </Flex>
   );
