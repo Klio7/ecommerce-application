@@ -1,43 +1,76 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { Flex } from "@chakra-ui/react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { Flex, Text, useToast } from "@chakra-ui/react";
 import getCartDetails from "../../services/getCartDetails";
 import { ICartProduct } from "../../types/types";
 import CartProduct from "../CartProduct/CartProduct";
 import CartHeader from "../CartHeader/CartHeader";
 import changeProductQuantity from "../../services/changeProductQuantity";
 import debounce from "../../utils/debounce";
+import EmptyCart from "../EmptyCart/EmptyCart";
 
 interface ICartData {
   cartProducts: ICartProduct[] | undefined;
   total: string;
 }
-function Cart() {
+function Cart({ cartId }: { cartId: string }) {
   const [cartData, setCartData] = useState<ICartData>();
+  const toast = useToast();
   useEffect(() => {
     async function getCart(cardId: string) {
-      const data = await getCartDetails(cardId);
-      const { cartProducts, total } = data;
-      setCartData({ cartProducts, total });
+      try {
+        const data = await getCartDetails(cardId);
+        const { cartProducts, total } = data;
+        setCartData({ cartProducts, total });
+      } catch (error) {
+        if (error instanceof Error) {
+          toast({
+            position: "top",
+            title: "Sorry!",
+            description: `${error.message}`,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      }
     }
-    getCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b");
-  }, []);
+    getCart(cartId);
+  }, [toast, cartId]);
 
-  async function onChangeQuantity(productId: string, value: string) {
-    const data = await changeProductQuantity(
-      "9ba8f627-278e-4fe4-b6e6-5b49c986b66b",
-      productId,
-      Number(value),
-    );
-    setCartData(data);
-  }
-
-  const handleQuantityChange = useMemo(
-    () => debounce(onChangeQuantity, 400),
-    [],
+  const onChangeQuantity = useCallback(
+    async (productId: string, value: string) => {
+      try {
+        const data = await changeProductQuantity(
+          cartId,
+          productId,
+          Number(value),
+        );
+        setCartData(data);
+      } catch (error) {
+        if (error instanceof Error) {
+          toast({
+            position: "top",
+            title: "Sorry!",
+            description: `${error.message}`,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      }
+    },
+    [toast, cartId],
   );
 
+  const handleQuantityChange = useMemo(
+    () => debounce(onChangeQuantity, 300),
+    [onChangeQuantity],
+  );
+  if (!cartData?.cartProducts?.length) {
+    return <EmptyCart />;
+  }
   return (
-    <Flex direction="column" alignItems="center">
+    <Flex direction="column" alignItems="flex-end">
       <Flex direction="column" px="10px">
         <CartHeader />
         {cartData?.cartProducts?.map((product) => (
@@ -54,15 +87,15 @@ function Cart() {
         ))}
       </Flex>
       <Flex
-        justify="flex-end"
-        align="flex-end"
+        justifyContent="space-between"
         p="20px"
         bg="footerColorDark"
         color="white"
         w="30%"
         m="10px 10px 30px 10px"
       >
-        Cart total: {cartData?.total}
+        <Text>Cart total:</Text>
+        <Text> {cartData?.total}</Text>
       </Flex>
     </Flex>
   );
