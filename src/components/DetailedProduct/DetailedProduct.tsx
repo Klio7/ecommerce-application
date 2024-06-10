@@ -86,7 +86,7 @@ function DetailedProduct({ productKey }: { productKey: string }) {
 
   function HandleAddToCart() {
     addProductToCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b", productId);
-    setIsInCart(cartIds?.some((id) => id === productId));
+    setIsInCart(true);
   }
 
   function HandleRemoveFromCart() {
@@ -95,7 +95,7 @@ function DetailedProduct({ productKey }: { productKey: string }) {
         "9ba8f627-278e-4fe4-b6e6-5b49c986b66b",
         removalIds[cartIds?.indexOf(productId)],
       );
-      setIsInCart(cartIds?.some((id) => id === productId));
+      setIsInCart(false);
     }
   }
 
