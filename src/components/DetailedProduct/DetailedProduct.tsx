@@ -84,14 +84,14 @@ function DetailedProduct({ productKey }: { productKey: string }) {
     setIsInCart(cartIds?.some((id) => id === productId));
   }, [cartIds, productId]);
 
-  function HandleAddToCart() {
-    addProductToCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b", productId);
+  async function HandleAddToCart() {
+    await addProductToCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b", productId);
     setIsInCart(true);
   }
 
-  function HandleRemoveFromCart() {
+  async function HandleRemoveFromCart() {
     if (removalIds && cartIds && productId) {
-      removeProductFromCart(
+      await removeProductFromCart(
         "9ba8f627-278e-4fe4-b6e6-5b49c986b66b",
         removalIds[cartIds?.indexOf(productId)],
       );
