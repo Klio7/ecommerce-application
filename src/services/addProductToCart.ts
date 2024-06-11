@@ -1,11 +1,10 @@
 import { ClientCredentialsFlowApiClient } from "./apiClients";
 import getCartVersion from "./getCartVersion";
-import parseCartData from "../utils/parseCartData";
 
 async function addProductToCart(cartId: string, id: string | undefined) {
   const version = await getCartVersion(cartId);
   try {
-    const data = await ClientCredentialsFlowApiClient()
+    await ClientCredentialsFlowApiClient()
       .carts()
       .withId({ ID: cartId })
       .post({
@@ -17,10 +16,8 @@ async function addProductToCart(cartId: string, id: string | undefined) {
         },
       })
       .execute();
-    const cartData = data.body;
-    return parseCartData(cartData);
   } catch (error) {
-    return Promise.reject(error);
+    throw new Error(`${error}`);
   }
 }
 export default addProductToCart;

@@ -85,17 +85,39 @@ function DetailedProduct({ productKey }: { productKey: string }) {
   }, [cartIds, productId]);
 
   async function HandleAddToCart() {
-    await addProductToCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b", productId);
-    setIsInCart(true);
+    try {
+      await addProductToCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b", productId);
+      setIsInCart(true);
+    } catch (error) {
+      toast({
+        position: "top",
+        title: "Sorry!",
+        description: `An error occured while adding to cart: ${error}`,
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
+    }
   }
 
   async function HandleRemoveFromCart() {
-    if (removalIds && cartIds && productId) {
-      await removeProductFromCart(
-        "9ba8f627-278e-4fe4-b6e6-5b49c986b66b",
-        removalIds[cartIds?.indexOf(productId)],
-      );
-      setIsInCart(false);
+    try {
+      if (removalIds && cartIds && productId) {
+        await removeProductFromCart(
+          "9ba8f627-278e-4fe4-b6e6-5b49c986b66b",
+          removalIds[cartIds?.indexOf(productId)],
+        );
+        setIsInCart(false);
+      }
+    } catch (error) {
+      toast({
+        position: "top",
+        title: "Sorry!",
+        description: `An error occured while removing from cart: ${error}`,
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
     }
   }
 
