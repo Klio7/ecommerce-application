@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Divider, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Image, Text } from "@chakra-ui/react";
 import "./ProductsItem.scss";
 import { Link } from "react-router-dom";
 
@@ -10,6 +10,7 @@ function ProductsItem({
   price,
   discountedPrice,
   productKey,
+  inCart,
 }: {
   name: string | undefined;
   description: string | undefined;
@@ -17,6 +18,7 @@ function ProductsItem({
   price: string | undefined;
   discountedPrice: string | undefined;
   productKey: string | undefined;
+  inCart: boolean;
 }) {
   return (
     <Link to={`${productKey}`}>
@@ -28,16 +30,28 @@ function ProductsItem({
           <Text>{description}</Text>
         </Box>
         <Divider />
-        {discountedPrice !== undefined ? (
-          <Flex alignItems="center" gap="1em">
-            <Text fontSize="1.5em">{discountedPrice}</Text>
-            <Text fontSize="big" className="grey-price">
-              <s>{price}</s>
-            </Text>
-          </Flex>
-        ) : (
-          <Text fontSize="1.5em">{price}</Text>
-        )}
+        <Flex alignItems="center" gap="1em">
+          {discountedPrice !== undefined ? (
+            <>
+              <Text fontSize="1.5em">{discountedPrice}</Text>
+              <Text fontSize="big" className="grey-price">
+                <s>{price}</s>
+              </Text>
+            </>
+          ) : (
+            <Text fontSize="1.5em">{price}</Text>
+          )}
+          <Button
+            colorScheme="gray"
+            isDisabled={inCart}
+            onClick={(event) => {
+              event.preventDefault();
+              console.log("Added to cart");
+            }}
+          >
+            {inCart ? "In Cart" : "Add to Cart"}
+          </Button>
+        </Flex>
         <Image
           alignSelf="center"
           boxSize="sm"
