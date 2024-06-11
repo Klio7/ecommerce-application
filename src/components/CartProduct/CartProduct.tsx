@@ -8,6 +8,7 @@ import {
   Input,
   useNumberInput,
   Tooltip,
+  Highlight,
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
 import { ISetCartProducts } from "../../types/types";
@@ -16,6 +17,8 @@ function CartProduct({
   productId,
   imageUrl,
   title,
+  discountedCartPrice,
+  discountedPrice,
   price,
   number,
   totalProductPrice,
@@ -31,11 +34,10 @@ function CartProduct({
 
   const increment = getIncrementButtonProps();
   const decrement = getDecrementButtonProps();
-  const input = getInputProps(
-    (oninput = () => {
+  const input = getInputProps();
+  /* (oninput = () => {
       handleQuantityChange(productId, input.value);
-    }),
-  );
+    }), */
 
   return (
     <Flex
@@ -69,7 +71,79 @@ function CartProduct({
         </Text>
       </Flex>
       <Flex w="20%" direction="column">
-        <Text> {price}</Text>
+        {!discountedPrice && !discountedCartPrice && <Text> {price}</Text>}
+        {discountedPrice && !discountedCartPrice && (
+          <Text>
+            <Highlight
+              query={`${price}`}
+              styles={{
+                textDecorationLine: "line-through",
+                color: "black",
+                fontSize: "sm",
+              }}
+            >
+              {`${discountedPrice}/${price}`}
+            </Highlight>
+          </Text>
+        )}
+        {!discountedPrice && discountedCartPrice && (
+          <Flex direction="column">
+            <Highlight
+              query={`${discountedCartPrice}`}
+              styles={{
+                bg: "orange.300",
+                p: "4px",
+              }}
+            >
+              {discountedCartPrice}
+            </Highlight>
+
+            <Highlight
+              query={`${price}`}
+              styles={{
+                textDecorationLine: "line-through",
+                color: "black",
+                fontSize: "sm",
+              }}
+            >
+              {`${price}`}
+            </Highlight>
+          </Flex>
+        )}
+        {discountedPrice && discountedCartPrice && (
+          <Flex direction="column">
+            <Highlight
+              query={`${discountedCartPrice}`}
+              styles={{
+                bg: "orange.300",
+                p: "4px",
+              }}
+            >
+              {discountedCartPrice}
+            </Highlight>
+
+            <Highlight
+              query={`${discountedPrice}`}
+              styles={{
+                textDecorationLine: "line-through",
+                color: "black",
+                fontSize: "sm",
+              }}
+            >
+              {`${discountedPrice}`}
+            </Highlight>
+            <Highlight
+              query={`${price}`}
+              styles={{
+                textDecorationLine: "line-through",
+                color: "gray.500",
+                fontSize: "xs",
+              }}
+            >
+              {`${price}`}
+            </Highlight>
+          </Flex>
+        )}
       </Flex>
       <Flex w="22%" align="center">
         <Flex justify="center">

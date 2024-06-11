@@ -35,6 +35,8 @@ export interface ICartProduct {
   productId: string;
   title: string;
   imageUrl: string | undefined;
+  discountedCartPrice: string | undefined;
+  discountedPrice: string | undefined;
   price: string;
   number: number;
   totalProductPrice: string;

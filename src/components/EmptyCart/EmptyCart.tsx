@@ -19,17 +19,17 @@ function EmptyCart() {
       <Link to="/catalog">
         <Button
           color="white"
-          backgroundColor="mainBrown"
-          border="2px solid"
-          borderColor="mainBrown"
+          backgroundColor="footerColorDark"
+          borderRadius="0"
           fontWeight="400"
           py="20px"
+          px="40px"
           transition="0.3s linear all"
           _hover={{
             backgroundColor: "#694D37",
           }}
         >
-          Continue shopping
+          SHOP NOW!
         </Button>
       </Link>
     </Flex>
