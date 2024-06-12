@@ -88,6 +88,14 @@ function DetailedProduct({ productKey }: { productKey: string }) {
     try {
       await addProductToCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b", productId);
       setIsInCart(true);
+      toast({
+        position: "top",
+        title: "Success!",
+        description: "Product successfully added to cart",
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      });
     } catch (error) {
       toast({
         position: "top",
@@ -108,6 +116,14 @@ function DetailedProduct({ productKey }: { productKey: string }) {
           removalIds[cartIds?.indexOf(productId)],
         );
         setIsInCart(false);
+        toast({
+          position: "top",
+          title: "Success!",
+          description: "Product successfully removed from cart",
+          status: "success",
+          duration: 6000,
+          isClosable: true,
+        });
       }
     } catch (error) {
       toast({
