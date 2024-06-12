@@ -21,7 +21,7 @@ function parseCartData(data: Cart) {
         imageUrl = undefined;
       }
       let discountedCartPrice;
-      if (lineItem.discountedPricePerQuantity[0].discountedPrice.value) {
+      if (lineItem.discountedPricePerQuantity[0]) {
         const rawDiscountedCartPrice =
           lineItem.discountedPricePerQuantity[0].discountedPrice.value
             .centAmount;
@@ -37,6 +37,7 @@ function parseCartData(data: Cart) {
           rawDiscountedPrice / 100,
         );
       }
+
       const rawPrice = lineItem.price.value.centAmount;
       const price = new Intl.NumberFormat("ru-RU", formatConfig).format(
         rawPrice / 100,

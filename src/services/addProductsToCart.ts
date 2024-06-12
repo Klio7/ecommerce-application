@@ -12,7 +12,7 @@ async function addProductToCart(cartId: string) {
         actions: [
           {
             action: "addLineItem",
-            productId: "a5c4459e-b4d6-4fde-815f-051d2cfb87af",
+            productId: "96e0c1d6-ac10-4ad4-b37f-6072ccbcdf28",
             quantity: 1,
           },
         ],
@@ -21,3 +21,10 @@ async function addProductToCart(cartId: string) {
     .execute();
 }
 export default addProductToCart;
+
+export function createCart() {
+  ClientCredentialsFlowApiClient()
+    .carts()
+    .post({ body: { currency: "USD" } })
+    .execute();
+}

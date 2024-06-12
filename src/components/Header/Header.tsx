@@ -134,7 +134,7 @@ function Header() {
                 transform: "scale(1.2)",
               }}
               onClick={() =>
-                addProductToCart("f8b29451-c39c-4836-8da2-e17b803e2a7b")
+                addProductToCart("810e88ae-27ae-43cd-af6f-f25a003f9579")
               }
             >
               About

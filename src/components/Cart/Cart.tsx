@@ -66,9 +66,28 @@ function Cart({ cartId }: { cartId: string }) {
     },
     [toast, cartId],
   );
-
+  const onAppliedPromoCode = useCallback(
+    async (discountCode: string) => {
+      try {
+        const data = await applyPromoCode(cartId, discountCode);
+        setCartData(data);
+      } catch (error) {
+        if (error instanceof Error) {
+          toast({
+            position: "top",
+            title: "Sorry!",
+            description: `${error.message}`,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      }
+    },
+    [toast, cartId],
+  );
   const handleQuantityChange = useMemo(
-    () => debounce(onChangeQuantity, 300),
+    () => debounce(onChangeQuantity, 400),
     [onChangeQuantity],
   );
 
@@ -125,29 +144,7 @@ function Cart({ cartId }: { cartId: string }) {
             borderRadius="0"
             mx="20px"
             _hover={{ bg: "blackAlpha.700" }}
-            onClick={() =>
-              applyPromoCode(cartId, inputValue)
-                .then(() =>
-                  toast({
-                    position: "top",
-                    title: "Congrats!",
-                    description: `Your code applied!`,
-                    status: "success",
-                    duration: 3000,
-                    isClosable: true,
-                  }),
-                )
-                .catch((error) =>
-                  toast({
-                    position: "top",
-                    title: "Sorry!",
-                    description: `${error.message}`,
-                    status: "error",
-                    duration: 3000,
-                    isClosable: true,
-                  }),
-                )
-            }
+            onClick={() => onAppliedPromoCode(inputValue)}
           >
             APPLY
           </Button>
