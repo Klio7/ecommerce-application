@@ -1,13 +1,13 @@
 import { ClientCredentialsFlowApiClient } from "./apiClients";
-import getCartVersion from "./getCartVersion";
 import parseCartData from "../utils/parseCartData";
+import getCartDetails from "./getCartDetails";
 
 async function changeProductQuantity(
   cartId: string,
   lineItemId: string,
   quantity: number,
 ) {
-  const version = await getCartVersion(cartId);
+  const { version } = await getCartDetails(cartId);
   try {
     const data = await ClientCredentialsFlowApiClient()
       .carts()
