@@ -30,14 +30,16 @@ function CartProduct({
       defaultValue: `${number}`,
       min: 1,
       max: 999,
+      onChange: (valueAsString) => {
+        if (valueAsString && Number(valueAsString) !== 0) {
+          handleQuantityChange(productId, valueAsString);
+        }
+      },
     });
 
   const increment = getIncrementButtonProps();
   const decrement = getDecrementButtonProps();
   const input = getInputProps();
-  /* (oninput = () => {
-      handleQuantityChange(productId, input.value);
-    }), */
 
   return (
     <Flex
@@ -158,7 +160,9 @@ function CartProduct({
           <Input {...input} w="60px" />
           <Button
             {...decrement}
-            onClick={() => handleQuantityChange(productId, input.value)}
+            onClick={() => {
+              handleQuantityChange(productId, input.value);
+            }}
             colorScheme="white"
             color="black"
           >
