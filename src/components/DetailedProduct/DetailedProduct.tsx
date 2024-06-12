@@ -73,12 +73,25 @@ function DetailedProduct({ productKey }: { productKey: string }) {
 
   useEffect(() => {
     async function getCart(cardId: string) {
-      const data = await getCartProductIds(cardId);
-      setCartIds(data[0]);
-      setRemovalIds(data[1]);
+      try {
+        const data = await getCartProductIds(cardId);
+        setCartIds(data[0]);
+        setRemovalIds(data[1]);
+      } catch (error) {
+        if (error instanceof Error) {
+          toast({
+            position: "top",
+            title: "Sorry!",
+            description: `${error.message}`,
+            status: "error",
+            duration: 6000,
+            isClosable: true,
+          });
+        }
+      }
     }
     getCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b");
-  }, [isInCart]);
+  }, [isInCart, toast]);
 
   useEffect(() => {
     setIsInCart(cartIds?.some((id) => id === productId));
@@ -97,14 +110,16 @@ function DetailedProduct({ productKey }: { productKey: string }) {
         isClosable: true,
       });
     } catch (error) {
-      toast({
-        position: "top",
-        title: "Sorry!",
-        description: `An error occured while adding to cart: ${error}`,
-        status: "error",
-        duration: 6000,
-        isClosable: true,
-      });
+      if (error instanceof Error) {
+        toast({
+          position: "top",
+          title: "Sorry!",
+          description: `${error.message}`,
+          status: "error",
+          duration: 6000,
+          isClosable: true,
+        });
+      }
     }
   }
 
@@ -126,14 +141,16 @@ function DetailedProduct({ productKey }: { productKey: string }) {
         });
       }
     } catch (error) {
-      toast({
-        position: "top",
-        title: "Sorry!",
-        description: `An error occured while removing from cart: ${error}`,
-        status: "error",
-        duration: 6000,
-        isClosable: true,
-      });
+      if (error instanceof Error) {
+        toast({
+          position: "top",
+          title: "Sorry!",
+          description: `${error.message}`,
+          status: "error",
+          duration: 6000,
+          isClosable: true,
+        });
+      }
     }
   }
 
