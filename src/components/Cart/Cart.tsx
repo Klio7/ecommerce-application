@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Flex, Text, useToast, Input, Button } from "@chakra-ui/react";
 import getCartDetails from "../../services/getCartDetails";
-import { ICartProduct } from "../../types/types";
+import { ICart } from "../../types/types";
 import CartProduct from "../CartProduct/CartProduct";
 import CartHeader from "../CartHeader/CartHeader";
 import changeProductQuantity from "../../services/changeProductQuantity";
 import debounce from "../../utils/debounce";
 import EmptyCart from "../EmptyCart/EmptyCart";
 import applyPromoCode from "../../services/applyPromoCode";
+import CartPopover from "../CartPopover/CartPopover";
+import clearCart from "../../services/clearCart";
 
-interface ICartData {
-  cartProducts: ICartProduct[] | undefined;
-  total: string;
-}
 function Cart({ cartId }: { cartId: string }) {
-  const [cartData, setCartData] = useState<ICartData>();
+  const [cartData, setCartData] = useState<ICart>();
   const toast = useToast();
   const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
   const handleChange = (event: React.ChangeEvent) =>
     setInputValue((event.target as HTMLInputElement).value);
 
@@ -72,11 +72,25 @@ function Cart({ cartId }: { cartId: string }) {
     [onChangeQuantity],
   );
 
+  const onClearCart = async () => {
+    const productIds = cartData?.cartProducts?.map(
+      (product) => product.productId,
+    );
+    if (productIds) {
+      const data = await clearCart(cartId, productIds);
+      setCartData(data);
+    }
+  };
+  const navigateToCheckout = () => {
+    navigate(`/checkout?cartId=${cartId}`, { state: { cartId } });
+  };
+
   if (!cartData?.cartProducts?.length) {
     return <EmptyCart />;
   }
   return (
     <Flex direction="column" alignItems="stretch">
+      <CartPopover onClearCart={onClearCart} />
       <Flex direction="column" px="10px">
         <CartHeader />
         {cartData?.cartProducts?.map((product) => (
@@ -110,14 +124,15 @@ function Cart({ cartId }: { cartId: string }) {
             fontWeight="400"
             borderRadius="0"
             mx="20px"
+            _hover={{ bg: "blackAlpha.700" }}
             onClick={() =>
               applyPromoCode(cartId, inputValue)
-                .then((data) =>
+                .then(() =>
                   toast({
                     position: "top",
                     title: "Congrats!",
-                    description: `${data}`,
-                    status: "error",
+                    description: `Your code applied!`,
+                    status: "success",
                     duration: 3000,
                     isClosable: true,
                   }),
@@ -137,15 +152,29 @@ function Cart({ cartId }: { cartId: string }) {
             APPLY
           </Button>
         </Flex>
-        <Flex
-          justifyContent="space-between"
-          p="20px"
-          bg="footerColorDark"
-          color="white"
-          w="30%"
-        >
-          <Text>Cart total:</Text>
-          <Text> {cartData?.total}</Text>
+        <Flex direction="column">
+          <Flex
+            justifyContent="space-between"
+            p="20px"
+            bg="footerColorDark"
+            color="white"
+            mb="50px"
+          >
+            <Text>Cart total:</Text>
+            <Text> {cartData?.total}</Text>
+          </Flex>
+          <Button
+            w="100%"
+            color="white"
+            bg="footerColorDark"
+            p="25px 50px"
+            fontWeight="400"
+            borderRadius="0"
+            _hover={{ bg: "blackAlpha.700" }}
+            onClick={navigateToCheckout}
+          >
+            CHECKOUT
+          </Button>
         </Flex>
       </Flex>
     </Flex>

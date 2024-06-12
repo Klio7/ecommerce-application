@@ -49,3 +49,6 @@ export interface ICart {
 export interface ISetCartProducts extends ICartProduct {
   handleQuantityChange: (productId: string, value: string) => void;
 }
+export interface IOnClearCart {
+  onClearCart: () => Promise<void>;
+}

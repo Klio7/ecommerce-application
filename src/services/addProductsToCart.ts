@@ -12,7 +12,7 @@ async function addProductToCart(cartId: string) {
         actions: [
           {
             action: "addLineItem",
-            productId: "42a96e07-706f-4819-acc5-2d1749527d33",
+            productId: "a5c4459e-b4d6-4fde-815f-051d2cfb87af",
             quantity: 1,
           },
         ],

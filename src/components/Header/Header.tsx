@@ -20,6 +20,7 @@ import { LuLogOut } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import "./Header.scss";
+import addProductToCart from "../../services/addProductsToCart";
 
 function Header() {
   const { isAuthenticated, setAuth } = useAuth();
@@ -132,6 +133,9 @@ function Header() {
               _hover={{
                 transform: "scale(1.2)",
               }}
+              onClick={() =>
+                addProductToCart("f8b29451-c39c-4836-8da2-e17b803e2a7b")
+              }
             >
               About
             </Text>
