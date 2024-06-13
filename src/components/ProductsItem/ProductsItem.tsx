@@ -58,7 +58,7 @@ function ProductsItem({
   };
 
   return (
-    <Link to={productKey ? `/products/${productKey}` : "#"}>
+    <Link to={`${productKey}`}>
       <Box className="products-item" border="1px solid black" padding="1em">
         <Box boxSize="xl" maxWidth="100%">
           <Text justifySelf="center" fontSize="1.5em" fontWeight="bold">
