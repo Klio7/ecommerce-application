@@ -72,7 +72,7 @@ const ClientCredentialsFlowApiClient = () => {
   const clientCredentialsFlowClient = new ClientBuilder()
     .withClientCredentialsFlow(authMiddlewareOptions)
     .withHttpMiddleware(httpMiddlewareOptions)
-    .withLoggerMiddleware()
+    // .withLoggerMiddleware()
     .build();
 
   const clientCredentialsFlowApiRoot = createApiBuilderFromCtpClient(

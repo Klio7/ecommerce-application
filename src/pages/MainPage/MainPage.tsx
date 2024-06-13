@@ -5,6 +5,17 @@ import { Link } from "react-router-dom";
 function MainPage() {
   return (
     <Box as="main" position="relative" w="100%">
+      <Flex
+        direction="column"
+        alignItems="center"
+        bg="footerColorDark"
+        color="white"
+        py="10px"
+        fontSize={["xs", "lg", "xl"]}
+      >
+        <Text>PSST! Are you RSSchool student? Get 10% off everything.</Text>
+        <Text>With code: SURVIVOR</Text>
+      </Flex>
       <Flex direction="column">
         <Flex>
           <Flex

@@ -20,25 +20,45 @@ function parseCartData(data: Cart) {
       } else {
         imageUrl = undefined;
       }
-      let price;
+      let discountedCartPrice;
+      if (lineItem.discountedPricePerQuantity[0]) {
+        const rawDiscountedCartPrice =
+          lineItem.discountedPricePerQuantity[0].discountedPrice.value
+            .centAmount;
+        discountedCartPrice = new Intl.NumberFormat(
+          "ru-RU",
+          formatConfig,
+        ).format(rawDiscountedCartPrice / 100);
+      }
+      let discountedPrice;
       if (lineItem.price.discounted) {
-        const rawPrice = lineItem.price.discounted.value.centAmount;
-        price = new Intl.NumberFormat("ru-RU", formatConfig).format(
-          rawPrice / 100,
-        );
-      } else {
-        const rawPrice = lineItem.price.value.centAmount;
-        price = new Intl.NumberFormat("ru-RU", formatConfig).format(
-          rawPrice / 100,
+        const rawDiscountedPrice = lineItem.price.discounted.value.centAmount;
+        discountedPrice = new Intl.NumberFormat("ru-RU", formatConfig).format(
+          rawDiscountedPrice / 100,
         );
       }
+
+      const rawPrice = lineItem.price.value.centAmount;
+      const price = new Intl.NumberFormat("ru-RU", formatConfig).format(
+        rawPrice / 100,
+      );
+
       const number = lineItem.quantity;
       const rawTotalPrice = lineItem.totalPrice.centAmount;
       const totalProductPrice = new Intl.NumberFormat(
         "ru-RU",
         formatConfig,
       ).format(rawTotalPrice / 100);
-      return { productId, title, imageUrl, price, number, totalProductPrice };
+      return {
+        productId,
+        title,
+        imageUrl,
+        discountedCartPrice,
+        discountedPrice,
+        price,
+        number,
+        totalProductPrice,
+      };
     });
   }
   const rawTotal = data.totalPrice.centAmount;

@@ -1,6 +1,6 @@
 function debounce<T extends (productId: string, value: string) => void>(
   func: T,
-  threshold = 300,
+  threshold = 400,
 ): T {
   let timeout: number;
 

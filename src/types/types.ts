@@ -35,6 +35,8 @@ export interface ICartProduct {
   productId: string;
   title: string;
   imageUrl: string | undefined;
+  discountedCartPrice: string | undefined;
+  discountedPrice: string | undefined;
   price: string;
   number: number;
   totalProductPrice: string;
@@ -46,4 +48,7 @@ export interface ICart {
 }
 export interface ISetCartProducts extends ICartProduct {
   handleQuantityChange: (productId: string, value: string) => void;
+}
+export interface IOnClearCart {
+  onClearCart: () => Promise<void>;
 }
