@@ -1,13 +1,9 @@
 import { ClientCredentialsFlowApiClient } from "./apiClients";
+import getCartVersion from "./getCartVersion";
 import parseCartData from "../utils/parseCartData";
-import getCartDetails from "./getCartDetails";
 
-async function changeProductQuantity(
-  cartId: string,
-  lineItemId: string,
-  quantity: number,
-) {
-  const { version } = await getCartDetails(cartId);
+async function applyPromoCode(cartId: string, discountCode: string) {
+  const version = await getCartVersion(cartId);
   try {
     const data = await ClientCredentialsFlowApiClient()
       .carts()
@@ -15,7 +11,12 @@ async function changeProductQuantity(
       .post({
         body: {
           version,
-          actions: [{ action: "changeLineItemQuantity", lineItemId, quantity }],
+          actions: [
+            {
+              action: "addDiscountCode",
+              code: discountCode,
+            },
+          ],
         },
       })
       .execute();
@@ -25,4 +26,4 @@ async function changeProductQuantity(
     return Promise.reject(error);
   }
 }
-export default changeProductQuantity;
+export default applyPromoCode;

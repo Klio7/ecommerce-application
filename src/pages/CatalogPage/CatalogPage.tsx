@@ -206,12 +206,9 @@ function CatalogPage() {
               const productKey = product.key;
               return (
                 <ProductsItem
-                  key={productData?.title}
-                  name={productData?.title}
-                  description={productData?.description}
-                  imageURL={productData?.images[0]}
-                  price={productData?.price}
-                  discountedPrice={productData?.discountedPrice}
+                  key={productKey}
+                  id={product.id}
+                  product={productData}
                   productKey={productKey}
                 />
               );

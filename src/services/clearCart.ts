@@ -1,13 +1,15 @@
+import { CartUpdateAction } from "@commercetools/platform-sdk";
 import { ClientCredentialsFlowApiClient } from "./apiClients";
+import getCartVersion from "./getCartVersion";
 import parseCartData from "../utils/parseCartData";
-import getCartDetails from "./getCartDetails";
 
-async function changeProductQuantity(
-  cartId: string,
-  lineItemId: string,
-  quantity: number,
-) {
-  const { version } = await getCartDetails(cartId);
+async function clearCart(cartId: string, productIds: string[]) {
+  const version = await getCartVersion(cartId);
+  const removeActions: CartUpdateAction[] = productIds.map((productId) => ({
+    action: "removeLineItem",
+    lineItemId: productId,
+  }));
+
   try {
     const data = await ClientCredentialsFlowApiClient()
       .carts()
@@ -15,7 +17,7 @@ async function changeProductQuantity(
       .post({
         body: {
           version,
-          actions: [{ action: "changeLineItemQuantity", lineItemId, quantity }],
+          actions: removeActions,
         },
       })
       .execute();
@@ -25,4 +27,5 @@ async function changeProductQuantity(
     return Promise.reject(error);
   }
 }
-export default changeProductQuantity;
+
+export default clearCart;

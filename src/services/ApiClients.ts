@@ -72,7 +72,7 @@ const ClientCredentialsFlowApiClient = () => {
   const clientCredentialsFlowClient = new ClientBuilder()
     .withClientCredentialsFlow(authMiddlewareOptions)
     .withHttpMiddleware(httpMiddlewareOptions)
-    .withLoggerMiddleware()
+    // .withLoggerMiddleware()
     .build();
 
   const clientCredentialsFlowApiRoot = createApiBuilderFromCtpClient(
@@ -84,4 +84,34 @@ const ClientCredentialsFlowApiClient = () => {
   return clientCredentialsFlowApiRoot;
 };
 
-export { PasswordFlowApiClient, ClientCredentialsFlowApiClient };
+const AnonymousFlowApiClient = () => {
+  const authMiddlewareOptions: AuthMiddlewareOptions = {
+    host: import.meta.env.VITE_CTP_AUTH_URL,
+    projectKey,
+    credentials: {
+      clientId: import.meta.env.VITE_CTP_CLIENT_ID,
+      clientSecret: import.meta.env.VITE_CTP_CLIENT_SECRET,
+    },
+    fetch,
+  };
+
+  const AnonymousFlowClient = new ClientBuilder()
+    .withAnonymousSessionFlow(authMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+
+  const anonymousFlowApiRoot = createApiBuilderFromCtpClient(
+    AnonymousFlowClient,
+  ).withProjectKey({
+    projectKey,
+  });
+
+  return anonymousFlowApiRoot;
+};
+
+export {
+  PasswordFlowApiClient,
+  ClientCredentialsFlowApiClient,
+  AnonymousFlowApiClient,
+};
