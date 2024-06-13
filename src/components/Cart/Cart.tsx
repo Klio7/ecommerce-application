@@ -7,18 +7,21 @@ import CartHeader from "../CartHeader/CartHeader";
 import changeProductQuantity from "../../services/changeProductQuantity";
 import debounce from "../../utils/debounce";
 import EmptyCart from "../EmptyCart/EmptyCart";
+import { getCartIdFromLocalStorage } from "../../store/LocalStorage";
 
 interface ICartData {
   cartProducts: ICartProduct[] | undefined;
   total: string;
 }
-function Cart({ cartId }: { cartId: string }) {
+function Cart() {
   const [cartData, setCartData] = useState<ICartData>();
   const toast = useToast();
+  const cartId = getCartIdFromLocalStorage();
+
   useEffect(() => {
     async function getCart(cardId: string) {
       try {
-        const data = await getCartDetails(cardId);
+        const { cartData: data } = await getCartDetails(cardId);
         const { cartProducts, total } = data;
         setCartData({ cartProducts, total });
       } catch (error) {
@@ -34,11 +37,18 @@ function Cart({ cartId }: { cartId: string }) {
         }
       }
     }
+    if (!cartId) {
+      return;
+    }
     getCart(cartId);
   }, [toast, cartId]);
 
   const onChangeQuantity = useCallback(
     async (productId: string, value: string) => {
+      if (!cartId) {
+        return;
+      }
+
       try {
         const data = await changeProductQuantity(
           cartId,
@@ -66,9 +76,11 @@ function Cart({ cartId }: { cartId: string }) {
     () => debounce(onChangeQuantity, 300),
     [onChangeQuantity],
   );
-  if (!cartData?.cartProducts?.length) {
+
+  if (!cartData?.cartProducts?.length || !cartId) {
     return <EmptyCart />;
   }
+
   return (
     <Flex direction="column" alignItems="flex-end">
       <Flex direction="column" px="10px">
