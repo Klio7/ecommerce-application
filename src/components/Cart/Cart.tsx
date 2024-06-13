@@ -8,14 +8,17 @@ import CartHeader from "../CartHeader/CartHeader";
 import changeProductQuantity from "../../services/changeProductQuantity";
 import debounce from "../../utils/debounce";
 import EmptyCart from "../EmptyCart/EmptyCart";
+import { getCartIdFromLocalStorage } from "../../store/LocalStorage";
 import applyPromoCode from "../../services/applyPromoCode";
 import CartPopover from "../CartPopover/CartPopover";
 import clearCart from "../../services/clearCart";
 
-function Cart({ cartId }: { cartId: string }) {
+function Cart() {
   const [loading, setLoading] = useState(true);
   const [cartData, setCartData] = useState<ICart>();
   const toast = useToast();
+  const cartId = getCartIdFromLocalStorage();
+
   const [inputValue, setInputValue] = useState("");
   const navigate = useNavigate();
   const handleChange = (event: React.ChangeEvent) =>
@@ -25,7 +28,7 @@ function Cart({ cartId }: { cartId: string }) {
     async function getCart(cardId: string) {
       try {
         setLoading(true);
-        const data = await getCartDetails(cardId);
+        const { cartData: data } = await getCartDetails(cardId);
         const { cartProducts, total } = data;
         setLoading(false);
         setCartData({ cartProducts, total });
@@ -43,11 +46,18 @@ function Cart({ cartId }: { cartId: string }) {
         }
       }
     }
+    if (!cartId) {
+      return;
+    }
     getCart(cartId);
   }, [toast, cartId]);
 
   const onChangeQuantity = useCallback(
     async (productId: string, value: string) => {
+      if (!cartId) {
+        return;
+      }
+
       try {
         const data = await changeProductQuantity(
           cartId,
@@ -110,7 +120,8 @@ function Cart({ cartId }: { cartId: string }) {
   if (loading) {
     return <Spinner size="xl" />;
   }
-  if (!cartData?.cartProducts?.length) {
+
+  if (!cartData?.cartProducts?.length || !cartId) {
     return <EmptyCart />;
   }
 
