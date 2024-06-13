@@ -13,9 +13,10 @@ import { ParsedProductData } from "../../types/types";
 import getProductDetails from "../../services/getProductDetails";
 import DetailedProductModal from "../DetailedProductModal/DetailedProductModal";
 import getProductId from "../../services/getProductId";
-import addProductToCart from "../../services/addProductToCart";
+import { addProductToCart } from "../../services/cartServices";
 import getCartProductIds from "../../services/getCartProductIds";
 import removeProductFromCart from "../../services/removeProductFromCart";
+import { getCartIdFromLocalStorage } from "../../store/LocalStorage";
 
 function DetailedProduct({ productKey }: { productKey: string }) {
   const [productData, setProductData] = useState<ParsedProductData>();
@@ -26,6 +27,7 @@ function DetailedProduct({ productKey }: { productKey: string }) {
   const [cartIds, setCartIds] = useState<string[]>();
   const [removalIds, setRemovalIds] = useState<string[]>();
   const toast = useToast();
+  const cartId = getCartIdFromLocalStorage();
 
   useEffect(() => {
     async function getProductData() {
@@ -90,8 +92,10 @@ function DetailedProduct({ productKey }: { productKey: string }) {
         }
       }
     }
-    getCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b");
-  }, [isInCart, toast]);
+    if (cartId !== null) {
+      getCart(cartId);
+    }
+  }, [isInCart, toast, cartId]);
 
   useEffect(() => {
     setIsInCart(cartIds?.some((id) => id === productId));
@@ -99,16 +103,18 @@ function DetailedProduct({ productKey }: { productKey: string }) {
 
   async function HandleAddToCart() {
     try {
-      await addProductToCart("9ba8f627-278e-4fe4-b6e6-5b49c986b66b", productId);
-      setIsInCart(true);
-      toast({
-        position: "top",
-        title: "Success!",
-        description: "Product successfully added to cart",
-        status: "success",
-        duration: 6000,
-        isClosable: true,
-      });
+      if (productId) {
+        await addProductToCart(productId);
+        setIsInCart(true);
+        toast({
+          position: "top",
+          title: "Success!",
+          description: "Product successfully added to cart",
+          status: "success",
+          duration: 6000,
+          isClosable: true,
+        });
+      }
     } catch (error) {
       if (error instanceof Error) {
         toast({
@@ -125,9 +131,9 @@ function DetailedProduct({ productKey }: { productKey: string }) {
 
   async function HandleRemoveFromCart() {
     try {
-      if (removalIds && cartIds && productId) {
+      if (removalIds && cartIds && productId && cartId) {
         await removeProductFromCart(
-          "9ba8f627-278e-4fe4-b6e6-5b49c986b66b",
+          cartId,
           removalIds[cartIds?.indexOf(productId)],
         );
         setIsInCart(false);

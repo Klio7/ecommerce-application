@@ -14,7 +14,7 @@ import CartPopover from "../CartPopover/CartPopover";
 import clearCart from "../../services/clearCart";
 
 function Cart() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [cartData, setCartData] = useState<ICart>();
   const toast = useToast();
   const cartId = getCartIdFromLocalStorage();
