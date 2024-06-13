@@ -82,6 +82,9 @@ function Cart() {
   );
   const onAppliedPromoCode = useCallback(
     async (discountCode: string) => {
+      if (!cartId) {
+        return;
+      }
       try {
         const data = await applyPromoCode(cartId, discountCode);
         setCartData(data);
@@ -109,7 +112,7 @@ function Cart() {
     const productIds = cartData?.cartProducts?.map(
       (product) => product.productId,
     );
-    if (productIds) {
+    if (cartId && productIds) {
       const data = await clearCart(cartId, productIds);
       setCartData(data);
     }

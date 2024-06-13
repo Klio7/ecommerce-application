@@ -27,3 +27,7 @@ export function setCartIdFromLocalStorage(cartId: string) {
 export function getCartIdFromLocalStorage() {
   return localStorage.getItem("cartId");
 }
+
+export function removeCartIdFromLocalStorage() {
+  return localStorage.removeItem("cartId");
+}

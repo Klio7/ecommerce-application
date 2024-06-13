@@ -10,7 +10,7 @@ function Checkout({ cartId }: { cartId: string }) {
   useEffect(() => {
     async function getCart(cardId: string) {
       try {
-        const data = await getCartDetails(cardId);
+        const { cartData: data } = await getCartDetails(cardId);
         const { cartProducts, total } = data;
         setCartData({ cartProducts, total });
       } catch (error) {
