@@ -25,9 +25,7 @@ function EmptyCart() {
           py="20px"
           px="40px"
           transition="0.3s linear all"
-          _hover={{
-            backgroundColor: "#694D37",
-          }}
+          _hover={{ bg: "blackAlpha.700" }}
         >
           SHOP NOW!
         </Button>

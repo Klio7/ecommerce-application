@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Flex, Text, useToast, Input, Button } from "@chakra-ui/react";
+import { Flex, Text, useToast, Input, Button, Spinner } from "@chakra-ui/react";
 import getCartDetails from "../../services/getCartDetails";
 import { ICart } from "../../types/types";
 import CartProduct from "../CartProduct/CartProduct";
@@ -13,6 +13,7 @@ import CartPopover from "../CartPopover/CartPopover";
 import clearCart from "../../services/clearCart";
 
 function Cart({ cartId }: { cartId: string }) {
+  const [loading, setLoading] = useState(true);
   const [cartData, setCartData] = useState<ICart>();
   const toast = useToast();
   const [inputValue, setInputValue] = useState("");
@@ -23,10 +24,13 @@ function Cart({ cartId }: { cartId: string }) {
   useEffect(() => {
     async function getCart(cardId: string) {
       try {
+        setLoading(true);
         const data = await getCartDetails(cardId);
         const { cartProducts, total } = data;
+        setLoading(false);
         setCartData({ cartProducts, total });
       } catch (error) {
+        setLoading(false);
         if (error instanceof Error) {
           toast({
             position: "top",
@@ -103,14 +107,17 @@ function Cart({ cartId }: { cartId: string }) {
   const navigateToCheckout = () => {
     navigate(`/checkout?cartId=${cartId}`, { state: { cartId } });
   };
-
+  if (loading) {
+    return <Spinner size="xl" />;
+  }
   if (!cartData?.cartProducts?.length) {
     return <EmptyCart />;
   }
+
   return (
-    <Flex direction="column" alignItems="stretch">
+    <Flex direction="column" alignItems="stretch" w={["100%", "100%", "80%"]}>
       <CartPopover onClearCart={onClearCart} />
-      <Flex direction="column" px="10px">
+      <Flex direction="column" px={["0", "0", "10px"]}>
         <CartHeader />
         {cartData?.cartProducts?.map((product) => (
           <CartProduct
@@ -128,13 +135,14 @@ function Cart({ cartId }: { cartId: string }) {
         ))}
       </Flex>
       <Flex justifyContent="space-between" my="20px">
-        <Flex>
+        <Flex direction={["column", "column", "row"]}>
           <Input
             placeholder="PROMO CODE"
             w="180px"
             marginLeft="15px"
             borderRadius="0"
             onChange={(event) => handleChange(event)}
+            mb="10px"
           />
           <Button
             color="white"

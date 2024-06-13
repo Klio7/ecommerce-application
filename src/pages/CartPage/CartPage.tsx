@@ -2,7 +2,7 @@ import React from "react";
 import { Flex } from "@chakra-ui/react";
 import Cart from "../../components/Cart/Cart";
 
-const cartId = "810e88ae-27ae-43cd-af6f-f25a003f9579";
+const cartId = "a8abf6b2-f00a-49bd-ad94-713b37054434";
 function CartPage() {
   return (
     <Flex justify="center" minHeight="100vh">

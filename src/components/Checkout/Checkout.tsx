@@ -30,7 +30,7 @@ function Checkout({ cartId }: { cartId: string }) {
   }, [toast, cartId]);
   return (
     <Flex justifyContent="space-around" w="100%">
-      <Flex direction="column" p="10px" w="60%">
+      <Flex direction="column" p="10px" w={["50%", "50%", "60%"]}>
         <Text fontWeight="600" mb="20px">
           Billing Details
         </Text>
@@ -57,7 +57,7 @@ function Checkout({ cartId }: { cartId: string }) {
         border="2px solid"
         justifyContent="flex-start"
         h="fit-content"
-        w="30%"
+        w={["50%", "50%", "30%"]}
         p="10px"
       >
         <Text>Products</Text>
