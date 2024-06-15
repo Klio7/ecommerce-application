@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Flex,
   Container,
@@ -17,6 +17,7 @@ import { addProductToCart } from "../../services/cartServices";
 import getCartProductIds from "../../services/getCartProductIds";
 import removeProductFromCart from "../../services/removeProductFromCart";
 import { getCartIdFromLocalStorage } from "../../store/LocalStorage";
+import { CartContext } from "../../contexts/CartContext";
 
 function DetailedProduct({ productKey }: { productKey: string }) {
   const [productData, setProductData] = useState<ParsedProductData>();
@@ -28,6 +29,7 @@ function DetailedProduct({ productKey }: { productKey: string }) {
   const [removalIds, setRemovalIds] = useState<string[]>();
   const toast = useToast();
   const cartId = getCartIdFromLocalStorage();
+  const { setCartItemsCount } = useContext(CartContext);
 
   useEffect(() => {
     async function getProductData() {
@@ -79,6 +81,7 @@ function DetailedProduct({ productKey }: { productKey: string }) {
         const data = await getCartProductIds(cardId);
         setCartIds(data[0]);
         setRemovalIds(data[1]);
+        setCartItemsCount(data[0].length);
       } catch (error) {
         if (error instanceof Error) {
           toast({
@@ -95,7 +98,7 @@ function DetailedProduct({ productKey }: { productKey: string }) {
     if (cartId !== null) {
       getCart(cartId);
     }
-  }, [isInCart, toast, cartId]);
+  }, [isInCart, toast, cartId, setCartItemsCount]);
 
   useEffect(() => {
     setIsInCart(cartIds?.some((id) => id === productId));

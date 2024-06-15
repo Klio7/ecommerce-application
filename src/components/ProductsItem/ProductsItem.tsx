@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Button,
@@ -12,6 +12,9 @@ import { Link } from "react-router-dom";
 import { addProductToCart } from "../../services/cartServices";
 import "./ProductsItem.scss";
 import { ParsedProductData } from "../../types/types";
+import { CartContext } from "../../contexts/CartContext";
+import getCartProductIds from "../../services/getCartProductIds";
+import { getCartIdFromLocalStorage } from "../../store/LocalStorage";
 
 interface ProductsItemProps {
   product: ParsedProductData | null;
@@ -28,12 +31,31 @@ function ProductsItem({
 }: ProductsItemProps) {
   // const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const { setCartItemsCount } = useContext(CartContext);
+  const cartId = getCartIdFromLocalStorage();
 
   if (!product) {
     return null;
   }
 
   const handleAddToCart = async () => {
+    async function getCart(cardId: string) {
+      try {
+        const data = await getCartProductIds(cardId);
+        setCartItemsCount(data[0].length);
+      } catch (error) {
+        if (error instanceof Error) {
+          toast({
+            position: "top",
+            title: "Sorry!",
+            description: `${error.message}`,
+            status: "error",
+            duration: 6000,
+            isClosable: true,
+          });
+        }
+      }
+    }
     // setLoading(true);
     try {
       await addProductToCart(id);
@@ -44,6 +66,11 @@ function ProductsItem({
         duration: 3000,
         isClosable: true,
       });
+      if (cartId !== null) {
+        getCart(cartId);
+      } else {
+        setCartItemsCount(1);
+      }
     } catch (error) {
       toast({
         title: "Error",
