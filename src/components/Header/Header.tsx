@@ -196,7 +196,20 @@ function Header() {
               />
             </Tooltip>
           </Link>
-          <Text pos='absolute' top="50%" left="70%" border='black' borderRadius="50%" h="1.3em" w="1.3em" textAlign="center" bgColor="#ded6cb" fontSize=".9em">{cartItemsCount}</Text>
+          <Text
+            pos="absolute"
+            top="50%"
+            left="70%"
+            border="black"
+            borderRadius="50%"
+            h="1.3em"
+            w="1.3em"
+            textAlign="center"
+            bgColor="#ded6cb"
+            fontSize=".9em"
+          >
+            {cartItemsCount}
+          </Text>
         </Box>
         {isAuthenticated ? (
           <Tooltip label="Sign out" font-size="lg" openDelay={300}>
