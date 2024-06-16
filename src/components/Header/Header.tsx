@@ -19,8 +19,9 @@ import {
 import { LuLogOut } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import { removeCartIdFromLocalStorage } from "../../store/LocalStorage";
+// import { removeCartIdFromLocalStorage } from "../../store/LocalStorage";
 import "./Header.scss";
+import { removeCartIdFromLocalStorage } from "../../store/LocalStorage";
 
 function Header() {
   const { isAuthenticated, setAuth } = useAuth();

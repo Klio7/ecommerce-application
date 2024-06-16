@@ -36,6 +36,26 @@ const createCart = async () => {
   }
 };
 
+const loadOrCreateCart = async () => {
+    let cartId = getCartIdFromLocalStorage();
+  
+    if (cartId) {
+      try {
+        const { cartData } = await getCartDetails(cartId);
+        if (cartData) {
+          return cartData;
+        }
+      } catch (error) {
+        console.error('Failed to load existing cart:', error);
+        // Если загрузка существующей корзины не удалась, создайте новую
+      }
+    }
+  
+    // Создайте новую корзину, если загрузка существующей не удалась
+    const newCart = await createCart();
+    return newCart;
+  };
+
 const addProductToCart = async (productId: string) => {
   let cartId = getCartIdFromLocalStorage();
 
@@ -70,4 +90,4 @@ const addProductToCart = async (productId: string) => {
   }
 };
 
-export { createCart, addProductToCart };
+export { createCart, addProductToCart, loadOrCreateCart };

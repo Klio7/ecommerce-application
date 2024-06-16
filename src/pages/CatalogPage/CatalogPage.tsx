@@ -17,6 +17,7 @@ import ProductsItem from "../../components/ProductsItem/ProductsItem";
 import CatalogMenus from "../../components/CatalogMenus/CatalogMenus";
 import parseProductDetails from "../../utils/parseProductDetails";
 import "./CatalogPage.scss";
+import { loadOrCreateCart } from "../../services/cartServices";
 
 function CatalogPage() {
   const [products, setProducts] = useState<ProductProjection[]>([]);
@@ -24,6 +25,25 @@ function CatalogPage() {
   const [searchValue, setSearchValue] = useState<string>("");
   const [breadcrumbs, setBreadcrumbs] = useState<string[][]>([[], []]);
   const toast = useToast();
+
+  useEffect(() => {
+    const initializeCart = async () => {
+      try {
+        await loadOrCreateCart();
+      } catch (error) {
+        toast({
+          position: "top",
+          title: "Cart initialization failed",
+          description: `Failed to create a new cart:`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    };
+
+    initializeCart();
+  }, [toast]);
 
   useEffect(() => {
     ClientCredentialsFlowApiClient()
