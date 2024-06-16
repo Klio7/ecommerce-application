@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, } from "react";
 import {
   Box,
   Button,
@@ -10,11 +10,12 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { addProductToCart } from "../../services/cartServices";
-import getCartProductIds from "../../services/getCartProductIds";
 import "./ProductsItem.scss";
 import { ParsedProductData } from "../../types/types";
-import removeProductFromCart from "../../services/removeProductFromCart";
+import { CartContext } from "../../contexts/CartContext";
+import getCartProductIds from "../../services/getCartProductIds";
 import { getCartIdFromLocalStorage } from "../../store/LocalStorage";
+import removeProductFromCart from "../../services/removeProductFromCart";
 
 interface ProductsItemProps {
   product: ParsedProductData | null;
@@ -32,7 +33,9 @@ function ProductsItem({
   const [cartIds, setCartIds] = useState<string[]>([]);
   const [removalIds, setRemovalIds] = useState<string[]>([]);
   const toast = useToast();
+  const { setCartItemsCount } = useContext(CartContext);
   const cartId = getCartIdFromLocalStorage();
+
 
   useEffect(() => {
     async function fetchCartData() {
@@ -67,6 +70,23 @@ function ProductsItem({
   }
 
   const handleAddToCart = async () => {
+    async function getCart(cardId: string) {
+      try {
+        const data = await getCartProductIds(cardId);
+        setCartItemsCount(data[0].length);
+      } catch (error) {
+        if (error instanceof Error) {
+          toast({
+            position: "top",
+            title: "Sorry!",
+            description: `${error.message}`,
+            status: "error",
+            duration: 6000,
+            isClosable: true,
+          });
+        }
+      }
+    }
     setLoading(true);
     try {
       await addProductToCart(id);
@@ -78,6 +98,11 @@ function ProductsItem({
         duration: 3000,
         isClosable: true,
       });
+      if (cartId !== null) {
+        getCart(cartId);
+      } else {
+        setCartItemsCount(1);
+      }
     } catch (error) {
       toast({
         title: "Error",

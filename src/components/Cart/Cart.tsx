@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useContext,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { Flex, Text, useToast, Input, Button, Spinner } from "@chakra-ui/react";
 import getCartDetails from "../../services/getCartDetails";
@@ -12,12 +18,14 @@ import { getCartIdFromLocalStorage } from "../../store/LocalStorage";
 import applyPromoCode from "../../services/applyPromoCode";
 import CartPopover from "../CartPopover/CartPopover";
 import clearCart from "../../services/clearCart";
+import { CartContext } from "../../contexts/CartContext";
 
 function Cart() {
   const [loading, setLoading] = useState(false);
   const [cartData, setCartData] = useState<ICart>();
   const toast = useToast();
   const cartId = getCartIdFromLocalStorage();
+  const { setCartItemsCount } = useContext(CartContext);
 
   const [inputValue, setInputValue] = useState("");
   const navigate = useNavigate();
@@ -65,6 +73,9 @@ function Cart() {
           Number(value),
         );
         setCartData(data);
+        if (data.cartProducts) {
+          setCartItemsCount(data.cartProducts.length);
+        }
       } catch (error) {
         if (error instanceof Error) {
           toast({
@@ -78,7 +89,7 @@ function Cart() {
         }
       }
     },
-    [toast, cartId],
+    [toast, cartId, setCartItemsCount],
   );
   const onAppliedPromoCode = useCallback(
     async (discountCode: string) => {
@@ -115,6 +126,9 @@ function Cart() {
     if (cartId && productIds) {
       const data = await clearCart(cartId, productIds);
       setCartData(data);
+      if (data.cartProducts) {
+        setCartItemsCount(data.cartProducts?.length);
+      }
     }
   };
   const navigateToCheckout = () => {

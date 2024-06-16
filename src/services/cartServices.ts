@@ -37,7 +37,7 @@ const createCart = async () => {
 };
 
 const loadOrCreateCart = async () => {
-    let cartId = getCartIdFromLocalStorage();
+    const cartId = getCartIdFromLocalStorage();
   
     if (cartId) {
       try {
@@ -47,11 +47,10 @@ const loadOrCreateCart = async () => {
         }
       } catch (error) {
         console.error('Failed to load existing cart:', error);
-        // Если загрузка существующей корзины не удалась, создайте новую
       }
     }
   
-    // Создайте новую корзину, если загрузка существующей не удалась
+
     const newCart = await createCart();
     return newCart;
   };
