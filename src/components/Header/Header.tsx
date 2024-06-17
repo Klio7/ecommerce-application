@@ -220,6 +220,7 @@ function Header() {
               onClick={() => {
                 setAuth(false);
                 removeCartIdFromLocalStorage();
+                setCartItemsCount(0);
               }}
               fontSize="18px"
               color="gray.600"

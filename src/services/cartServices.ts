@@ -70,4 +70,4 @@ const addProductToCart = async (productId: string) => {
   }
 };
 
-export { createCart, addProductToCart };
+export { createCart, addProductToCart, getApiClient };
