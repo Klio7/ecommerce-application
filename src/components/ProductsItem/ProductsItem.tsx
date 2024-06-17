@@ -69,6 +69,7 @@ function ProductsItem({ product, id, productKey }: ProductsItemProps) {
       try {
         const data = await getCartProductIds(cardId);
         setCartItemsCount(data[0].length);
+        await getCartProductIds(cardId);
       } catch (error) {
         if (error instanceof Error) {
           toast({
