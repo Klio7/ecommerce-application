@@ -8,7 +8,6 @@ import {
   getTokenFromLocalStorage,
   setCartIdFromLocalStorage,
 } from "../store/LocalStorage";
-import debounce from "../utils/debounce";
 
 const getApiClient = () => {
   const { isAuthenticated } = getTokenFromLocalStorage();
