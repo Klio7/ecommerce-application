@@ -54,7 +54,7 @@ function ProductsItem({ product, id, productKey }: ProductsItemProps) {
     if (cartId) {
       fetchCartData();
     }
-  }, [cartId, toast]);
+  }, [cartId, toast, isInCart, setCartItemsCount]);
 
   useEffect(() => {
     setIsInCart(cartIds.includes(id));
