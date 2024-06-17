@@ -71,6 +71,4 @@ const addProductToCart = async (productId: string) => {
   }
 };
 
-const debouncedAddProductToCart = debounce(addProductToCart, 400);
-
-export { createCart, debouncedAddProductToCart as addProductToCart };
+export { createCart, addProductToCart };
