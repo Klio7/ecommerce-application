@@ -39,6 +39,8 @@ function ProductsItem({ product, id, productKey }: ProductsItemProps) {
           const data = await getCartProductIds(cartId);
           setCartIds(data[0]);
           setRemovalIds(data[1]);
+          setCartItemsCount(data[0].length);
+
         } catch (error) {
           toast({
             title: "Error",
