@@ -9,6 +9,7 @@ import {
   Input,
   Select,
   Spinner,
+  Button,
   useToast,
 } from "@chakra-ui/react";
 import { ProductProjection } from "@commercetools/platform-sdk";
@@ -23,7 +24,18 @@ function CatalogPage() {
   const [sortValue, setSortValue] = useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
   const [breadcrumbs, setBreadcrumbs] = useState<string[][]>([[], []]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const productsPerPage = 6;
   const toast = useToast();
+
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct,
+  );
 
   useEffect(() => {
     ClientCredentialsFlowApiClient()
@@ -67,6 +79,7 @@ function CatalogPage() {
         });
       setSortValue("");
       setSearchValue("");
+      setCurrentPage(1);
     },
     [toast],
   );
@@ -119,6 +132,7 @@ function CatalogPage() {
           isClosable: true,
         });
       });
+    setCurrentPage(1);
   }
 
   function HandleSearch(value: string) {
@@ -145,6 +159,7 @@ function CatalogPage() {
       });
     setSearchValue(value);
     setSortValue("");
+    setCurrentPage(1);
   }
 
   function HandleBreadcrumbsClick(crumb: string) {
@@ -157,6 +172,29 @@ function CatalogPage() {
     }
   }
 
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const renderPagination = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i += 1) {
+      pages.push(
+        <Button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          isDisabled={i === currentPage}
+          mx={1}
+          size="sm"
+          bgColor={i === currentPage ? "#ded6cb" : "gray.200"}
+        >
+          {i}
+        </Button>,
+      );
+    }
+    return pages;
+  };
+
   return (
     <Flex className="catalog-page-wrapper">
       <CatalogMenus
@@ -168,7 +206,7 @@ function CatalogPage() {
         setBreadcrumbs={setBreadcrumbs}
       />
       <Box flexGrow={1}>
-        <Flex>
+        <Flex mb={4}>
           <Input
             placeholder="Search"
             onChange={(e) => {
@@ -199,9 +237,9 @@ function CatalogPage() {
             </BreadcrumbItem>
           ))}
         </Breadcrumb>
-        <Grid className="grid" as="main">
-          {products ? (
-            products.map((product) => {
+        <Grid className="grid" as="main" gap={4}>
+          {currentProducts.length > 0 ? (
+            currentProducts.map((product) => {
               const productData = parseProductDetails(product);
               const productKey = product.key;
               return (
@@ -214,9 +252,19 @@ function CatalogPage() {
               );
             })
           ) : (
-            <Spinner alignSelf="center" />
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              justifyContent="center"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
           )}
         </Grid>
+        <Flex className="pagination-controls" justifyContent="center" mt={4}>
+          {renderPagination()}
+        </Flex>
       </Box>
     </Flex>
   );
