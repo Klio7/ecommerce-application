@@ -8,6 +8,7 @@ import {
   getTokenFromLocalStorage,
   setCartIdFromLocalStorage,
 } from "../store/LocalStorage";
+import debounce from "../utils/debounce";
 
 const getApiClient = () => {
   const { isAuthenticated } = getTokenFromLocalStorage();
@@ -70,4 +71,6 @@ const addProductToCart = async (productId: string) => {
   }
 };
 
-export { createCart, addProductToCart };
+const debouncedAddProductToCart = debounce(addProductToCart, 400);
+
+export { createCart, debouncedAddProductToCart as addProductToCart };
