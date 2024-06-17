@@ -9,6 +9,7 @@ import ProfilePage from "../pages/ProfilePage/ProfilePage";
 import CartPage from "../pages/CartPage/CartPage";
 import DetailedProductPage from "../pages/DetailedProductPage/DetailedProductPage";
 import CheckoutPage from "../pages/CheckoutPage/CheckoutPage";
+import AboutUs from "../pages/AboutUs/AboutUs";
 
 function Router() {
   return (
@@ -18,7 +19,7 @@ function Router() {
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/catalog" element={<CatalogPage />} />
       <Route path="*" element={<NotFoundPage />} />
-      <Route path="/about" element={<NotFoundPage />} />
+      <Route path="/about" element={<AboutUs />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
