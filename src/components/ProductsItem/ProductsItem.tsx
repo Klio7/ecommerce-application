@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -15,24 +15,50 @@ import { ParsedProductData } from "../../types/types";
 import { CartContext } from "../../contexts/CartContext";
 import getCartProductIds from "../../services/getCartProductIds";
 import { getCartIdFromLocalStorage } from "../../store/LocalStorage";
+import removeProductFromCart from "../../services/removeProductFromCart";
 
 interface ProductsItemProps {
   product: ParsedProductData | null;
   id: string;
   productKey: string | undefined;
-  // inCart: boolean | undefined;
 }
 
-function ProductsItem({
-  product,
-  id,
-  productKey,
-  // inCart,
-}: ProductsItemProps) {
-  // const [loading, setLoading] = useState(false);
+function ProductsItem({ product, id, productKey }: ProductsItemProps) {
+  const [loading, setLoading] = useState(false);
+  const [isInCart, setIsInCart] = useState<boolean>(false);
+  const [cartIds, setCartIds] = useState<string[]>([]);
+  const [removalIds, setRemovalIds] = useState<string[]>([]);
   const toast = useToast();
   const { setCartItemsCount } = useContext(CartContext);
   const cartId = getCartIdFromLocalStorage();
+
+  useEffect(() => {
+    async function fetchCartData() {
+      if (cartId) {
+        try {
+          const data = await getCartProductIds(cartId);
+          setCartIds(data[0]);
+          setRemovalIds(data[1]);
+        } catch (error) {
+          toast({
+            title: "Error",
+            description: "Failed to fetch cart data.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      }
+    }
+
+    if (cartId) {
+      fetchCartData();
+    }
+  }, [cartId, toast]);
+
+  useEffect(() => {
+    setIsInCart(cartIds.includes(id));
+  }, [cartIds, id]);
 
   if (!product) {
     return null;
@@ -56,9 +82,10 @@ function ProductsItem({
         }
       }
     }
-    // setLoading(true);
+    setLoading(true);
     try {
       await addProductToCart(id);
+      setIsInCart(true);
       toast({
         title: "Added to cart",
         description: `${product.title} has been added to your cart.`,
@@ -80,7 +107,36 @@ function ProductsItem({
         isClosable: true,
       });
     } finally {
-      // setLoading(false);
+      setLoading(false);
+    }
+  };
+
+  const handleRemoveFromCart = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    setLoading(true);
+    try {
+      if (cartId && removalIds.length > 0) {
+        const removalId = removalIds[cartIds.indexOf(id)];
+        await removeProductFromCart(cartId, removalId);
+        setIsInCart(false);
+        toast({
+          title: "Removed from cart",
+          description: `${product?.title} has been removed from your cart.`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to remove product from cart.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,17 +161,27 @@ function ProductsItem({
           ) : (
             <Text fontSize="1.5em">{product.price}</Text>
           )}
-          <Button
-            colorScheme="teal"
-            // isDisabled={inCart || loading}
-            onClick={(event) => {
-              event.preventDefault();
-              handleAddToCart();
-            }}
-          >
-            Add to Cart
-            {/* {inCart ? "In Cart" : loading ? "Adding..." : "Add to Cart"} */}
-          </Button>
+          {isInCart ? (
+            <Button
+              isDisabled={loading}
+              onClick={(event) => {
+                event.preventDefault();
+                handleRemoveFromCart(event);
+              }}
+            >
+              {loading ? "Removing..." : "Remove from Cart"}
+            </Button>
+          ) : (
+            <Button
+              isDisabled={loading}
+              onClick={(event) => {
+                event.preventDefault();
+                handleAddToCart();
+              }}
+            >
+              {loading ? "Adding..." : "Add to Cart"}
+            </Button>
+          )}
         </Flex>
         <Image
           alignSelf="center"
