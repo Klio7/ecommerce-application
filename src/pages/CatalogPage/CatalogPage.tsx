@@ -28,13 +28,14 @@ function CatalogPage() {
   const productsPerPage = 6;
   const toast = useToast();
 
-
   const totalPages = Math.ceil(products.length / productsPerPage);
-
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct,
+  );
 
   useEffect(() => {
     ClientCredentialsFlowApiClient()
@@ -177,7 +178,7 @@ function CatalogPage() {
 
   const renderPagination = () => {
     const pages = [];
-    for (let i = 1; i <= totalPages; i+=1) {
+    for (let i = 1; i <= totalPages; i += 1) {
       pages.push(
         <Button
           key={i}
@@ -188,13 +189,11 @@ function CatalogPage() {
           bgColor={i === currentPage ? "#ded6cb" : "gray.200"}
         >
           {i}
-        </Button>
+        </Button>,
       );
     }
     return pages;
   };
-
-
 
   return (
     <Flex className="catalog-page-wrapper">
@@ -254,13 +253,13 @@ function CatalogPage() {
             })
           ) : (
             <Spinner
-        thickness="4px"
-        speed="0.65s"
-        justifyContent="center"
-        emptyColor="gray.200"
-        color="blue.500"
-        size="xl"
-      />
+              thickness="4px"
+              speed="0.65s"
+              justifyContent="center"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
           )}
         </Grid>
         <Flex className="pagination-controls" justifyContent="center" mt={4}>
