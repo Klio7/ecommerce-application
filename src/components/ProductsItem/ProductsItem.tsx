@@ -69,8 +69,6 @@ function ProductsItem({ product, id, productKey }: ProductsItemProps) {
   const handleAddToCart = async () => {
     async function getCart(cardId: string) {
       try {
-        const data = await getCartProductIds(cardId);
-        setCartItemsCount(data[0].length);
         await getCartProductIds(cardId);
       } catch (error) {
         if (error instanceof Error) {
