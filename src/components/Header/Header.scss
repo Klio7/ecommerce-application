@@ -1,0 +1,9 @@
+.icon {
+    transition: .3s;
+    padding: 0 10px;
+}
+
+.icon:hover {
+    cursor: pointer;
+    transform: scale(120%);
+}
