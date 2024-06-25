@@ -19,3 +19,15 @@ export function getTokenFromLocalStorage() {
 export function getClientIdFromLocalStorage() {
   return localStorage.getItem("client_id");
 }
+
+export function setCartIdFromLocalStorage(cartId: string) {
+  return localStorage.setItem("cartId", cartId);
+}
+
+export function getCartIdFromLocalStorage() {
+  return localStorage.getItem("cartId");
+}
+
+export function removeCartIdFromLocalStorage() {
+  return localStorage.removeItem("cartId");
+}

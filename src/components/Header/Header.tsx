@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Flex,
   Button,
@@ -15,15 +15,49 @@ import {
   Text,
   IconButton,
   Tooltip,
+  useToast,
+  Box,
 } from "@chakra-ui/react";
 import { LuLogOut } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import {
+  getCartIdFromLocalStorage,
+  removeCartIdFromLocalStorage,
+} from "../../store/LocalStorage";
 import "./Header.scss";
+import { CartContext } from "../../contexts/CartContext";
+import getCartProductIds from "../../services/getCartProductIds";
 
 function Header() {
   const { isAuthenticated, setAuth } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { cartItemsCount, setCartItemsCount } = useContext(CartContext);
+  const cartId = getCartIdFromLocalStorage();
+  const toast = useToast();
+
+  useEffect(() => {
+    async function getCart(cardId: string) {
+      try {
+        const data = await getCartProductIds(cardId);
+        setCartItemsCount(data[0].length);
+      } catch (error) {
+        if (error instanceof Error) {
+          toast({
+            position: "top",
+            title: "Sorry!",
+            description: `${error.message}`,
+            status: "error",
+            duration: 6000,
+            isClosable: true,
+          });
+        }
+      }
+    }
+    if (cartId !== null) {
+      getCart(cartId);
+    }
+  }, [cartId, setCartItemsCount, toast]);
 
   return (
     <Flex
@@ -38,7 +72,7 @@ function Header() {
         <Button
           className="icon"
           colorScheme="none"
-          leftIcon={<img src="images/icons/Burger.svg" alt="burger" />}
+          leftIcon={<img src="/images/icons/Burger.svg" alt="burger" />}
           onClick={onOpen}
         />
       </Show>
@@ -90,7 +124,7 @@ function Header() {
       </Drawer>
       <Flex align="center" gap="1em">
         <Link to="/">
-          <img className="icon" src="images/icons/blyudo.png" alt="Blyudo" />
+          <img className="icon" src="/images/icons/blyudo.png" alt="Blyudo" />
         </Link>
         <Link to="/">
           <Text
@@ -146,28 +180,48 @@ function Header() {
             <Tooltip label="Your profile" font-size="lg" openDelay={300}>
               <img
                 className="icon"
-                src="images/icons/Avatar.svg"
+                src="/images/icons/Avatar.svg"
                 alt="profile"
               />
             </Tooltip>
           </Link>
         ) : null}
-        <Link to="/basket">
-          <Tooltip label="Cart" font-size="lg" openDelay={300}>
-            <img
-              className="icon"
-              src="images/icons/Shopping cart.svg"
-              alt="basket"
-            />
-          </Tooltip>
-        </Link>
+        <Box position="relative">
+          <Link to="/cart">
+            <Tooltip label="Cart" font-size="lg" openDelay={300}>
+              <img
+                className="icon"
+                src="/images/icons/Shopping cart.svg"
+                alt="basket"
+              />
+            </Tooltip>
+          </Link>
+          <Text
+            pos="absolute"
+            top="50%"
+            left="70%"
+            border="black"
+            borderRadius="50%"
+            h="1.3em"
+            w="1.3em"
+            textAlign="center"
+            bgColor="#ded6cb"
+            fontSize=".9em"
+          >
+            {cartItemsCount}
+          </Text>
+        </Box>
         {isAuthenticated ? (
           <Tooltip label="Sign out" font-size="lg" openDelay={300}>
             <IconButton
               aria-label="Search database"
               icon={<LuLogOut />}
               bg="white"
-              onClick={() => setAuth(false)}
+              onClick={() => {
+                setAuth(false);
+                removeCartIdFromLocalStorage();
+                setCartItemsCount(0);
+              }}
               fontSize="18px"
               color="gray.600"
               transition="0.3s linear all"
